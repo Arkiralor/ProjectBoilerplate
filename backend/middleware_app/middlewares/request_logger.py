@@ -84,7 +84,7 @@ class RequestLogger(object):
                 path=path,
                 cookie=cookies,
                 body=body,
-                body_text=body.decode('utf8', 'strict'),
+                body_text=body.decode('utf8', 'strict') if body else "",
                 headers=headers,
                 params=params,
                 user=user
