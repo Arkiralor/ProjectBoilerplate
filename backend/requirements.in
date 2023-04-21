@@ -7,8 +7,10 @@ django-dotenv
 djangorestframework
 djangorestframework-simplejwt
 django-storages
+motor
 pillow
 psycopg2-binary
+pymongo
 pytest-django
 python-jose[cryptography]
 requests

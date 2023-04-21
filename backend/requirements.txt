@@ -45,6 +45,8 @@ djangorestframework==3.14.0
     #   djangorestframework-simplejwt
 djangorestframework-simplejwt==5.2.2
     # via -r requirements.in
+dnspython==2.3.0
+    # via pymongo
 ecdsa==0.18.0
     # via python-jose
 exceptiongroup==1.1.1
@@ -61,6 +63,8 @@ jmespath==1.0.1
     # via
     #   boto3
     #   botocore
+motor==3.1.2
+    # via -r requirements.in
 packaging==23.1
     # via pytest
 pillow==9.5.0
@@ -79,6 +83,10 @@ pycparser==2.21
     # via cffi
 pyjwt==2.6.0
     # via djangorestframework-simplejwt
+pymongo==4.3.3
+    # via
+    #   -r requirements.in
+    #   motor
 pytest==7.3.1
     # via pytest-django
 pytest-django==4.5.2

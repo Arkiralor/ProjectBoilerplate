@@ -53,6 +53,14 @@ DATABASES = {
     }
 }
 
+MONGO_URI = environ.get("MONGO_URI")
+MONGO_NAME = environ.get("MONGO_NAME")
+MONGO_HOST = environ.get("MONGO_HOST")
+MONGO_PORT = int(environ.get("MONGO_PORT", 27017))
+MONGO_USER = environ.get("MONGO_USER", None)
+MONGO_PASSWORD = environ.get("MONGO_PASSWORD", None)
+
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
