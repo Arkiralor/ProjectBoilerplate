@@ -1,0 +1,15 @@
+autopep8
+boto3
+coverage
+django
+django-cors-headers
+django-dotenv
+djangorestframework
+djangorestframework-simplejwt
+django-storages
+pillow
+psycopg2-binary
+pytest-django
+python-jose[cryptography]
+requests
+tldextract
