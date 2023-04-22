@@ -29,7 +29,7 @@ The setup procedures are defined as follows
 
 #### Backend Setup
 
-See `backend/readme.md`
+See [`backend/readme.md`](https://github.com/Arkiralor/ProjectBoilerplate/blob/master/backend/README.md)
 
 #### Frontend Setup
 
