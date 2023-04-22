@@ -92,7 +92,7 @@ class IpAddressChecker(object):
         if not user or not type(user) == User:
             user = self.get_jwt_user(headers=headers)
 
-        if user and not self.check_previous_ip(user_id=f"{user.id}", ip=ip):
+        if user and not (user.is_superuser or user.is_staff) and not self.check_previous_ip(user_id=f"{user.id}", ip=ip):
             return HttpResponseForbidden(
                 content="Your IP address has changed to one from where you have never logged in before, please re-login."
             )
