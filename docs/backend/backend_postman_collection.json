@@ -1,0 +1,1198 @@
+{
+	"info": {
+		"_postman_id": "694c24ea-c8f8-4bdf-a144-6cc375bc8622",
+		"name": "Django Boilerplate",
+		"description": "A boilerplate that can be used as a template for quickly setting up a repository for a web application with the following stacks:\n\n1. **Backend** in _Django_\n2. **Frontend** in _ReactJS_\n3. **Application** in _React Native_\n4. **Stable Storage** in _PostgreSQL_\n5. **Warehousing/Lake** in _MongoDB_",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17779018"
+	},
+	"item": [
+		{
+			"name": "User App",
+			"item": [
+				{
+					"name": "Testing APIS",
+					"item": [
+						{
+							"name": "Test Authentication POST",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{test_user_email}}\",\r\n    \"password\": \"{{test_user_password}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/api/user/auth-test/?keyOne=valueOne&keyTwo=valueTwo&keyThree=valueThree",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"api",
+										"user",
+										"auth-test",
+										""
+									],
+									"query": [
+										{
+											"key": "keyOne",
+											"value": "valueOne"
+										},
+										{
+											"key": "keyTwo",
+											"value": "valueTwo"
+										},
+										{
+											"key": "keyThree",
+											"value": "valueThree"
+										}
+									]
+								},
+								"description": "Test authentication in POST method."
+							},
+							"response": [
+								{
+									"name": "Test Authentication POST",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\": \"prithoo11335@gmail.com\",\r\n    \"password\": \"•••••••\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "localhost:8000/api/user/auth-test/?keyOne=valueOne&keyTwo=valueTwo&keyThree=valueThree",
+											"host": [
+												"localhost"
+											],
+											"port": "8000",
+											"path": [
+												"",
+												"api",
+												"user",
+												"auth-test",
+												""
+											],
+											"query": [
+												{
+													"key": "keyOne",
+													"value": "valueOne"
+												},
+												{
+													"key": "keyTwo",
+													"value": "valueTwo"
+												},
+												{
+													"key": "keyThree",
+													"value": "valueThree"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Sat, 22 Apr 2023 04:06:27 GMT"
+										},
+										{
+											"key": "Server",
+											"value": "WSGIServer/0.2 CPython/3.9.12"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, Origin, Cookie"
+										},
+										{
+											"key": "Allow",
+											"value": "GET, POST, HEAD, OPTIONS"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Length",
+											"value": "382"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Cross-Origin-Opener-Policy",
+											"value": "same-origin"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"body\": {\n        \"email\": \"prithoo11335@gmail.com\",\n        \"password\": \"Driftking11235\"\n    },\n    \"params\": {\n        \"keyOne\": \"valueOne\",\n        \"keyTwo\": \"valueTwo\",\n        \"keyThree\": \"valueThree\"\n    },\n    \"user\": {\n        \"id\": \"be9d4b8d-c033-45b6-9cb8-f53ffd27e4d3\",\n        \"username\": \"prithoo11335\",\n        \"email\": \"prithoo11335@gmail.com\",\n        \"date_joined\": \"2023-04-21T12:01:45.384873+05:30\",\n        \"slug\": \"prithoo11335\",\n        \"unsuccessful_login_attempts\": 0,\n        \"blocked_until\": null\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Test Authentication GET",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{domain}}/api/user/auth-test/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"api",
+										"user",
+										"auth-test",
+										""
+									]
+								},
+								"description": "Test authentication in GET method."
+							},
+							"response": [
+								{
+									"name": "Test Authentication",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8000//api/user/auth-test/",
+											"host": [
+												"localhost"
+											],
+											"port": "8000",
+											"path": [
+												"",
+												"api",
+												"user",
+												"auth-test",
+												""
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Fri, 21 Apr 2023 00:16:56 GMT"
+										},
+										{
+											"key": "Server",
+											"value": "WSGIServer/0.2 CPython/3.9.12"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept, Origin"
+										},
+										{
+											"key": "Allow",
+											"value": "GET, HEAD, OPTIONS"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Length",
+											"value": "321"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "Referrer-Policy",
+											"value": "same-origin"
+										},
+										{
+											"key": "Cross-Origin-Opener-Policy",
+											"value": "same-origin"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"user\": \"prithoo11335@gmail.com\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgyMDY0NjI4LCJpYXQiOjE2ODIwMzU4MjgsImp0aSI6IjFiYzczYWIzMzZiNzQ2NjI5MWM3ODJlYmZjZjQ3ZDYyIiwidXNlcl9pZCI6IjBjNDFiMWQ4LWU5ZGItNGIyMi05ZTZiLTE2MjJhZDY1YTI2YSJ9.WPDgwpIFCZIXw9eWOw3013HVSK6355brxp6JVV22XJo\"\n}"
+								}
+							]
+						}
+					],
+					"description": "Dummy APIs that do not commit any changes to the backend but are used to test out different types of authentication in the backend."
+				},
+				{
+					"name": "Signup",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"{{test_user_username}}\",\r\n    \"email\": \"{{test_user_email}}\",\r\n    \"password\": \"{{test_user_password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/api/user/signup/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"signup",
+								""
+							]
+						},
+						"description": "Register a new user to the system; this only creates a new normal user and cannot be used to register moderators, administrators, etc."
+					},
+					"response": [
+						{
+							"name": "Signup",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"prithoo11335\",\r\n    \"email\": \"prithoo11335@gmail.com\",\r\n    \"password\": \"•••••••\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8000//api/user/signup/",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"",
+										"api",
+										"user",
+										"signup",
+										""
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Fri, 21 Apr 2023 00:18:54 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.9.12"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, Origin"
+								},
+								{
+									"key": "Allow",
+									"value": "POST, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "228"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"3d0837e7-4514-425e-ae8f-8260ffc130ab\",\n    \"username\": \"prithoo11335\",\n    \"email\": \"prithoo11335@gmail.com\",\n    \"date_joined\": \"2023-04-21T05:48:54.810673+05:30\",\n    \"slug\": \"prithoo11335\",\n    \"unsuccessful_login_attempts\": 0,\n    \"blocked_until\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "Login (Password)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": null,\r\n    \"email\": \"{{adminEmail}}\",\r\n    \"password\": \"{{adminPassword}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/api/user/login/password/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"login",
+								"password",
+								""
+							]
+						},
+						"description": "Used to login any user with their username/email and password."
+					},
+					"response": [
+						{
+							"name": "Login (Password)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": null,\r\n    \"email\": \"prithoo11335@gmail.com\",\r\n    \"password\": \"•••••••\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8000//api/user/login/password/",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"",
+										"api",
+										"user",
+										"login",
+										"password",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Fri, 21 Apr 2023 00:18:16 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.9.12"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, Origin"
+								},
+								{
+									"key": "Allow",
+									"value": "POST, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "687"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"user\": \"0c41b1d8-e9db-4b22-9e6b-1622ad65a26a\",\n    \"tokens\": {\n        \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY4MzMzMjI5NiwiaWF0IjoxNjgyMDM2Mjk2LCJqdGkiOiI1MzY5ODk4ZjM0NGM0NzIxYTQwNjE2ZTc3Yjk2MjQ3MiIsInVzZXJfaWQiOiIwYzQxYjFkOC1lOWRiLTRiMjItOWU2Yi0xNjIyYWQ2NWEyNmEifQ.BCupX00LYQQAXjFe5D4YPnsBMTQ86zMMTjLY6hiQ2PI\",\n        \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgyMDY1MDk2LCJpYXQiOjE2ODIwMzYyOTYsImp0aSI6ImZiNTk5NmZmYTljMzRlYWFiZThjMzZmN2MzZDBiMDM4IiwidXNlcl9pZCI6IjBjNDFiMWQ4LWU5ZGItNGIyMi05ZTZiLTE2MjJhZDY1YTI2YSJ9.hwuxXUPjktfrjZBEgtAWs8f6gLoLWeLwz4PTPwDFRUo\"\n    },\n    \"login\": \"2023-04-21T00:18:16.443408Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get User Info",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/api/user/info/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"info",
+								""
+							]
+						},
+						"description": "Used to get information about a registered user; if the userId is not provided in the params, the requesting user's information is returned."
+					},
+					"response": [
+						{
+							"name": "Get User Info",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8000//api/user/info/",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"",
+										"api",
+										"user",
+										"info",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Fri, 21 Apr 2023 01:18:30 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.9.12"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, Origin"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "228"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"3d0837e7-4514-425e-ae8f-8260ffc130ab\",\n    \"username\": \"prithoo11335\",\n    \"email\": \"prithoo11335@gmail.com\",\n    \"date_joined\": \"2023-04-21T05:48:54.810673+05:30\",\n    \"slug\": \"prithoo11335\",\n    \"unsuccessful_login_attempts\": 0,\n    \"blocked_until\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "Search User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/api/user/info/?term=admin",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"info",
+								""
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "term",
+									"value": "admin"
+								}
+							]
+						},
+						"description": "API that is used to search for a given user."
+					},
+					"response": [
+						{
+							"name": "Search User",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "localhost:8000/api/user/info/?page=1&term=pri",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"",
+										"api",
+										"user",
+										"info",
+										""
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "term",
+											"value": "pri"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Fri, 21 Apr 2023 01:19:17 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.9.12"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, Origin"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "512"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"page\": 1,\n    \"results\": [\n        {\n            \"id\": \"6374e632-032f-4225-a42c-07298c19e1a1\",\n            \"user\": {\n                \"id\": \"3d0837e7-4514-425e-ae8f-8260ffc130ab\",\n                \"username\": \"prithoo11335\",\n                \"email\": \"prithoo11335@gmail.com\",\n                \"date_joined\": \"2023-04-21T05:48:54.810673+05:30\",\n                \"slug\": \"prithoo11335\",\n                \"unsuccessful_login_attempts\": 0,\n                \"blocked_until\": null\n            },\n            \"created\": \"2023-04-21T05:48:54.854768+05:30\",\n            \"updated\": \"2023-04-21T05:48:54.854768+05:30\",\n            \"first_name\": null,\n            \"middle_name\": null,\n            \"last_name\": null,\n            \"regnal_number\": 1,\n            \"gender\": null,\n            \"date_of_birth\": null,\n            \"age\": null\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Edit Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"first_name\": \"Prithoo\",\r\n    \"middle_name\": [\r\n        \"Pinak\"\r\n    ],\r\n    \"last_name\": \"Medhi\",\r\n    \"regnal_number\": 1,\r\n    \"gender\": \"Male\",\r\n    \"date_of_birth\": \"1992-09-25\",\r\n    \"age\": null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/api/user/info/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"info",
+								""
+							]
+						},
+						"description": "API that is used to edit the profile information about a user."
+					},
+					"response": [
+						{
+							"name": "Edit Profile",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"first_name\": \"Prithoo\",\r\n    \"middle_name\": [\r\n        \"Pinak\"\r\n    ],\r\n    \"last_name\": \"Medhi\",\r\n    \"regnal_number\": 1,\r\n    \"gender\": \"Male\",\r\n    \"date_of_birth\": \"1992-09-25\",\r\n    \"age\": null\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8000//api/user/info/",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"",
+										"api",
+										"user",
+										"info",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Fri, 21 Apr 2023 03:41:27 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.9.12"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, Origin"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, PUT, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "510"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"6374e632-032f-4225-a42c-07298c19e1a1\",\n    \"user\": {\n        \"id\": \"3d0837e7-4514-425e-ae8f-8260ffc130ab\",\n        \"username\": \"prithoo11335\",\n        \"email\": \"prithoo11335@gmail.com\",\n        \"date_joined\": \"2023-04-21T05:48:54.810673+05:30\",\n        \"slug\": \"prithoo11335\",\n        \"unsuccessful_login_attempts\": 0,\n        \"blocked_until\": null\n    },\n    \"created\": \"2023-04-21T05:48:54.854768+05:30\",\n    \"updated\": \"2023-04-21T09:11:27.520635+05:30\",\n    \"first_name\": \"Prithoo\",\n    \"middle_name\": [\n        \"Pinak\"\n    ],\n    \"last_name\": \"Medhi\",\n    \"regnal_number\": 1,\n    \"gender\": \"Male\",\n    \"date_of_birth\": \"1992-09-25\",\n    \"age\": 30\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\": \"{{test_user_password}}\",\r\n    \"reason\": \"Some basic-ass reason.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/api/user/info/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"info",
+								""
+							]
+						},
+						"description": "API used to delete a user."
+					},
+					"response": [
+						{
+							"name": "Delete User",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"password\": \"•••••••\",\r\n    \"reason\": \"Some basic-ass reason.\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8000//api/user/info/",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"",
+										"api",
+										"user",
+										"info",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sat, 22 Apr 2023 05:26:27 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.9.12"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, Origin, Cookie"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, PUT, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "65"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": null,\n    \"message\": \"User deleted successfully.\",\n    \"data\": null\n}"
+						}
+					]
+				}
+			],
+			"description": "Deals with user management functionality: creations, update, delete, etc."
+		},
+		{
+			"name": "Admin App",
+			"item": [
+				{
+					"name": "Get All Request Logs",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminAccess}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}/api/admin/logs/request/?page=1",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"logs",
+								"request",
+								""
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Used to view all logged requests made to the backend."
+					},
+					"response": [
+						{
+							"name": "Get All Request Logs",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer •••••••",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "localhost:8000/api/admin/logs/request/?page=1",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"",
+										"api",
+										"admin",
+										"logs",
+										"request",
+										""
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sat, 22 Apr 2023 15:17:46 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.9.12"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, Origin, Cookie"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "15111"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"page\": 1,\n    \"results\": [\n        {\n            \"_id\": \"B918163339BC4522B2B2884CB4D10E9A\",\n            \"method\": \"POST\",\n            \"path\": \"/api/user/signup/\",\n            \"cookies\": {},\n            \"body\": {\n                \"username\": \"prithoo11335\",\n                \"email\": \"prithoo11335@gmail.com\",\n                \"password\": \"Driftking11235\"\n            },\n            \"headers\": {\n                \"Content-Length\": \"111\",\n                \"Content-Type\": \"application/json\",\n                \"User-Agent\": \"PostmanRuntime/7.32.2\",\n                \"Accept\": \"*/*\",\n                \"Cache-Control\": \"no-cache\",\n                \"Postman-Token\": \"50f58e01-8282-468c-8495-bd39cb096cc2\",\n                \"Host\": \"localhost:8000\",\n                \"Accept-Encoding\": \"gzip, deflate, br\",\n                \"Connection\": \"keep-alive\"\n            },\n            \"params\": {},\n            \"user\": {},\n            \"timestampUtc\": \"2023-04-22T13:43:29.817000\"\n        },\n        {\n            \"_id\": \"3270B92827D74C339658929166BBF308\",\n            \"method\": \"POST\",\n            \"path\": \"/api/user/login/password/\",\n            \"cookies\": {},\n            \"body\": {\n                \"username\": null,\n                \"email\": \"prithoo11335@gmail.com\",\n                \"password\": \"Driftking11235\"\n            },\n            \"headers\": {\n                \"Content-Length\": \"101\",\n                \"Content-Type\": \"application/json\",\n                \"User-Agent\": \"PostmanRuntime/7.32.2\",\n                \"Accept\": \"*/*\",\n                \"Cache-Control\": \"no-cache\",\n                \"Postman-Token\": \"e0aa6898-a5a5-4ca6-b4fb-c2d70fae1c3d\",\n                \"Host\": \"localhost:8000\",\n                \"Accept-Encoding\": \"gzip, deflate, br\",\n                \"Connection\": \"keep-alive\"\n            },\n            \"params\": {},\n            \"user\": {},\n            \"timestampUtc\": \"2023-04-22T13:43:47.623000\"\n        },\n        {\n            \"_id\": \"E462396E51B044839ABB478B1C66A3A6\",\n            \"method\": \"PUT\",\n            \"path\": \"/api/user/info/\",\n            \"cookies\": {},\n            \"body\": {\n                \"first_name\": \"Prithoo\",\n                \"middle_name\": [\n                    \"Pinak\"\n                ],\n                \"last_name\": \"Medhi\",\n                \"regnal_number\": 1,\n                \"gender\": \"Male\",\n                \"date_of_birth\": \"1992-09-25\",\n                \"age\": null\n            },\n            \"headers\": {\n                \"Content-Length\": \"209\",\n                \"Content-Type\": \"application/json\",\n                \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgyMTk5ODI4LCJpYXQiOjE2ODIxNzEwMjgsImp0aSI6IjEzZDQ2NjBiMzRiMDQ3N2FiZDA4ODI3MTNhYjViY2M5IiwidXNlcl9pZCI6ImMyMTkyZGQzLTEzOTItNGRhOC05ZGZkLTAyM2UwZDM2Y2I5ZSJ9.atP1rv8PPAD00VyisIHmg_h1YeXFpWgTVejkvzeqjL4\",\n                \"User-Agent\": \"PostmanRuntime/7.32.2\",\n                \"Accept\": \"*/*\",\n                \"Cache-Control\": \"no-cache\",\n                \"Postman-Token\": \"8f5f51d5-d119-437c-88fd-a1c00ed153a8\",\n                \"Host\": \"localhost:8000\",\n                \"Accept-Encoding\": \"gzip, deflate, br\",\n                \"Connection\": \"keep-alive\"\n            },\n            \"params\": {},\n            \"user\": {\n                \"id\": \"c2192dd3-1392-4da8-9dfd-023e0d36cb9e\",\n                \"username\": \"prithoo11335\",\n                \"email\": \"prithoo11335@gmail.com\",\n                \"date_joined\": \"2023-04-22T19:13:30.372276+05:30\",\n                \"slug\": \"prithoo11335\",\n                \"unsuccessful_login_attempts\": 0,\n                \"blocked_until\": null\n            },\n            \"timestampUtc\": \"2023-04-22T13:44:14.946000\"\n        },\n        {\n            \"_id\": \"4CEE68F9E925441482B4E50D067BF5C8\",\n            \"method\": \"POST\",\n            \"path\": \"/api/user/login/password/\",\n            \"cookies\": {},\n            \"body\": {\n                \"username\": null,\n                \"email\": \"admin@admin.com\",\n                \"password\": \"password\"\n            },\n            \"headers\": {\n                \"Content-Length\": \"88\",\n                \"Content-Type\": \"application/json\",\n                \"User-Agent\": \"PostmanRuntime/7.32.2\",\n                \"Accept\": \"*/*\",\n                \"Cache-Control\": \"no-cache\",\n                \"Postman-Token\": \"e4769bf3-b599-4747-94c2-06a95238231c\",\n                \"Host\": \"localhost:8000\",\n                \"Accept-Encoding\": \"gzip, deflate, br\",\n                \"Connection\": \"keep-alive\"\n            },\n            \"params\": {},\n            \"user\": {},\n            \"timestampUtc\": \"2023-04-22T15:07:26.493000\"\n        },\n        {\n            \"_id\": \"F045605FFC654C72917F65051DB42687\",\n            \"method\": \"PUT\",\n            \"path\": \"/api/user/info/\",\n            \"cookies\": {},\n            \"body\": {\n                \"first_name\": \"Prithoo\",\n                \"middle_name\": [\n                    \"Pinak\"\n                ],\n                \"last_name\": \"Medhi\",\n                \"regnal_number\": 1,\n                \"gender\": \"Male\",\n                \"date_of_birth\": \"1992-09-25\",\n                \"age\": null\n            },\n            \"headers\": {\n                \"Content-Length\": \"209\",\n                \"Content-Type\": \"application/json\",\n                \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgyMTk5ODI4LCJpYXQiOjE2ODIxNzEwMjgsImp0aSI6IjEzZDQ2NjBiMzRiMDQ3N2FiZDA4ODI3MTNhYjViY2M5IiwidXNlcl9pZCI6ImMyMTkyZGQzLTEzOTItNGRhOC05ZGZkLTAyM2UwZDM2Y2I5ZSJ9.atP1rv8PPAD00VyisIHmg_h1YeXFpWgTVejkvzeqjL4\",\n                \"User-Agent\": \"PostmanRuntime/7.32.2\",\n                \"Accept\": \"*/*\",\n                \"Cache-Control\": \"no-cache\",\n                \"Postman-Token\": \"34896a5d-4145-4fcd-9dfe-2177222a67ca\",\n                \"Host\": \"localhost:8000\",\n                \"Accept-Encoding\": \"gzip, deflate, br\",\n                \"Connection\": \"keep-alive\"\n            },\n            \"params\": {},\n            \"user\": {\n                \"id\": \"c2192dd3-1392-4da8-9dfd-023e0d36cb9e\",\n                \"username\": \"prithoo11335\",\n                \"email\": \"prithoo11335@gmail.com\",\n                \"date_joined\": \"2023-04-22T19:13:30.372276+05:30\",\n                \"slug\": \"prithoo11335\",\n                \"unsuccessful_login_attempts\": 0,\n                \"blocked_until\": null\n            },\n            \"timestampUtc\": \"2023-04-22T15:08:53.135000\"\n        },\n        {\n            \"_id\": \"BD8CA56561CF403591A72D8C92BB36A2\",\n            \"method\": \"PUT\",\n            \"path\": \"/api/user/info/\",\n            \"cookies\": {},\n            \"body\": {\n                \"first_name\": \"Prithoo\",\n                \"middle_name\": [\n                    \"Pinak\"\n                ],\n                \"last_name\": \"Medhi\",\n                \"regnal_number\": 1,\n                \"gender\": \"Male\",\n                \"date_of_birth\": \"1992-09-25\",\n                \"age\": null\n            },\n            \"headers\": {\n                \"Content-Length\": \"209\",\n                \"Content-Type\": \"application/json\",\n                \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgyMTk5ODI4LCJpYXQiOjE2ODIxNzEwMjgsImp0aSI6IjEzZDQ2NjBiMzRiMDQ3N2FiZDA4ODI3MTNhYjViY2M5IiwidXNlcl9pZCI6ImMyMTkyZGQzLTEzOTItNGRhOC05ZGZkLTAyM2UwZDM2Y2I5ZSJ9.atP1rv8PPAD00VyisIHmg_h1YeXFpWgTVejkvzeqjL4\",\n                \"User-Agent\": \"PostmanRuntime/7.32.2\",\n                \"Accept\": \"*/*\",\n                \"Cache-Control\": \"no-cache\",\n                \"Postman-Token\": \"56b24a8a-91bc-421d-bf77-760f07d451cb\",\n                \"Host\": \"localhost:8000\",\n                \"Accept-Encoding\": \"gzip, deflate, br\",\n                \"Connection\": \"keep-alive\"\n            },\n            \"params\": {},\n            \"user\": {\n                \"id\": \"c2192dd3-1392-4da8-9dfd-023e0d36cb9e\",\n                \"username\": \"prithoo11335\",\n                \"email\": \"prithoo11335@gmail.com\",\n                \"date_joined\": \"2023-04-22T19:13:30.372276+05:30\",\n                \"slug\": \"prithoo11335\",\n                \"unsuccessful_login_attempts\": 0,\n                \"blocked_until\": null\n            },\n            \"timestampUtc\": \"2023-04-22T15:08:54.191000\"\n        },\n        {\n            \"_id\": \"0CE6BDDD661947278252EE62891A27A6\",\n            \"method\": \"PUT\",\n            \"path\": \"/api/user/info/\",\n            \"cookies\": {},\n            \"body\": {\n                \"first_name\": \"Prithoo\",\n                \"middle_name\": [\n                    \"Pinak\"\n                ],\n                \"last_name\": \"Medhi\",\n                \"regnal_number\": 1,\n                \"gender\": \"Male\",\n                \"date_of_birth\": \"1992-09-25\",\n                \"age\": null\n            },\n            \"headers\": {\n                \"Content-Length\": \"209\",\n                \"Content-Type\": \"application/json\",\n                \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgyMTk5ODI4LCJpYXQiOjE2ODIxNzEwMjgsImp0aSI6IjEzZDQ2NjBiMzRiMDQ3N2FiZDA4ODI3MTNhYjViY2M5IiwidXNlcl9pZCI6ImMyMTkyZGQzLTEzOTItNGRhOC05ZGZkLTAyM2UwZDM2Y2I5ZSJ9.atP1rv8PPAD00VyisIHmg_h1YeXFpWgTVejkvzeqjL4\",\n                \"User-Agent\": \"PostmanRuntime/7.32.2\",\n                \"Accept\": \"*/*\",\n                \"Cache-Control\": \"no-cache\",\n                \"Postman-Token\": \"b967731e-e211-49d9-9897-6fe6b0632d79\",\n                \"Host\": \"localhost:8000\",\n                \"Accept-Encoding\": \"gzip, deflate, br\",\n                \"Connection\": \"keep-alive\"\n            },\n            \"params\": {},\n            \"user\": {\n                \"id\": \"c2192dd3-1392-4da8-9dfd-023e0d36cb9e\",\n                \"username\": \"prithoo11335\",\n                \"email\": \"prithoo11335@gmail.com\",\n                \"date_joined\": \"2023-04-22T19:13:30.372276+05:30\",\n                \"slug\": \"prithoo11335\",\n                \"unsuccessful_login_attempts\": 0,\n                \"blocked_until\": null\n            },\n            \"timestampUtc\": \"2023-04-22T15:08:55.048000\"\n        },\n        {\n            \"_id\": \"5F8CE01BAC1E403AA248F30145F56FC9\",\n            \"method\": \"PUT\",\n            \"path\": \"/api/user/info/\",\n            \"cookies\": {},\n            \"body\": {\n                \"first_name\": \"Prithoo\",\n                \"middle_name\": [\n                    \"Pinak\"\n                ],\n                \"last_name\": \"Medhi\",\n                \"regnal_number\": 1,\n                \"gender\": \"Male\",\n                \"date_of_birth\": \"1992-09-25\",\n                \"age\": null\n            },\n            \"headers\": {\n                \"Content-Length\": \"209\",\n                \"Content-Type\": \"application/json\",\n                \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgyMTk5ODI4LCJpYXQiOjE2ODIxNzEwMjgsImp0aSI6IjEzZDQ2NjBiMzRiMDQ3N2FiZDA4ODI3MTNhYjViY2M5IiwidXNlcl9pZCI6ImMyMTkyZGQzLTEzOTItNGRhOC05ZGZkLTAyM2UwZDM2Y2I5ZSJ9.atP1rv8PPAD00VyisIHmg_h1YeXFpWgTVejkvzeqjL4\",\n                \"User-Agent\": \"PostmanRuntime/7.32.2\",\n                \"Accept\": \"*/*\",\n                \"Cache-Control\": \"no-cache\",\n                \"Postman-Token\": \"966d8a12-bb93-41dd-8e27-62c1806a318f\",\n                \"Host\": \"localhost:8000\",\n                \"Accept-Encoding\": \"gzip, deflate, br\",\n                \"Connection\": \"keep-alive\"\n            },\n            \"params\": {},\n            \"user\": {\n                \"id\": \"c2192dd3-1392-4da8-9dfd-023e0d36cb9e\",\n                \"username\": \"prithoo11335\",\n                \"email\": \"prithoo11335@gmail.com\",\n                \"date_joined\": \"2023-04-22T19:13:30.372276+05:30\",\n                \"slug\": \"prithoo11335\",\n                \"unsuccessful_login_attempts\": 0,\n                \"blocked_until\": null\n            },\n            \"timestampUtc\": \"2023-04-22T15:08:55.832000\"\n        },\n        {\n            \"_id\": \"C2E86157E90B4C55A68297D2619C4F55\",\n            \"method\": \"PUT\",\n            \"path\": \"/api/user/info/\",\n            \"cookies\": {},\n            \"body\": {\n                \"first_name\": \"Prithoo\",\n                \"middle_name\": [\n                    \"Pinak\"\n                ],\n                \"last_name\": \"Medhi\",\n                \"regnal_number\": 1,\n                \"gender\": \"Male\",\n                \"date_of_birth\": \"1992-09-25\",\n                \"age\": null\n            },\n            \"headers\": {\n                \"Content-Length\": \"209\",\n                \"Content-Type\": \"application/json\",\n                \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgyMTk5ODI4LCJpYXQiOjE2ODIxNzEwMjgsImp0aSI6IjEzZDQ2NjBiMzRiMDQ3N2FiZDA4ODI3MTNhYjViY2M5IiwidXNlcl9pZCI6ImMyMTkyZGQzLTEzOTItNGRhOC05ZGZkLTAyM2UwZDM2Y2I5ZSJ9.atP1rv8PPAD00VyisIHmg_h1YeXFpWgTVejkvzeqjL4\",\n                \"User-Agent\": \"PostmanRuntime/7.32.2\",\n                \"Accept\": \"*/*\",\n                \"Cache-Control\": \"no-cache\",\n                \"Postman-Token\": \"1db63ccb-a43b-46ac-99b5-d8c13e50424b\",\n                \"Host\": \"localhost:8000\",\n                \"Accept-Encoding\": \"gzip, deflate, br\",\n                \"Connection\": \"keep-alive\"\n            },\n            \"params\": {},\n            \"user\": {\n                \"id\": \"c2192dd3-1392-4da8-9dfd-023e0d36cb9e\",\n                \"username\": \"prithoo11335\",\n                \"email\": \"prithoo11335@gmail.com\",\n                \"date_joined\": \"2023-04-22T19:13:30.372276+05:30\",\n                \"slug\": \"prithoo11335\",\n                \"unsuccessful_login_attempts\": 0,\n                \"blocked_until\": null\n            },\n            \"timestampUtc\": \"2023-04-22T15:08:56.645000\"\n        },\n        {\n            \"_id\": \"6DF67E1DBD904030AA9F04D9EAE643DF\",\n            \"method\": \"PUT\",\n            \"path\": \"/api/user/info/\",\n            \"cookies\": {},\n            \"body\": {\n                \"first_name\": \"Prithoo\",\n                \"middle_name\": [\n                    \"Pinak\"\n                ],\n                \"last_name\": \"Medhi\",\n                \"regnal_number\": 1,\n                \"gender\": \"Male\",\n                \"date_of_birth\": \"1992-09-25\",\n                \"age\": null\n            },\n            \"headers\": {\n                \"Content-Length\": \"209\",\n                \"Content-Type\": \"application/json\",\n                \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgyMTk5ODI4LCJpYXQiOjE2ODIxNzEwMjgsImp0aSI6IjEzZDQ2NjBiMzRiMDQ3N2FiZDA4ODI3MTNhYjViY2M5IiwidXNlcl9pZCI6ImMyMTkyZGQzLTEzOTItNGRhOC05ZGZkLTAyM2UwZDM2Y2I5ZSJ9.atP1rv8PPAD00VyisIHmg_h1YeXFpWgTVejkvzeqjL4\",\n                \"User-Agent\": \"PostmanRuntime/7.32.2\",\n                \"Accept\": \"*/*\",\n                \"Cache-Control\": \"no-cache\",\n                \"Postman-Token\": \"df8152e9-0384-4f34-9524-7232798e3af7\",\n                \"Host\": \"localhost:8000\",\n                \"Accept-Encoding\": \"gzip, deflate, br\",\n                \"Connection\": \"keep-alive\"\n            },\n            \"params\": {},\n            \"user\": {\n                \"id\": \"c2192dd3-1392-4da8-9dfd-023e0d36cb9e\",\n                \"username\": \"prithoo11335\",\n                \"email\": \"prithoo11335@gmail.com\",\n                \"date_joined\": \"2023-04-22T19:13:30.372276+05:30\",\n                \"slug\": \"prithoo11335\",\n                \"unsuccessful_login_attempts\": 0,\n                \"blocked_until\": null\n            },\n            \"timestampUtc\": \"2023-04-22T15:08:57.462000\"\n        },\n        {\n            \"_id\": \"D869F234B1234F119B35DCB8160032A3\",\n            \"method\": \"PUT\",\n            \"path\": \"/api/user/info/\",\n            \"cookies\": {},\n            \"body\": {\n                \"first_name\": \"Prithoo\",\n                \"middle_name\": [\n                    \"Pinak\"\n                ],\n                \"last_name\": \"Medhi\",\n                \"regnal_number\": 1,\n                \"gender\": \"Male\",\n                \"date_of_birth\": \"1992-09-25\",\n                \"age\": null\n            },\n            \"headers\": {\n                \"Content-Length\": \"209\",\n                \"Content-Type\": \"application/json\",\n                \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgyMTk5ODI4LCJpYXQiOjE2ODIxNzEwMjgsImp0aSI6IjEzZDQ2NjBiMzRiMDQ3N2FiZDA4ODI3MTNhYjViY2M5IiwidXNlcl9pZCI6ImMyMTkyZGQzLTEzOTItNGRhOC05ZGZkLTAyM2UwZDM2Y2I5ZSJ9.atP1rv8PPAD00VyisIHmg_h1YeXFpWgTVejkvzeqjL4\",\n                \"User-Agent\": \"PostmanRuntime/7.32.2\",\n                \"Accept\": \"*/*\",\n                \"Cache-Control\": \"no-cache\",\n                \"Postman-Token\": \"8b06f897-2d52-4723-9f6c-608f4587d532\",\n                \"Host\": \"localhost:8000\",\n                \"Accept-Encoding\": \"gzip, deflate, br\",\n                \"Connection\": \"keep-alive\"\n            },\n            \"params\": {},\n            \"user\": {\n                \"id\": \"c2192dd3-1392-4da8-9dfd-023e0d36cb9e\",\n                \"username\": \"prithoo11335\",\n                \"email\": \"prithoo11335@gmail.com\",\n                \"date_joined\": \"2023-04-22T19:13:30.372276+05:30\",\n                \"slug\": \"prithoo11335\",\n                \"unsuccessful_login_attempts\": 0,\n                \"blocked_until\": null\n            },\n            \"timestampUtc\": \"2023-04-22T15:08:58.266000\"\n        },\n        {\n            \"_id\": \"4447CD1161324A18AB554CB50D581FE8\",\n            \"method\": \"PUT\",\n            \"path\": \"/api/user/info/\",\n            \"cookies\": {},\n            \"body\": {\n                \"first_name\": \"Prithoo\",\n                \"middle_name\": [\n                    \"Pinak\"\n                ],\n                \"last_name\": \"Medhi\",\n                \"regnal_number\": 1,\n                \"gender\": \"Male\",\n                \"date_of_birth\": \"1992-09-25\",\n                \"age\": null\n            },\n            \"headers\": {\n                \"Content-Length\": \"209\",\n                \"Content-Type\": \"application/json\",\n                \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgyMTk5ODI4LCJpYXQiOjE2ODIxNzEwMjgsImp0aSI6IjEzZDQ2NjBiMzRiMDQ3N2FiZDA4ODI3MTNhYjViY2M5IiwidXNlcl9pZCI6ImMyMTkyZGQzLTEzOTItNGRhOC05ZGZkLTAyM2UwZDM2Y2I5ZSJ9.atP1rv8PPAD00VyisIHmg_h1YeXFpWgTVejkvzeqjL4\",\n                \"User-Agent\": \"PostmanRuntime/7.32.2\",\n                \"Accept\": \"*/*\",\n                \"Cache-Control\": \"no-cache\",\n                \"Postman-Token\": \"17f484d1-5b1c-4e0b-8695-c170c11d26ca\",\n                \"Host\": \"localhost:8000\",\n                \"Accept-Encoding\": \"gzip, deflate, br\",\n                \"Connection\": \"keep-alive\"\n            },\n            \"params\": {},\n            \"user\": {\n                \"id\": \"c2192dd3-1392-4da8-9dfd-023e0d36cb9e\",\n                \"username\": \"prithoo11335\",\n                \"email\": \"prithoo11335@gmail.com\",\n                \"date_joined\": \"2023-04-22T19:13:30.372276+05:30\",\n                \"slug\": \"prithoo11335\",\n                \"unsuccessful_login_attempts\": 0,\n                \"blocked_until\": null\n            },\n            \"timestampUtc\": \"2023-04-22T15:08:59.070000\"\n        },\n        {\n            \"_id\": \"76C0F484D2AF4057B5AD66FE7284FCD9\",\n            \"method\": \"PUT\",\n            \"path\": \"/api/user/info/\",\n            \"cookies\": {},\n            \"body\": {\n                \"first_name\": \"Prithoo\",\n                \"middle_name\": [\n                    \"Pinak\"\n                ],\n                \"last_name\": \"Medhi\",\n                \"regnal_number\": 1,\n                \"gender\": \"Male\",\n                \"date_of_birth\": \"1992-09-25\",\n                \"age\": null\n            },\n            \"headers\": {\n                \"Content-Length\": \"209\",\n                \"Content-Type\": \"application/json\",\n                \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgyMTk5ODI4LCJpYXQiOjE2ODIxNzEwMjgsImp0aSI6IjEzZDQ2NjBiMzRiMDQ3N2FiZDA4ODI3MTNhYjViY2M5IiwidXNlcl9pZCI6ImMyMTkyZGQzLTEzOTItNGRhOC05ZGZkLTAyM2UwZDM2Y2I5ZSJ9.atP1rv8PPAD00VyisIHmg_h1YeXFpWgTVejkvzeqjL4\",\n                \"User-Agent\": \"PostmanRuntime/7.32.2\",\n                \"Accept\": \"*/*\",\n                \"Cache-Control\": \"no-cache\",\n                \"Postman-Token\": \"b98075d9-f42a-44ec-85e0-2aa605cb25f9\",\n                \"Host\": \"localhost:8000\",\n                \"Accept-Encoding\": \"gzip, deflate, br\",\n                \"Connection\": \"keep-alive\"\n            },\n            \"params\": {},\n            \"user\": {\n                \"id\": \"c2192dd3-1392-4da8-9dfd-023e0d36cb9e\",\n                \"username\": \"prithoo11335\",\n                \"email\": \"prithoo11335@gmail.com\",\n                \"date_joined\": \"2023-04-22T19:13:30.372276+05:30\",\n                \"slug\": \"prithoo11335\",\n                \"unsuccessful_login_attempts\": 0,\n                \"blocked_until\": null\n            },\n            \"timestampUtc\": \"2023-04-22T15:09:00.051000\"\n        },\n        {\n            \"_id\": \"CF10480D2F504E098A93529115BFD8A5\",\n            \"method\": \"PUT\",\n            \"path\": \"/api/user/info/\",\n            \"cookies\": {},\n            \"body\": {\n                \"first_name\": \"Prithoo\",\n                \"middle_name\": [\n                    \"Pinak\"\n                ],\n                \"last_name\": \"Medhi\",\n                \"regnal_number\": 1,\n                \"gender\": \"Male\",\n                \"date_of_birth\": \"1992-09-25\",\n                \"age\": null\n            },\n            \"headers\": {\n                \"Content-Length\": \"209\",\n                \"Content-Type\": \"application/json\",\n                \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgyMTk5ODI4LCJpYXQiOjE2ODIxNzEwMjgsImp0aSI6IjEzZDQ2NjBiMzRiMDQ3N2FiZDA4ODI3MTNhYjViY2M5IiwidXNlcl9pZCI6ImMyMTkyZGQzLTEzOTItNGRhOC05ZGZkLTAyM2UwZDM2Y2I5ZSJ9.atP1rv8PPAD00VyisIHmg_h1YeXFpWgTVejkvzeqjL4\",\n                \"User-Agent\": \"PostmanRuntime/7.32.2\",\n                \"Accept\": \"*/*\",\n                \"Cache-Control\": \"no-cache\",\n                \"Postman-Token\": \"9ce938ca-18bb-4b1c-9d68-91a243a454aa\",\n                \"Host\": \"localhost:8000\",\n                \"Accept-Encoding\": \"gzip, deflate, br\",\n                \"Connection\": \"keep-alive\"\n            },\n            \"params\": {},\n            \"user\": {\n                \"id\": \"c2192dd3-1392-4da8-9dfd-023e0d36cb9e\",\n                \"username\": \"prithoo11335\",\n                \"email\": \"prithoo11335@gmail.com\",\n                \"date_joined\": \"2023-04-22T19:13:30.372276+05:30\",\n                \"slug\": \"prithoo11335\",\n                \"unsuccessful_login_attempts\": 0,\n                \"blocked_until\": null\n            },\n            \"timestampUtc\": \"2023-04-22T15:09:00.948000\"\n        },\n        {\n            \"_id\": \"7283936615DE41D0804D3FCDAACC811E\",\n            \"method\": \"POST\",\n            \"path\": \"/api/user/info/\",\n            \"cookies\": {},\n            \"body\": {},\n            \"headers\": {\n                \"Content-Length\": \"0\",\n                \"Content-Type\": \"text/plain\",\n                \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgyMTk5ODI4LCJpYXQiOjE2ODIxNzEwMjgsImp0aSI6IjEzZDQ2NjBiMzRiMDQ3N2FiZDA4ODI3MTNhYjViY2M5IiwidXNlcl9pZCI6ImMyMTkyZGQzLTEzOTItNGRhOC05ZGZkLTAyM2UwZDM2Y2I5ZSJ9.atP1rv8PPAD00VyisIHmg_h1YeXFpWgTVejkvzeqjL4\",\n                \"User-Agent\": \"PostmanRuntime/7.32.2\",\n                \"Accept\": \"*/*\",\n                \"Cache-Control\": \"no-cache\",\n                \"Postman-Token\": \"732b22ad-9c1f-464c-9f99-6dfa63218079\",\n                \"Host\": \"localhost:8000\",\n                \"Accept-Encoding\": \"gzip, deflate, br\",\n                \"Connection\": \"keep-alive\"\n            },\n            \"params\": {\n                \"term\": \"admin\"\n            },\n            \"user\": {\n                \"id\": \"c2192dd3-1392-4da8-9dfd-023e0d36cb9e\",\n                \"username\": \"prithoo11335\",\n                \"email\": \"prithoo11335@gmail.com\",\n                \"date_joined\": \"2023-04-22T19:13:30.372276+05:30\",\n                \"slug\": \"prithoo11335\",\n                \"unsuccessful_login_attempts\": 0,\n                \"blocked_until\": null\n            },\n            \"timestampUtc\": \"2023-04-22T15:09:37.279000\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Search for Request Log",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminAccess}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}/api/admin/logs/request/?page=1&method=put&path=/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"logs",
+								"request",
+								""
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "method",
+									"value": "put"
+								},
+								{
+									"key": "path",
+									"value": "/"
+								}
+							]
+						},
+						"description": "API used to search for requests made to the backend."
+					},
+					"response": [
+						{
+							"name": "Search for Request Log",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer •••••••",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "localhost:8000/api/admin/logs/request/?page=1&method=put&path=/",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"",
+										"api",
+										"admin",
+										"logs",
+										"request",
+										""
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "method",
+											"value": "put"
+										},
+										{
+											"key": "path",
+											"value": "/"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sat, 22 Apr 2023 15:23:35 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.9.12"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, Origin, Cookie"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "12474"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"page\": 1,\n    \"results\": [\n        {\n            \"_id\": \"E462396E51B044839ABB478B1C66A3A6\",\n            \"method\": \"PUT\",\n            \"path\": \"/api/user/info/\",\n            \"cookies\": {},\n            \"body\": {\n                \"first_name\": \"Prithoo\",\n                \"middle_name\": [\n                    \"Pinak\"\n                ],\n                \"last_name\": \"Medhi\",\n                \"regnal_number\": 1,\n                \"gender\": \"Male\",\n                \"date_of_birth\": \"1992-09-25\",\n                \"age\": null\n            },\n            \"headers\": {\n                \"Content-Length\": \"209\",\n                \"Content-Type\": \"application/json\",\n                \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgyMTk5ODI4LCJpYXQiOjE2ODIxNzEwMjgsImp0aSI6IjEzZDQ2NjBiMzRiMDQ3N2FiZDA4ODI3MTNhYjViY2M5IiwidXNlcl9pZCI6ImMyMTkyZGQzLTEzOTItNGRhOC05ZGZkLTAyM2UwZDM2Y2I5ZSJ9.atP1rv8PPAD00VyisIHmg_h1YeXFpWgTVejkvzeqjL4\",\n                \"User-Agent\": \"PostmanRuntime/7.32.2\",\n                \"Accept\": \"*/*\",\n                \"Cache-Control\": \"no-cache\",\n                \"Postman-Token\": \"8f5f51d5-d119-437c-88fd-a1c00ed153a8\",\n                \"Host\": \"localhost:8000\",\n                \"Accept-Encoding\": \"gzip, deflate, br\",\n                \"Connection\": \"keep-alive\"\n            },\n            \"params\": {},\n            \"user\": {\n                \"id\": \"c2192dd3-1392-4da8-9dfd-023e0d36cb9e\",\n                \"username\": \"prithoo11335\",\n                \"email\": \"prithoo11335@gmail.com\",\n                \"date_joined\": \"2023-04-22T19:13:30.372276+05:30\",\n                \"slug\": \"prithoo11335\",\n                \"unsuccessful_login_attempts\": 0,\n                \"blocked_until\": null\n            },\n            \"timestampUtc\": \"2023-04-22T13:44:14.946000\"\n        },\n        {\n            \"_id\": \"F045605FFC654C72917F65051DB42687\",\n            \"method\": \"PUT\",\n            \"path\": \"/api/user/info/\",\n            \"cookies\": {},\n            \"body\": {\n                \"first_name\": \"Prithoo\",\n                \"middle_name\": [\n                    \"Pinak\"\n                ],\n                \"last_name\": \"Medhi\",\n                \"regnal_number\": 1,\n                \"gender\": \"Male\",\n                \"date_of_birth\": \"1992-09-25\",\n                \"age\": null\n            },\n            \"headers\": {\n                \"Content-Length\": \"209\",\n                \"Content-Type\": \"application/json\",\n                \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgyMTk5ODI4LCJpYXQiOjE2ODIxNzEwMjgsImp0aSI6IjEzZDQ2NjBiMzRiMDQ3N2FiZDA4ODI3MTNhYjViY2M5IiwidXNlcl9pZCI6ImMyMTkyZGQzLTEzOTItNGRhOC05ZGZkLTAyM2UwZDM2Y2I5ZSJ9.atP1rv8PPAD00VyisIHmg_h1YeXFpWgTVejkvzeqjL4\",\n                \"User-Agent\": \"PostmanRuntime/7.32.2\",\n                \"Accept\": \"*/*\",\n                \"Cache-Control\": \"no-cache\",\n                \"Postman-Token\": \"34896a5d-4145-4fcd-9dfe-2177222a67ca\",\n                \"Host\": \"localhost:8000\",\n                \"Accept-Encoding\": \"gzip, deflate, br\",\n                \"Connection\": \"keep-alive\"\n            },\n            \"params\": {},\n            \"user\": {\n                \"id\": \"c2192dd3-1392-4da8-9dfd-023e0d36cb9e\",\n                \"username\": \"prithoo11335\",\n                \"email\": \"prithoo11335@gmail.com\",\n                \"date_joined\": \"2023-04-22T19:13:30.372276+05:30\",\n                \"slug\": \"prithoo11335\",\n                \"unsuccessful_login_attempts\": 0,\n                \"blocked_until\": null\n            },\n            \"timestampUtc\": \"2023-04-22T15:08:53.135000\"\n        },\n        {\n            \"_id\": \"BD8CA56561CF403591A72D8C92BB36A2\",\n            \"method\": \"PUT\",\n            \"path\": \"/api/user/info/\",\n            \"cookies\": {},\n            \"body\": {\n                \"first_name\": \"Prithoo\",\n                \"middle_name\": [\n                    \"Pinak\"\n                ],\n                \"last_name\": \"Medhi\",\n                \"regnal_number\": 1,\n                \"gender\": \"Male\",\n                \"date_of_birth\": \"1992-09-25\",\n                \"age\": null\n            },\n            \"headers\": {\n                \"Content-Length\": \"209\",\n                \"Content-Type\": \"application/json\",\n                \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgyMTk5ODI4LCJpYXQiOjE2ODIxNzEwMjgsImp0aSI6IjEzZDQ2NjBiMzRiMDQ3N2FiZDA4ODI3MTNhYjViY2M5IiwidXNlcl9pZCI6ImMyMTkyZGQzLTEzOTItNGRhOC05ZGZkLTAyM2UwZDM2Y2I5ZSJ9.atP1rv8PPAD00VyisIHmg_h1YeXFpWgTVejkvzeqjL4\",\n                \"User-Agent\": \"PostmanRuntime/7.32.2\",\n                \"Accept\": \"*/*\",\n                \"Cache-Control\": \"no-cache\",\n                \"Postman-Token\": \"56b24a8a-91bc-421d-bf77-760f07d451cb\",\n                \"Host\": \"localhost:8000\",\n                \"Accept-Encoding\": \"gzip, deflate, br\",\n                \"Connection\": \"keep-alive\"\n            },\n            \"params\": {},\n            \"user\": {\n                \"id\": \"c2192dd3-1392-4da8-9dfd-023e0d36cb9e\",\n                \"username\": \"prithoo11335\",\n                \"email\": \"prithoo11335@gmail.com\",\n                \"date_joined\": \"2023-04-22T19:13:30.372276+05:30\",\n                \"slug\": \"prithoo11335\",\n                \"unsuccessful_login_attempts\": 0,\n                \"blocked_until\": null\n            },\n            \"timestampUtc\": \"2023-04-22T15:08:54.191000\"\n        },\n        {\n            \"_id\": \"0CE6BDDD661947278252EE62891A27A6\",\n            \"method\": \"PUT\",\n            \"path\": \"/api/user/info/\",\n            \"cookies\": {},\n            \"body\": {\n                \"first_name\": \"Prithoo\",\n                \"middle_name\": [\n                    \"Pinak\"\n                ],\n                \"last_name\": \"Medhi\",\n                \"regnal_number\": 1,\n                \"gender\": \"Male\",\n                \"date_of_birth\": \"1992-09-25\",\n                \"age\": null\n            },\n            \"headers\": {\n                \"Content-Length\": \"209\",\n                \"Content-Type\": \"application/json\",\n                \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgyMTk5ODI4LCJpYXQiOjE2ODIxNzEwMjgsImp0aSI6IjEzZDQ2NjBiMzRiMDQ3N2FiZDA4ODI3MTNhYjViY2M5IiwidXNlcl9pZCI6ImMyMTkyZGQzLTEzOTItNGRhOC05ZGZkLTAyM2UwZDM2Y2I5ZSJ9.atP1rv8PPAD00VyisIHmg_h1YeXFpWgTVejkvzeqjL4\",\n                \"User-Agent\": \"PostmanRuntime/7.32.2\",\n                \"Accept\": \"*/*\",\n                \"Cache-Control\": \"no-cache\",\n                \"Postman-Token\": \"b967731e-e211-49d9-9897-6fe6b0632d79\",\n                \"Host\": \"localhost:8000\",\n                \"Accept-Encoding\": \"gzip, deflate, br\",\n                \"Connection\": \"keep-alive\"\n            },\n            \"params\": {},\n            \"user\": {\n                \"id\": \"c2192dd3-1392-4da8-9dfd-023e0d36cb9e\",\n                \"username\": \"prithoo11335\",\n                \"email\": \"prithoo11335@gmail.com\",\n                \"date_joined\": \"2023-04-22T19:13:30.372276+05:30\",\n                \"slug\": \"prithoo11335\",\n                \"unsuccessful_login_attempts\": 0,\n                \"blocked_until\": null\n            },\n            \"timestampUtc\": \"2023-04-22T15:08:55.048000\"\n        },\n        {\n            \"_id\": \"5F8CE01BAC1E403AA248F30145F56FC9\",\n            \"method\": \"PUT\",\n            \"path\": \"/api/user/info/\",\n            \"cookies\": {},\n            \"body\": {\n                \"first_name\": \"Prithoo\",\n                \"middle_name\": [\n                    \"Pinak\"\n                ],\n                \"last_name\": \"Medhi\",\n                \"regnal_number\": 1,\n                \"gender\": \"Male\",\n                \"date_of_birth\": \"1992-09-25\",\n                \"age\": null\n            },\n            \"headers\": {\n                \"Content-Length\": \"209\",\n                \"Content-Type\": \"application/json\",\n                \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgyMTk5ODI4LCJpYXQiOjE2ODIxNzEwMjgsImp0aSI6IjEzZDQ2NjBiMzRiMDQ3N2FiZDA4ODI3MTNhYjViY2M5IiwidXNlcl9pZCI6ImMyMTkyZGQzLTEzOTItNGRhOC05ZGZkLTAyM2UwZDM2Y2I5ZSJ9.atP1rv8PPAD00VyisIHmg_h1YeXFpWgTVejkvzeqjL4\",\n                \"User-Agent\": \"PostmanRuntime/7.32.2\",\n                \"Accept\": \"*/*\",\n                \"Cache-Control\": \"no-cache\",\n                \"Postman-Token\": \"966d8a12-bb93-41dd-8e27-62c1806a318f\",\n                \"Host\": \"localhost:8000\",\n                \"Accept-Encoding\": \"gzip, deflate, br\",\n                \"Connection\": \"keep-alive\"\n            },\n            \"params\": {},\n            \"user\": {\n                \"id\": \"c2192dd3-1392-4da8-9dfd-023e0d36cb9e\",\n                \"username\": \"prithoo11335\",\n                \"email\": \"prithoo11335@gmail.com\",\n                \"date_joined\": \"2023-04-22T19:13:30.372276+05:30\",\n                \"slug\": \"prithoo11335\",\n                \"unsuccessful_login_attempts\": 0,\n                \"blocked_until\": null\n            },\n            \"timestampUtc\": \"2023-04-22T15:08:55.832000\"\n        },\n        {\n            \"_id\": \"C2E86157E90B4C55A68297D2619C4F55\",\n            \"method\": \"PUT\",\n            \"path\": \"/api/user/info/\",\n            \"cookies\": {},\n            \"body\": {\n                \"first_name\": \"Prithoo\",\n                \"middle_name\": [\n                    \"Pinak\"\n                ],\n                \"last_name\": \"Medhi\",\n                \"regnal_number\": 1,\n                \"gender\": \"Male\",\n                \"date_of_birth\": \"1992-09-25\",\n                \"age\": null\n            },\n            \"headers\": {\n                \"Content-Length\": \"209\",\n                \"Content-Type\": \"application/json\",\n                \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgyMTk5ODI4LCJpYXQiOjE2ODIxNzEwMjgsImp0aSI6IjEzZDQ2NjBiMzRiMDQ3N2FiZDA4ODI3MTNhYjViY2M5IiwidXNlcl9pZCI6ImMyMTkyZGQzLTEzOTItNGRhOC05ZGZkLTAyM2UwZDM2Y2I5ZSJ9.atP1rv8PPAD00VyisIHmg_h1YeXFpWgTVejkvzeqjL4\",\n                \"User-Agent\": \"PostmanRuntime/7.32.2\",\n                \"Accept\": \"*/*\",\n                \"Cache-Control\": \"no-cache\",\n                \"Postman-Token\": \"1db63ccb-a43b-46ac-99b5-d8c13e50424b\",\n                \"Host\": \"localhost:8000\",\n                \"Accept-Encoding\": \"gzip, deflate, br\",\n                \"Connection\": \"keep-alive\"\n            },\n            \"params\": {},\n            \"user\": {\n                \"id\": \"c2192dd3-1392-4da8-9dfd-023e0d36cb9e\",\n                \"username\": \"prithoo11335\",\n                \"email\": \"prithoo11335@gmail.com\",\n                \"date_joined\": \"2023-04-22T19:13:30.372276+05:30\",\n                \"slug\": \"prithoo11335\",\n                \"unsuccessful_login_attempts\": 0,\n                \"blocked_until\": null\n            },\n            \"timestampUtc\": \"2023-04-22T15:08:56.645000\"\n        },\n        {\n            \"_id\": \"6DF67E1DBD904030AA9F04D9EAE643DF\",\n            \"method\": \"PUT\",\n            \"path\": \"/api/user/info/\",\n            \"cookies\": {},\n            \"body\": {\n                \"first_name\": \"Prithoo\",\n                \"middle_name\": [\n                    \"Pinak\"\n                ],\n                \"last_name\": \"Medhi\",\n                \"regnal_number\": 1,\n                \"gender\": \"Male\",\n                \"date_of_birth\": \"1992-09-25\",\n                \"age\": null\n            },\n            \"headers\": {\n                \"Content-Length\": \"209\",\n                \"Content-Type\": \"application/json\",\n                \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgyMTk5ODI4LCJpYXQiOjE2ODIxNzEwMjgsImp0aSI6IjEzZDQ2NjBiMzRiMDQ3N2FiZDA4ODI3MTNhYjViY2M5IiwidXNlcl9pZCI6ImMyMTkyZGQzLTEzOTItNGRhOC05ZGZkLTAyM2UwZDM2Y2I5ZSJ9.atP1rv8PPAD00VyisIHmg_h1YeXFpWgTVejkvzeqjL4\",\n                \"User-Agent\": \"PostmanRuntime/7.32.2\",\n                \"Accept\": \"*/*\",\n                \"Cache-Control\": \"no-cache\",\n                \"Postman-Token\": \"df8152e9-0384-4f34-9524-7232798e3af7\",\n                \"Host\": \"localhost:8000\",\n                \"Accept-Encoding\": \"gzip, deflate, br\",\n                \"Connection\": \"keep-alive\"\n            },\n            \"params\": {},\n            \"user\": {\n                \"id\": \"c2192dd3-1392-4da8-9dfd-023e0d36cb9e\",\n                \"username\": \"prithoo11335\",\n                \"email\": \"prithoo11335@gmail.com\",\n                \"date_joined\": \"2023-04-22T19:13:30.372276+05:30\",\n                \"slug\": \"prithoo11335\",\n                \"unsuccessful_login_attempts\": 0,\n                \"blocked_until\": null\n            },\n            \"timestampUtc\": \"2023-04-22T15:08:57.462000\"\n        },\n        {\n            \"_id\": \"D869F234B1234F119B35DCB8160032A3\",\n            \"method\": \"PUT\",\n            \"path\": \"/api/user/info/\",\n            \"cookies\": {},\n            \"body\": {\n                \"first_name\": \"Prithoo\",\n                \"middle_name\": [\n                    \"Pinak\"\n                ],\n                \"last_name\": \"Medhi\",\n                \"regnal_number\": 1,\n                \"gender\": \"Male\",\n                \"date_of_birth\": \"1992-09-25\",\n                \"age\": null\n            },\n            \"headers\": {\n                \"Content-Length\": \"209\",\n                \"Content-Type\": \"application/json\",\n                \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgyMTk5ODI4LCJpYXQiOjE2ODIxNzEwMjgsImp0aSI6IjEzZDQ2NjBiMzRiMDQ3N2FiZDA4ODI3MTNhYjViY2M5IiwidXNlcl9pZCI6ImMyMTkyZGQzLTEzOTItNGRhOC05ZGZkLTAyM2UwZDM2Y2I5ZSJ9.atP1rv8PPAD00VyisIHmg_h1YeXFpWgTVejkvzeqjL4\",\n                \"User-Agent\": \"PostmanRuntime/7.32.2\",\n                \"Accept\": \"*/*\",\n                \"Cache-Control\": \"no-cache\",\n                \"Postman-Token\": \"8b06f897-2d52-4723-9f6c-608f4587d532\",\n                \"Host\": \"localhost:8000\",\n                \"Accept-Encoding\": \"gzip, deflate, br\",\n                \"Connection\": \"keep-alive\"\n            },\n            \"params\": {},\n            \"user\": {\n                \"id\": \"c2192dd3-1392-4da8-9dfd-023e0d36cb9e\",\n                \"username\": \"prithoo11335\",\n                \"email\": \"prithoo11335@gmail.com\",\n                \"date_joined\": \"2023-04-22T19:13:30.372276+05:30\",\n                \"slug\": \"prithoo11335\",\n                \"unsuccessful_login_attempts\": 0,\n                \"blocked_until\": null\n            },\n            \"timestampUtc\": \"2023-04-22T15:08:58.266000\"\n        },\n        {\n            \"_id\": \"4447CD1161324A18AB554CB50D581FE8\",\n            \"method\": \"PUT\",\n            \"path\": \"/api/user/info/\",\n            \"cookies\": {},\n            \"body\": {\n                \"first_name\": \"Prithoo\",\n                \"middle_name\": [\n                    \"Pinak\"\n                ],\n                \"last_name\": \"Medhi\",\n                \"regnal_number\": 1,\n                \"gender\": \"Male\",\n                \"date_of_birth\": \"1992-09-25\",\n                \"age\": null\n            },\n            \"headers\": {\n                \"Content-Length\": \"209\",\n                \"Content-Type\": \"application/json\",\n                \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgyMTk5ODI4LCJpYXQiOjE2ODIxNzEwMjgsImp0aSI6IjEzZDQ2NjBiMzRiMDQ3N2FiZDA4ODI3MTNhYjViY2M5IiwidXNlcl9pZCI6ImMyMTkyZGQzLTEzOTItNGRhOC05ZGZkLTAyM2UwZDM2Y2I5ZSJ9.atP1rv8PPAD00VyisIHmg_h1YeXFpWgTVejkvzeqjL4\",\n                \"User-Agent\": \"PostmanRuntime/7.32.2\",\n                \"Accept\": \"*/*\",\n                \"Cache-Control\": \"no-cache\",\n                \"Postman-Token\": \"17f484d1-5b1c-4e0b-8695-c170c11d26ca\",\n                \"Host\": \"localhost:8000\",\n                \"Accept-Encoding\": \"gzip, deflate, br\",\n                \"Connection\": \"keep-alive\"\n            },\n            \"params\": {},\n            \"user\": {\n                \"id\": \"c2192dd3-1392-4da8-9dfd-023e0d36cb9e\",\n                \"username\": \"prithoo11335\",\n                \"email\": \"prithoo11335@gmail.com\",\n                \"date_joined\": \"2023-04-22T19:13:30.372276+05:30\",\n                \"slug\": \"prithoo11335\",\n                \"unsuccessful_login_attempts\": 0,\n                \"blocked_until\": null\n            },\n            \"timestampUtc\": \"2023-04-22T15:08:59.070000\"\n        },\n        {\n            \"_id\": \"76C0F484D2AF4057B5AD66FE7284FCD9\",\n            \"method\": \"PUT\",\n            \"path\": \"/api/user/info/\",\n            \"cookies\": {},\n            \"body\": {\n                \"first_name\": \"Prithoo\",\n                \"middle_name\": [\n                    \"Pinak\"\n                ],\n                \"last_name\": \"Medhi\",\n                \"regnal_number\": 1,\n                \"gender\": \"Male\",\n                \"date_of_birth\": \"1992-09-25\",\n                \"age\": null\n            },\n            \"headers\": {\n                \"Content-Length\": \"209\",\n                \"Content-Type\": \"application/json\",\n                \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgyMTk5ODI4LCJpYXQiOjE2ODIxNzEwMjgsImp0aSI6IjEzZDQ2NjBiMzRiMDQ3N2FiZDA4ODI3MTNhYjViY2M5IiwidXNlcl9pZCI6ImMyMTkyZGQzLTEzOTItNGRhOC05ZGZkLTAyM2UwZDM2Y2I5ZSJ9.atP1rv8PPAD00VyisIHmg_h1YeXFpWgTVejkvzeqjL4\",\n                \"User-Agent\": \"PostmanRuntime/7.32.2\",\n                \"Accept\": \"*/*\",\n                \"Cache-Control\": \"no-cache\",\n                \"Postman-Token\": \"b98075d9-f42a-44ec-85e0-2aa605cb25f9\",\n                \"Host\": \"localhost:8000\",\n                \"Accept-Encoding\": \"gzip, deflate, br\",\n                \"Connection\": \"keep-alive\"\n            },\n            \"params\": {},\n            \"user\": {\n                \"id\": \"c2192dd3-1392-4da8-9dfd-023e0d36cb9e\",\n                \"username\": \"prithoo11335\",\n                \"email\": \"prithoo11335@gmail.com\",\n                \"date_joined\": \"2023-04-22T19:13:30.372276+05:30\",\n                \"slug\": \"prithoo11335\",\n                \"unsuccessful_login_attempts\": 0,\n                \"blocked_until\": null\n            },\n            \"timestampUtc\": \"2023-04-22T15:09:00.051000\"\n        },\n        {\n            \"_id\": \"CF10480D2F504E098A93529115BFD8A5\",\n            \"method\": \"PUT\",\n            \"path\": \"/api/user/info/\",\n            \"cookies\": {},\n            \"body\": {\n                \"first_name\": \"Prithoo\",\n                \"middle_name\": [\n                    \"Pinak\"\n                ],\n                \"last_name\": \"Medhi\",\n                \"regnal_number\": 1,\n                \"gender\": \"Male\",\n                \"date_of_birth\": \"1992-09-25\",\n                \"age\": null\n            },\n            \"headers\": {\n                \"Content-Length\": \"209\",\n                \"Content-Type\": \"application/json\",\n                \"Authorization\": \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgyMTk5ODI4LCJpYXQiOjE2ODIxNzEwMjgsImp0aSI6IjEzZDQ2NjBiMzRiMDQ3N2FiZDA4ODI3MTNhYjViY2M5IiwidXNlcl9pZCI6ImMyMTkyZGQzLTEzOTItNGRhOC05ZGZkLTAyM2UwZDM2Y2I5ZSJ9.atP1rv8PPAD00VyisIHmg_h1YeXFpWgTVejkvzeqjL4\",\n                \"User-Agent\": \"PostmanRuntime/7.32.2\",\n                \"Accept\": \"*/*\",\n                \"Cache-Control\": \"no-cache\",\n                \"Postman-Token\": \"9ce938ca-18bb-4b1c-9d68-91a243a454aa\",\n                \"Host\": \"localhost:8000\",\n                \"Accept-Encoding\": \"gzip, deflate, br\",\n                \"Connection\": \"keep-alive\"\n            },\n            \"params\": {},\n            \"user\": {\n                \"id\": \"c2192dd3-1392-4da8-9dfd-023e0d36cb9e\",\n                \"username\": \"prithoo11335\",\n                \"email\": \"prithoo11335@gmail.com\",\n                \"date_joined\": \"2023-04-22T19:13:30.372276+05:30\",\n                \"slug\": \"prithoo11335\",\n                \"unsuccessful_login_attempts\": 0,\n                \"blocked_until\": null\n            },\n            \"timestampUtc\": \"2023-04-22T15:09:00.948000\"\n        }\n    ]\n}"
+						}
+					]
+				}
+			],
+			"description": "Application that deals with administrative and maintainance tasks via APIs."
+		}
+	]
+}
