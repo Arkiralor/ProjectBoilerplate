@@ -4,6 +4,7 @@ from rest_framework.request import Request
 from rest_framework.views import APIView
 
 from core.boilerplate.response_template import Resp
+from user_app.serializers import ShowUserSerializer
 from user_app.utils import UserModelUtils, UserProfileModelUtils
 
 from user_app import logger
@@ -17,11 +18,32 @@ class AccessTestAPI(APIView):
             data= {
                 "user": request.user.email,
                 "message": "Access token working successfully."
-            }
+            },
+            status_code=status.HTTP_200_OK
         )
 
         logger.info(resp.message)
 
+        return resp.response()
+    
+    def post(self, request:Request, *args, **kwargs):
+        data = request.data
+        params = request.query_params
+        user = request.user
+
+        resp = Resp(
+            message="Authentication successfull in POST method.",
+            data={
+                "body": data,
+                "params": params,
+                "user": ShowUserSerializer(user).data
+            },
+            status_code=status.HTTP_200_OK
+        )
+
+        if resp.error:
+            raise resp.exception()
+        
         return resp.response()
 
 
@@ -83,6 +105,16 @@ class UserAPI(APIView):
         data = request.data
 
         resp = UserProfileModelUtils.put(user_id=user_id, data=data)
+
+        if resp.error:
+            raise resp.exception()
+        
+        return resp.response()
+    
+    def delete(self, request:Request, *args, **kwargs):
+        password = request.data.get("password")
+        reason = request.data.get("reason", "No reason given.")
+        resp = UserModelUtils.delete(user=request.user, password=password, reason=reason)
 
         if resp.error:
             raise resp.exception()

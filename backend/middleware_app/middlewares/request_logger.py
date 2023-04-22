@@ -1,5 +1,7 @@
+from datetime import datetime
 from json import loads
 from os import environ
+from uuid import uuid4
 
 from core.settings import DEBUG, SECRET_KEY
 from database.collections import DatabaseCollections
@@ -9,6 +11,7 @@ from jose import jwt
 from middleware_app import logger
 from middleware_app.models import RequestLog
 from user_app.models import User
+from user_app.serializers import ShowUserSerializer
 
 
 class RequestLogger(object):
@@ -46,8 +49,6 @@ class RequestLogger(object):
 
             token = headers.get("Authorization").split(" ")[1]
             validated = jwt.decode(token=token, key=SECRET_KEY, algorithms=[environ.get('JWT_ALGORITHM'),])
-
-            # arkiralor: Change `user_id` to whatever user identification you use in your JWT.
             return User.objects.filter(pk=validated.get("user_id")).first()
         except Exception as ex:
             logger.info(f"{ex}")
@@ -57,16 +58,20 @@ class RequestLogger(object):
         """
         Record the request in the appropriate collection in the MongoDB cluster that was set up.
         """
-        no_sql_data = {
-            "method": method,
-            "path": path,
-            "cookies": cookies,
-            "body": loads(body.decode('utf8', 'strict')) if body else "",
-            "headers": headers,
-            "params": params,
-            "user": user.email if type(user) == User else None
-        }
+        
         try:
+            no_sql_data = {
+                "_id": f"{uuid4()}",
+                "method": method,
+                "path": path,
+                "cookies": cookies,
+                "body": loads(body.decode('utf8', 'strict')) if body else {},
+                "headers": headers,
+                "params": params if params else {},
+                "user": ShowUserSerializer(user).data if user else {},
+                "timestampUtc": datetime.utcnow()
+            }
+
             _ = SynchronousMethods.insert_one(
                 no_sql_data, DatabaseCollections.request_logs)
         except Exception as ex:
@@ -87,7 +92,7 @@ class RequestLogger(object):
                 body_text=body.decode('utf8', 'strict') if body else "",
                 headers=headers,
                 params=params,
-                user=user
+                user=user if type(user) == User else None
             )
         except Exception as ex:
             logger.exception(f"{ex}")
@@ -99,14 +104,14 @@ class RequestLogger(object):
             cookies = request.COOKIES
             body = request.body
             headers = request.headers
-            params = request.content_params
-            user = self.get_jwt_user(headers=headers)
+            params = request.GET
+            user = request.user
 
-            if not type(user) == User:
-                user = None
+            if not user or not type(user)==User:
+                user = self.get_jwt_user(headers=headers)
 
             logger.info(
-                f"INCOMING REQUEST: `USER: {user}\tPATH:{path}\tMETHOD: {method}`")
+                f"INCOMING REQUEST: `USER: {user.email if user else None}\tPATH:{path}\tMETHOD: {method}`")
 
             self.record_in_nosql(method, path, cookies,
                                  body, headers, params, user)

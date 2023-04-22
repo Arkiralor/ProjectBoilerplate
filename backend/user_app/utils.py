@@ -1,3 +1,5 @@
+from datetime import datetime, timezone, timedelta
+
 from django.conf import settings
 from django.contrib.auth.hashers import make_password, check_password
 from django.core.paginator import Paginator
@@ -8,6 +10,9 @@ from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from core.boilerplate.response_template import Resp
+from database.collections import DatabaseCollections
+from database.methods import SynchronousMethods
+from database.synchronous import s_db
 from user_app.models import User, UserProfile
 from user_app.model_choices import UserModelChoices
 from user_app.serializers import UserRegisterSerializer, ShowUserSerializer, UserProfileInputSerializer, UserProfileOutputSerializer
@@ -266,6 +271,61 @@ class UserModelUtils:
         logger.info(
             f"User {user.email} logged in at {resp.data.get('login')} via password.")
 
+        return resp
+
+    @classmethod
+    def insert_into_mongo(cls, data:dict=None, reason:str=None)->None:
+        try:
+            data["_id"] = data.get("id")
+            del data["id"]
+
+            data["reason"] = reason
+            data["timestamp"] = datetime.utcnow() + timedelta(hours=5, minutes=30)
+        
+            _ = SynchronousMethods.insert_one(data=data, collection=DatabaseCollections.deleted_users)
+        except Exception as ex:
+            logger.warn(f"{ex}")
+
+
+    @classmethod
+    def delete(cls, user:User=None, password:str=None, reason:str=None) -> Resp:
+        """
+        Utility method for a user to delete their account.
+        """
+        resp = Resp()
+
+        if not user or not password:
+            resp.error = "Missing Data"
+            resp.message = "Both user and password are required."
+            resp.data = {
+                "user": user.email,
+                "password": password
+            }
+            resp.status_code = status.HTTP_400_BAD_REQUEST
+
+            logger.warn(resp.message)
+            return resp
+        
+        if not check_password(password, user.password):
+            resp.error = "Incorrect Password"
+            resp.message = resp.error
+            resp.data = {
+                "user": user.email,
+                "password": password
+            }
+            resp.status_code = status.HTTP_401_UNAUTHORIZED
+
+            logger.warn(resp.message)
+            return resp
+        
+        cls.insert_into_mongo(data=ShowUserSerializer(user).data, reason=reason)        
+
+        user.delete()
+
+        resp.message = f"User deleted successfully."
+        resp.status_code = status.HTTP_200_OK
+        
+        logger.info(resp.message)
         return resp
 
 
