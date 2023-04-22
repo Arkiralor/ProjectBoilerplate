@@ -75,3 +75,4 @@ AWS_REGION_NAME = ""
 ## Documentation
 
 1. [Postman](https://documenter.getpostman.com/view/17779018/2s93Y3wh65)
+2. [JSON](https://github.com/Arkiralor/ProjectBoilerplate/blob/master/docs/backend/backend_postman_collection.json)
