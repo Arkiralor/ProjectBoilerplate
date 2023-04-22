@@ -2,6 +2,8 @@ from core.settings import MAX_ITEMS_PER_PAGE
 from database.asynchrous import as_db
 from database.synchronous import s_db
 
+from database import logger
+
 
 
 class AsynchronousMethods:
@@ -19,13 +21,25 @@ class AsynchronousMethods:
         return new
     
     @classmethod
-    async def find(cls, filter_dict:dict=None, collection:str=None, page:int=1)->dict:
+    async def find(cls, filter_dict:dict=None, collection:str=None, page:int=1)->list:
         if not filter_dict:
             results = await cls.db[collection].find().skip((page-1)*MAX_ITEMS_PER_PAGE).limit(MAX_ITEMS_PER_PAGE)
         else:
             results = await cls.db[collection].find(filter_dict).skip((page-1)*MAX_ITEMS_PER_PAGE).limit(MAX_ITEMS_PER_PAGE)
 
         return list(results)
+    
+    @classmethod
+    async def exists(cls, filter_dict:dict=None, collection:str=None)->bool:
+        if not filter_dict:
+            return False
+        
+        result = await cls.db[collection].find(filter_dict).count()
+        logger.info(f"Count: {result}")
+        if not result > 0:
+            return False
+        
+        return True
     
 
 class SynchronousMethods:
@@ -43,10 +57,22 @@ class SynchronousMethods:
         return new
     
     @classmethod
-    def find(cls, filter_dict:dict=None, collection:str=None, page:int=1)->dict:
+    def find(cls, filter_dict:dict=None, collection:str=None, page:int=1)->list:
         if not filter_dict:
             results = cls.db[collection].find().skip((page-1)*MAX_ITEMS_PER_PAGE).limit(MAX_ITEMS_PER_PAGE)
         else:
             results = cls.db[collection].find(filter_dict).skip((page-1)*MAX_ITEMS_PER_PAGE).limit(MAX_ITEMS_PER_PAGE)
 
         return list(results)
+    
+    @classmethod
+    def exists(cls, filter_dict:dict=None, collection:str=None)->bool:
+        if not filter_dict:
+            return False
+        
+        result = cls.db[collection].count_documents(filter=filter_dict)
+        logger.info(f"Count: {result}")
+        if not result > 0:
+            return False
+        
+        return True
