@@ -108,18 +108,6 @@ DJANGO_LOG_FILE = path.join(LOG_DIR, 'django.log')
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'verbose',
-        },
-        'root_file': {
-            'class': 'logging.FileHandler',
-            'filename': ENV_LOG_FILE,
-            'formatter': 'verbose',
-            'encoding': 'utf-8',
-        }
-    },
     'formatters': {
         'verbose': {
             'format': '[%(levelname)s|%(asctime)s.%(msecs)d|%(name)s|%(module)s|%(funcName)s:%(lineno)s]    %(message)s',
@@ -129,6 +117,18 @@ LOGGING = {
             'format': '[%(asctime)s|%(name)s|%(module)s|%(funcName)s:%(lineno)s]    %(message)s',
             'datefmt': '%d/%b/%Y %H:%M:%S',
         },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'local',
+        },
+        'root_file': {
+            'class': 'logging.FileHandler',
+            'filename': ENV_LOG_FILE,
+            'formatter': 'verbose',
+            'encoding': 'utf-8',
+        }
     },
     'loggers': {
         'root': {
