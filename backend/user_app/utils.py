@@ -274,17 +274,18 @@ class UserModelUtils:
         return resp
 
     @classmethod
-    def insert_into_mongo(cls, data:dict=None, reason:str=None)->None:
+    def insert_deleted_user_into_mongo(cls, data:dict=None, reason:str=None)->None:
         try:
             data["_id"] = data.get("id")
             del data["id"]
 
             data["reason"] = reason
-            data["timestamp"] = datetime.utcnow() + timedelta(hours=5, minutes=30)
+            data["timestamp"] = timezone.now().strftime('%Y-%m-%dT%H:%M:%S.%f%z')
         
-            _ = SynchronousMethods.insert_one(data=data, collection=DatabaseCollections.deleted_users)
+            return SynchronousMethods.insert_one(data=data, collection=DatabaseCollections.deleted_users)
         except Exception as ex:
             logger.warn(f"{ex}")
+            return {}
 
 
     @classmethod
@@ -318,11 +319,12 @@ class UserModelUtils:
             logger.warn(resp.message)
             return resp
         
-        cls.insert_into_mongo(data=ShowUserSerializer(user).data, reason=reason)        
+        deleted = cls.insert_deleted_user_into_mongo(data=ShowUserSerializer(user).data, reason=reason)        
 
         user.delete()
 
         resp.message = f"User deleted successfully."
+        resp.data = deleted
         resp.status_code = status.HTTP_200_OK
         
         logger.info(resp.message)
