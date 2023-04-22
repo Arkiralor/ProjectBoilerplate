@@ -25,7 +25,7 @@ class Resp:
 
     def to_dict(self):
         if self.error:
-            logger.warn(self.text())
+            logger.warn(self.to_text())
             
         if (type(self.data) == dict or type(self.data) == OrderedDict or type(self.data) == ReturnDict) and not self.error:
             return self.data
@@ -37,19 +37,20 @@ class Resp:
                 "data": self.data
             }
     
-    def text(self):
+    def to_text(self):
         return f"{self.error.upper()}:  {self.message}"
     
-    def response(self):
+    def to_response(self):
         return Response(
             self.to_dict(),
             status=self.status_code
         )
+        
     
-    def exception(self):
-        logger.exception(self.text())
+    def to_exception(self):
+        logger.warn(self.to_text())
 
         return APIException(
-            detail=self.text(),
+            detail=self.to_text(),
             code=self.status_code
         )

@@ -61,12 +61,12 @@ class RequestLogger(object):
         
         try:
             no_sql_data = {
-                "_id": f"{uuid4()}",
+                "_id": f"{uuid4()}".replace("-", "").upper(),
                 "method": method,
                 "path": path,
-                "cookies": cookies,
+                "cookies": cookies if cookies else {},
                 "body": loads(body.decode('utf8', 'strict')) if body else {},
-                "headers": headers,
+                "headers": headers if headers else {},
                 "params": params if params else {},
                 "user": ShowUserSerializer(user).data if user else {},
                 "timestampUtc": datetime.utcnow()
@@ -97,7 +97,7 @@ class RequestLogger(object):
         except Exception as ex:
             logger.exception(f"{ex}")
 
-    def process_request(self, request: HttpRequest = None, record_sql: bool = False):
+    def process_request(self, request: HttpRequest = None, record_nosql:bool=True, record_sql: bool = False):
         if DEBUG and not request.path.startswith("/admin"):
             method = request.method
             path = request.path
@@ -110,10 +110,10 @@ class RequestLogger(object):
             if not user or not type(user)==User:
                 user = self.get_jwt_user(headers=headers)
 
-            logger.info(
-                f"INCOMING REQUEST: `USER: {user.email if user else None}\tPATH:{path}\tMETHOD: {method}`")
+            logger.info( f"INCOMING REQUEST: `USER: {user.email if user else None}\tPATH:{path}\tMETHOD: {method}`")
 
-            self.record_in_nosql(method, path, cookies,
+            if record_nosql:
+                self.record_in_nosql(method, path, cookies,
                                  body, headers, params, user)
             if record_sql:
                 self.record_in_sql(method, path, cookies,
