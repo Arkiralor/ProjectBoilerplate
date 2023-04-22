@@ -1,6 +1,8 @@
 from django.db.models.signals import post_save, pre_save, post_delete, pre_delete
 
 from user_app.models import User, UserProfile
+from user_app.serializers import ShowUserSerializer
+from user_app.utils import UserModelUtils
 
 from user_app import logger
 
@@ -19,11 +21,17 @@ class UserSignalReciever:
         if not created:
             logger.info(f"User: '{instance.email}' updated.")
 
+    @classmethod
+    def pre_delete(cls, sender, instance, *args, **kwargs):
+        _ = UserModelUtils.insert_deleted_user_into_mongo(data=ShowUserSerializer(instance=instance).data)
+
 
 post_save.connect(receiver=UserSignalReciever.created,
                   sender=UserSignalReciever.model)
 post_save.connect(receiver=UserSignalReciever.updated,
                   sender=UserSignalReciever.model)
+pre_delete.connect(receiver=UserSignalReciever.pre_delete,
+                   sender=UserSignalReciever.model)
 
 
 class UserProfileSignalReciever:

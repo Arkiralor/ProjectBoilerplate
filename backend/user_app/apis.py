@@ -24,7 +24,7 @@ class AccessTestAPI(APIView):
 
         logger.info(resp.message)
 
-        return resp.response()
+        return resp.to_response()
     
     def post(self, request:Request, *args, **kwargs):
         data = request.data
@@ -40,11 +40,8 @@ class AccessTestAPI(APIView):
             },
             status_code=status.HTTP_200_OK
         )
-
-        if resp.error:
-            raise resp.exception()
         
-        return resp.response()
+        return resp.to_response()
 
 
 class RegisterUserAPI(APIView):
@@ -55,9 +52,9 @@ class RegisterUserAPI(APIView):
 
         resp = UserModelUtils.create(data=data)
         if resp.error:
-            raise resp.exception()
+            raise resp.to_exception()
         
-        return resp.response()
+        return resp.to_response()
     
 class PasswordLoginAPI(APIView):
     permission_classes = (AllowAny,)
@@ -69,9 +66,9 @@ class PasswordLoginAPI(APIView):
 
         resp = UserModelUtils.login_via_password(username=username, email=email, password=password)
         if resp.error:
-            raise resp.exception()
+            raise resp.to_exception()
         
-        return resp.response()
+        return resp.to_response()
     
 
 class UserAPI(APIView):
@@ -83,33 +80,30 @@ class UserAPI(APIView):
             user_id = request.user.id
 
         resp = UserModelUtils.get(user_id=user_id)
-
         if resp.error:
-            raise resp.exception()
+            raise resp.to_exception()
         
-        return resp.response()
+        return resp.to_response()
     
     def post(self, request:Request, page:int=1, *args, **kwargs):
         term = request.query_params.get("term", "")
         page = int(request.query_params.get("page", 1))
-        logger.info(f"Term: {term}\tPage: {page}")
-        resp = UserModelUtils.search(term=term, page=page)
-
-        if resp.error:
-            raise resp.exception()
         
-        return resp.response()
+        resp = UserModelUtils.search(term=term, page=page)
+        if resp.error:
+            raise resp.to_exception()
+        
+        return resp.to_response()
     
     def put(self, request:Request, *args, **kwargs):
         user_id = request.user.id
         data = request.data
 
         resp = UserProfileModelUtils.put(user_id=user_id, data=data)
-
         if resp.error:
-            raise resp.exception()
+            raise resp.to_exception()
         
-        return resp.response()
+        return resp.to_response()
     
     def delete(self, request:Request, *args, **kwargs):
         password = request.data.get("password")
@@ -117,6 +111,6 @@ class UserAPI(APIView):
         resp = UserModelUtils.delete(user=request.user, password=password, reason=reason)
 
         if resp.error:
-            raise resp.exception()
+            return resp.to_exception()
         
-        return resp.response()
+        return resp.to_response()

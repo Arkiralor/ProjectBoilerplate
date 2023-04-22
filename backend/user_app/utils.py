@@ -128,11 +128,13 @@ class UserModelUtils:
         resp = Resp()
 
         if cls.check_if_user_exists(username=data.get('username'), email=data.get('email')):
-            resp.error = "User already exists."
+            resp.error = "User Exists."
             resp.data = data
-            resp.message = f"A user with the given credentials (username | email | phone) already exists."
+            resp.message = f"A user with the given credentials (username | email) already exists."
             resp.status_code = status.HTTP_400_BAD_REQUEST
-            return Resp
+
+            logger.warn(resp.to_text())
+            return resp
 
         _keys = data.keys()
 
@@ -158,12 +160,12 @@ class UserModelUtils:
             resp.message = f"{deserialized.errors}"
             resp.status_code = status.HTTP_400_BAD_REQUEST
 
-            logger.warn(resp.message)
-
+            logger.warn(resp.to_text())
             return resp
 
         deserialized.save()
         serialized = ShowUserSerializer(deserialized.instance)
+
         resp.data = serialized.data
         resp.message = f"User {serialized.instance.email} registered succesfully."
         resp.status_code = status.HTTP_201_CREATED
@@ -274,7 +276,11 @@ class UserModelUtils:
         return resp
 
     @classmethod
-    def insert_deleted_user_into_mongo(cls, data:dict=None, reason:str=None)->None:
+    def insert_deleted_user_into_mongo(
+            cls, 
+            data:dict=None, 
+            reason:str="Some generic reason."
+        )->None:
         try:
             data["_id"] = data.get("id")
             del data["id"]
@@ -319,12 +325,12 @@ class UserModelUtils:
             logger.warn(resp.message)
             return resp
         
-        deleted = cls.insert_deleted_user_into_mongo(data=ShowUserSerializer(user).data, reason=reason)        
+        # deleted = cls.insert_deleted_user_into_mongo(data=ShowUserSerializer(user).data, reason=reason)        
 
         user.delete()
 
         resp.message = f"User deleted successfully."
-        resp.data = deleted
+        # resp.data = deleted
         resp.status_code = status.HTTP_200_OK
         
         logger.info(resp.message)
