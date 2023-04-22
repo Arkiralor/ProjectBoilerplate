@@ -1,9 +1,11 @@
 from datetime import datetime, timezone, timedelta
+from uuid import uuid4
 
 from django.conf import settings
 from django.contrib.auth.hashers import make_password, check_password
 from django.core.paginator import Paginator
 from django.db.models import Q, QuerySet
+from django.http import HttpRequest
 from django.utils import timezone
 
 from rest_framework import status
@@ -198,6 +200,35 @@ class UserModelUtils:
         return resp
 
     @classmethod
+    def get_ip_address(cls, request:HttpRequest=None):
+        try:
+            x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+            if x_forwarded_for:
+                ip = x_forwarded_for.split(',')[0]
+            else:
+                ip = request.META.get('REMOTE_ADDR')
+            return ip
+        except Exception as ex:
+            logger.warn(f"{ex}")
+            return ""
+
+    @classmethod
+    def log_login_ip(cls, user:str=None, request:HttpRequest=None)->None:
+        ip = cls.get_ip_address(request=request)
+        if ip:
+            try:
+                data = {
+                    "_id": f"{uuid4()}".replace("-", "").upper(),
+                    "user": user,
+                    "ip": ip,
+                    "userAgent": request.headers.get("User-Agent", "").split("/")[0],
+                    "timestampUtc": datetime.utcnow()
+                }
+                _ = SynchronousMethods.insert_one(data=data, collection=DatabaseCollections.user_ips)
+            except Exception as ex:
+                logger.warn(f"{ex}")
+
+    @classmethod
     def login_via_password(cls, username: str = None, email: str = None, password: str = None, *args, **kwargs) -> Resp:
         resp = Resp()
         user: User = None
@@ -262,6 +293,7 @@ class UserModelUtils:
         user.save()
 
         tokens = JWTUtils.get_tokens_for_user(user=user)
+        
         resp.message = f"User {user.email} logged in successfully."
         resp.data = {
             "user": user.id,

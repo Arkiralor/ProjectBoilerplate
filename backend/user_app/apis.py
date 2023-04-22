@@ -65,9 +65,11 @@ class PasswordLoginAPI(APIView):
         password = request.data.get("password", "")
 
         resp = UserModelUtils.login_via_password(username=username, email=email, password=password)
+        logger.info(f"{resp.data.get('user')}")
         if resp.error:
             raise resp.to_exception()
         
+        _ = UserModelUtils.log_login_ip(user=f"{resp.data.get('user', '')}", request=request)
         return resp.to_response()
     
 
