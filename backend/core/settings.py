@@ -118,15 +118,6 @@ LOGGING = {
             'filename': ENV_LOG_FILE,
             'formatter': 'verbose',
             'encoding': 'utf-8',
-        },
-        'django_file': {
-            'level': 'INFO',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': DJANGO_LOG_FILE,
-            'maxBytes': 50000,
-            'backupCount': 2,
-            'formatter': 'local',
-            'encoding': 'utf-8',
         }
     },
     'formatters': {
