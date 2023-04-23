@@ -4,7 +4,7 @@ This middleware application contains some critical analytical and security modul
 
 Unless specified otherwise, the middlewares described within use [MongoDB](https://www.mongodb.com/) for read/write operations as it was observed that even on locally hosted instances of relational tables, the overhead added on `write` to a request process was __~70 milliseconds__ and since we do not require [ACID](https://www.ibm.com/docs/en/cics-ts/5.4?topic=processing-acid-properties-transactions) compliance in these implementations but __do__ require fast read/write times and flexibility, we opted to forego relational data stores.
 
-Since out system uses `JWT Authentication` via [Django Restframework-SimpleJWT](https://django-rest-framework-simplejwt.readthedocs.io/en/latest/), the requesting user's identity can be deciphered by decrypting the bearer token in the `Authorization` field of an incoming request.
+Since our system uses `JWT Authentication` via [Django Restframework-SimpleJWT](https://django-rest-framework-simplejwt.readthedocs.io/en/latest/), the requesting user's identity can be deciphered by decrypting the bearer token in the `Authorization` field of an incoming request.
 
 The current application has two components:
 
@@ -29,5 +29,11 @@ from any location and client in the known universe. For the sake of keeping the 
 In this way we refrain from asking the user to go through hoops in the sky just to use the system, while at the same time highly limiting the viability of stealing their access token.
 
 __Note:__ If you check the source-code, you can see that we have omitted administrators and staff from the scope of this middleware as the URLs and Endpoints that can be accesses by them will be protected by firewall and reverse-proxy rules _(most commonly by [nGinX](https://www.nginx.com/))_.
+
+__Note:__ That being said, you can now set CORS to allow all origins as the new IP rules in the Access Control System regarding JWTokens will take care of rogue user access. 
+
+__Note:__ Also, if for some reason the frontend/app isn't sending you the user's current IP address, kindly rectify it __immediately__ by following [these](https://www.thetechplatform.com/post/how-to-get-user-ip-address-in-react-js) steps to attach the current IP address to the correct fields in the request header _(of course, this is only an example, you can determine the user's IP address in multitudes of ways, but this should offer a good starting point)_.
+
+__Addemdum:__ It should be noted that we would want to set up a [Celery](https://docs.celeryq.dev/) or [Airflow](https://airflow.apache.org/) task to automatically delete all records older than the number of days it takes for a `refreshToken` to expire.
 
 Of cource this is a very crude and simple implementation of the logic and can be modified further. Afterall, this entire repository is only to be used as a template to set up your own codebase. For example, you can replace the `noSQL` database with a `Graph` database to take the distance between nodes (user IP adresses) into consideration when rejecting or accepting an access token.
