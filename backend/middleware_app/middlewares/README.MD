@@ -28,12 +28,15 @@ from any location and client in the known universe. For the sake of keeping the 
 
 In this way we refrain from asking the user to go through hoops in the sky just to use the system, while at the same time highly limiting the viability of stealing their access token.
 
-__Note:__ If you check the source-code, you can see that we have omitted administrators and staff from the scope of this middleware as the URLs and Endpoints that can be accesses by them will be protected by firewall and reverse-proxy rules _(most commonly by [nGinX](https://www.nginx.com/))_.
+#### Notes
 
-__Note:__ That being said, you can now set CORS to allow all origins as the new IP rules in the Access Control System regarding JWTokens will take care of rogue user access. 
+1. If you check the source-code, you can see that we have omitted administrators and staff from the scope of this middleware as the URLs and Endpoints that can be accesses by them will be protected by firewall and reverse-proxy rules _(most commonly by [nGinX](https://www.nginx.com/))_.
 
-__Note:__ Also, if for some reason the frontend/app isn't sending you the user's current IP address, kindly rectify it __immediately__ by following [these](https://www.thetechplatform.com/post/how-to-get-user-ip-address-in-react-js) steps to attach the current IP address to the correct fields in the request header _(of course, this is only an example, you can determine the user's IP address in multitudes of ways, but this should offer a good starting point)_.
+2. Also, if for some reason the frontend/app isn't sending you the user's current IP address, kindly rectify it __immediately__ by following [these](https://www.thetechplatform.com/post/how-to-get-user-ip-address-in-react-js) steps, if necessary, to attach the current IP address to the correct fields in the request header _(of course, this is only an example, you can determine the user's IP address in multitudes of ways, but this should offer a good starting point)_.
 
-__Addemdum:__ It should be noted that we would want to set up a [Celery](https://docs.celeryq.dev/) or [Airflow](https://airflow.apache.org/) task to automatically delete all records older than the number of days it takes for a `refreshToken` to expire.
+#### Addendum
+_It should be noted that we would want to set up a [Celery](https://docs.celeryq.dev/) or [Airflow](https://airflow.apache.org/) task to automatically delete all records older than the number of days it takes for a `refreshToken` to expire._
+
+### Final Thoughts
 
 Of cource this is a very crude and simple implementation of the logic and can be modified further. Afterall, this entire repository is only to be used as a template to set up your own codebase. For example, you can replace the `noSQL` database with a `Graph` database to take the distance between nodes (user IP adresses) into consideration when rejecting or accepting an access token.
