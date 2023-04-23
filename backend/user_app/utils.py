@@ -1,4 +1,5 @@
 from datetime import datetime, timezone, timedelta
+from typing import List
 from uuid import uuid4
 
 from django.conf import settings
@@ -325,7 +326,6 @@ class UserModelUtils:
             logger.warn(f"{ex}")
             return {}
 
-
     @classmethod
     def delete(cls, user:User=None, password:str=None, reason:str=None) -> Resp:
         """
@@ -362,6 +362,78 @@ class UserModelUtils:
         resp.message = f"User deleted successfully."
         resp.status_code = status.HTTP_200_OK
         
+        logger.info(resp.message)
+        return resp
+
+    @classmethod
+    def get_whitelisted_ips(cls, user:User=None)->Resp:
+        resp = Resp()
+
+        if not user:
+            resp.error = "Invalid Argument(s)"
+            resp.message = "'User' is a mandatory argument."
+            resp.data = {
+                "user": user
+            }
+            resp.status_code = status.HTTP_400_BAD_REQUEST
+
+            logger.warn(resp.text())
+            return resp
+        
+        filter_dict = {
+            "user": f"{user.id}"
+        }
+
+        results = SynchronousMethods.find_distinct(filter_dict=filter_dict, collection=DatabaseCollections.user_white_listed_ips)
+
+        resp.message = f"White-listed IP addresses for '{user.email}' retrieved successfully."
+        resp.data = results
+        resp.status_code = status.HTTP_200_OK
+
+        logger.info(resp.message)
+        return resp
+
+    @classmethod
+    def add_white_list_ips(cls, user:User=None, password:str=None, ips:List[str]=[]) -> Resp:
+        resp = Resp()
+
+        if not user or not check_password(password=password, encoded=user.password):
+            resp.error = "Invalid Credentials"
+            resp.message = "The entered password is incorrect."
+            resp.data = {
+                "user": user.email if user else None,
+                "password": password,
+            }
+            resp.status_code = status.HTTP_403_FORBIDDEN
+
+            logger.warn(resp.text())
+            return resp
+        
+        for ip in ips:
+            try:
+                data = {
+                    "user": f"{user.id}",
+                    "ip": ip
+                }
+
+                _ = SynchronousMethods.insert_one(data=data, collection=DatabaseCollections.user_white_listed_ips)
+            except Exception as ex:
+                resp.error = "Error in MongoDB Insertion"
+                resp.message = f"{ex}"
+                resp.data = data
+                resp.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+
+                logger.exception(resp.text())
+                return resp
+
+        results = cls.get_whitelisted_ips(user=user)
+        if results.error:
+            return resp
+
+        resp.message = f"White-listed IP for {user.email} updated successfully."
+        resp.data = results.data
+        resp.status_code = status.HTTP_200_OK
+
         logger.info(resp.message)
         return resp
 

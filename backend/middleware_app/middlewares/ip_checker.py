@@ -80,8 +80,8 @@ class IpAddressChecker(object):
                 }
             ]
         }
-        _exists = SynchronousMethods.exists(
-            filter_dict=filter_dict, collection=DatabaseCollections.user_ips)
+        _exists = SynchronousMethods.exists(filter_dict=filter_dict, collection=DatabaseCollections.user_ips) or SynchronousMethods.exists(
+            filter_dict=filter_dict, collection=DatabaseCollections.user_white_listed_ips)
         return _exists
 
     def process_request(self, request: HttpRequest):

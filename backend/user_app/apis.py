@@ -9,13 +9,14 @@ from user_app.utils import UserModelUtils, UserProfileModelUtils
 
 from user_app import logger
 
+
 class AccessTestAPI(APIView):
     permission_classes = (IsAuthenticated,)
 
-    def get(self, request:Request, *args, **kwargs):
+    def get(self, request: Request, *args, **kwargs):
         resp = Resp(
             message="Access token working successfully.",
-            data= {
+            data={
                 "user": request.user.email,
                 "message": "Access token working successfully."
             },
@@ -25,8 +26,8 @@ class AccessTestAPI(APIView):
         logger.info(resp.message)
 
         return resp.to_response()
-    
-    def post(self, request:Request, *args, **kwargs):
+
+    def post(self, request: Request, *args, **kwargs):
         data = request.data
         params = request.query_params
         user = request.user
@@ -40,22 +41,24 @@ class AccessTestAPI(APIView):
             },
             status_code=status.HTTP_200_OK
         )
-        
+
         return resp.to_response()
 
 
 class RegisterUserAPI(APIView):
     permission_classes = (AllowAny,)
 
-    def post(self, request:Request, *args, **kwargs):
+    def post(self, request: Request, *args, **kwargs):
         data = request.data
 
         resp = UserModelUtils.create(data=data)
         if resp.error:
             raise resp.to_exception()
-        
+
+        _ = UserModelUtils.log_login_ip(user=f"{resp.data.get('id', '')}", request=request)
         return resp.to_response()
-    
+
+
 class PasswordLoginAPI(APIView):
     permission_classes = (AllowAny,)
 
@@ -64,18 +67,20 @@ class PasswordLoginAPI(APIView):
         email = request.data.get("email", None)
         password = request.data.get("password", "")
 
-        resp = UserModelUtils.login_via_password(username=username, email=email, password=password)
+        resp = UserModelUtils.login_via_password(
+            username=username, email=email, password=password)
         if resp.error:
             raise resp.to_exception()
-        
-        _ = UserModelUtils.log_login_ip(user=f"{resp.data.get('user', '')}", request=request)
+
+        _ = UserModelUtils.log_login_ip(
+            user=f"{resp.data.get('user', '')}", request=request)
         return resp.to_response()
-    
+
 
 class UserAPI(APIView):
     permission_classes = (IsAuthenticated,)
 
-    def get(self, request:Request, *args, **kwargs):
+    def get(self, request: Request, *args, **kwargs):
         user_id = request.query_params.get("user_id")
         if not user_id:
             user_id = request.user.id
@@ -83,35 +88,70 @@ class UserAPI(APIView):
         resp = UserModelUtils.get(user_id=user_id)
         if resp.error:
             raise resp.to_exception()
-        
+
         return resp.to_response()
-    
-    def post(self, request:Request, page:int=1, *args, **kwargs):
+
+    def post(self, request: Request, page: int = 1, *args, **kwargs):
         term = request.query_params.get("term", "")
         page = int(request.query_params.get("page", 1))
-        
+
         resp = UserModelUtils.search(term=term, page=page)
         if resp.error:
             raise resp.to_exception()
-        
+
         return resp.to_response()
-    
-    def put(self, request:Request, *args, **kwargs):
+
+    def put(self, request: Request, *args, **kwargs):
         user_id = request.user.id
         data = request.data
 
         resp = UserProfileModelUtils.put(user_id=user_id, data=data)
         if resp.error:
             raise resp.to_exception()
-        
+
         return resp.to_response()
-    
-    def delete(self, request:Request, *args, **kwargs):
+
+    def delete(self, request: Request, *args, **kwargs):
         password = request.data.get("password")
         reason = request.data.get("reason", "No reason given.")
-        resp = UserModelUtils.delete(user=request.user, password=password, reason=reason)
+        resp = UserModelUtils.delete(
+            user=request.user, password=password, reason=reason)
 
         if resp.error:
             return resp.to_exception()
-        
+
+        return resp.to_response()
+
+
+class WhiteListIpAddressAPI(APIView):
+    """
+    API for a user to set/get Whitelisted IP addresses.
+    """
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request: Request, *args, **kwargs):
+        """
+        Get all IP addresses whitelisted for user.
+        """
+        resp = UserModelUtils.get_whitelisted_ips(user=request.user)
+        if resp.error:
+            raise resp.to_exception()
+
+        return resp.to_response()
+
+    def post(self, request: Request, *args, **kwargs):
+        """
+        Add IP addresses to whitelist for user.
+        """
+        password = request.data.get("password", None)
+        ip_addresses = request.data.get("ip_addresses", [])
+
+        if not type(ip_addresses) == list and not type(ip_addresses) == set:
+            ip_addresses = [ip_addresses]
+
+        resp = UserModelUtils.add_white_list_ips(
+            user=request.user, password=password, ips=ip_addresses)
+        if resp.error:
+            raise resp.to_exception()
+
         return resp.to_response()
