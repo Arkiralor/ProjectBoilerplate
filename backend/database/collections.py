@@ -5,3 +5,4 @@ class DatabaseCollections:
     deleted_users = "deletedUsers"
 
     user_ips = "userIpAdresses"
+    user_white_listed_ips = "userWhitelistedIps"
