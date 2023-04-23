@@ -357,12 +357,9 @@ class UserModelUtils:
             logger.warn(resp.message)
             return resp
         
-        # deleted = cls.insert_deleted_user_into_mongo(data=ShowUserSerializer(user).data, reason=reason)        
-
         user.delete()
 
         resp.message = f"User deleted successfully."
-        # resp.data = deleted
         resp.status_code = status.HTTP_200_OK
         
         logger.info(resp.message)
