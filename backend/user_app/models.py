@@ -9,6 +9,7 @@ from django.template.defaultfilters import slugify
 from django.utils import timezone
 
 from core.boilerplate.model_template import TemplateModel
+from user_app.constants import FormatRegex
 from user_app.model_choices import UserModelChoices
 
 from user_app import logger
@@ -123,4 +124,37 @@ class UserProfile(TemplateModel):
         indexes = (
             models.Index(fields=('user',)),
             models.Index(fields=('first_name', 'last_name')),
+        )
+
+
+class UserAuthToken(TemplateModel):
+    """
+    Model to hold permanent tokens for backend calls to the APIs.
+    """
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    token = models.CharField(
+        validators=[
+            RegexValidator(regex=FormatRegex.AUTH_TOKEN_VALIDATOR, message="Token doesn't fit ReGex.", code="invalid_token")
+        ],
+        max_length=512, 
+        editable=False,
+        unique=True
+    )
+
+    def __str__(self):
+        return f"AuthToken for {self.user.email}"
+    
+    def create(self, *args, **kwargs):
+        self.token = f"{uuid4()}{uuid4()}{uuid4()}".replace("-", "").upper()
+        super(UserAuthToken, self).create(*args, **kwargs)
+
+    class Meta:
+        verbose_name = "User Authentication Token"
+        verbose_name_plural = "User Authentication Tokens"
+        ordering = ("-created", "-updated")
+        indexes = (
+            models.Index(fields=("id",)),
+            models.Index(fields=("user",)),
+            models.Index(fields=("token",))
         )

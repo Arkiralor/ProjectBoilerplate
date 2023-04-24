@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 
-from user_app.models import User, UserProfile
+from user_app.models import User, UserProfile, UserAuthToken
 
 
 class UserRegisterSerializer(ModelSerializer):
@@ -47,4 +47,19 @@ class UserProfileOutputSerializer(ModelSerializer):
 
     class Meta:
         model = UserProfile
+        fields = '__all__'
+
+
+class UserAuthTokenInputSerializer(ModelSerializer):
+
+    class Meta:
+        model = UserAuthToken
+        fields = '__all__'
+
+
+class UserAuthTokenOutputSerializer(ModelSerializer):
+    user = ShowUserSerializer()
+
+    class Meta:
+        model = UserAuthToken
         fields = '__all__'

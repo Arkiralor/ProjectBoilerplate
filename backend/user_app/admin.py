@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from user_app.models import User, UserProfile
+from user_app.models import User, UserProfile, UserAuthToken
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
@@ -20,3 +20,14 @@ class UserProfileAdmin(admin.ModelAdmin):
     )
     raw_id_fields = ("user",)
     ordering = ("-created",)
+
+
+@admin.register(UserAuthToken)
+class UserAuthTokenAdmin(admin.ModelAdmin):
+    list_display = ("id", "user", "created", "updated")
+    search_fields = (
+        "token",
+        "user__id",
+        "user__username",
+        "user__email"
+    )

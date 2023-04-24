@@ -13,6 +13,6 @@ THIRD_PARTY_MIDDLEWARE = [
 ]
 
 CUSTOM_MIDDLEWARE = [
-    'middleware_app.middlewares.ip_checker.IpAddressChecker',
+    # 'middleware_app.middlewares.ip_checker.IpAddressChecker',
     'middleware_app.middlewares.request_logger.RequestLogger',
 ]
