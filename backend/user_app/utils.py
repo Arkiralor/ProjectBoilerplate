@@ -39,9 +39,15 @@ class JWTUtils:
 
 
 class UserModelUtils:
+    """
+    Utility methods for operations on user model objects.
+    """
 
     @classmethod
     def get(cls, user_id: str = None) -> Resp:
+        """
+        Get basic information about a user.
+        """
         resp = Resp()
 
         if not user_id:
@@ -50,7 +56,7 @@ class UserModelUtils:
             resp.data = user_id
             resp.status_code = status.HTTP_400_BAD_REQUEST
 
-            logger.warn(resp.text())
+            logger.warn(resp.to_text())
 
         user_obj = User.objects.filter(pk=user_id).first()
         if not user_obj:
@@ -59,7 +65,7 @@ class UserModelUtils:
             resp.data = user_id
             resp.status_code = status.HTTP_404_NOT_FOUND
 
-            logger.warn(resp.text())
+            logger.warn(resp.to_text())
             return resp
 
         serialized = ShowUserSerializer(user_obj).data
@@ -73,6 +79,9 @@ class UserModelUtils:
 
     @classmethod
     def search(cls, term: str = None, page: int = 1, *args, **kwargs) -> Resp:
+        """
+        Search for users via string argument.
+        """
         resp = Resp()
         if not term:
             resp.error = "Invalid Data"
@@ -129,6 +138,9 @@ class UserModelUtils:
 
     @classmethod
     def create(cls, data: dict = None, user_type: str = UserModelChoices.user, *args, **kwargs) -> Resp:
+        """
+        Register a new user in the system.
+        """
         resp = Resp()
 
         if cls.check_if_user_exists(username=data.get('username'), email=data.get('email')):
@@ -178,6 +190,10 @@ class UserModelUtils:
 
     @classmethod
     def block_user(cls, user: User = None, blocked_until: int = settings.OTP_ATTEMPT_TIMEOUT, *args, **kwargs) -> Resp:
+        """
+        Block a single user for a pre-defined amount of time.
+        Most commonly to be used when there is an excessive amount of unsuccessfull login attempts.
+        """
         resp = Resp()
 
         if not user:
@@ -203,6 +219,10 @@ class UserModelUtils:
 
     @classmethod
     def get_ip_address(cls, request:HttpRequest=None):
+        """
+        Get the IP address from a request.
+        To be used when logging a user's IP address when logging in.
+        """
         try:
             x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
             if x_forwarded_for:
@@ -216,6 +236,9 @@ class UserModelUtils:
 
     @classmethod
     def log_login_ip(cls, user:str=None, request:HttpRequest=None)->None:
+        """
+        Log a user's IP address when successfully logging in.
+        """
         ip = cls.get_ip_address(request=request)
         if ip:
             try:
@@ -226,12 +249,23 @@ class UserModelUtils:
                     "userAgent": request.headers.get("User-Agent", "").split("/")[0],
                     "timestampUtc": datetime.utcnow()
                 }
-                _ = SynchronousMethods.insert_one(data=data, collection=DatabaseCollections.user_ips)
+
+                check_dict = {
+                    "$and": [
+                        {"user": user},
+                        {"ip": ip}
+                    ]
+                }
+                if not SynchronousMethods.exists(filter_dict=check_dict, collection=DatabaseCollections.user_ips):
+                    _ = SynchronousMethods.insert_one(data=data, collection=DatabaseCollections.user_ips)
             except Exception as ex:
                 logger.warn(f"{ex}")
 
     @classmethod
     def login_via_password(cls, username: str = None, email: str = None, password: str = None, *args, **kwargs) -> Resp:
+        """
+        Log in a user via their password.
+        """
         resp = Resp()
         user: User = None
 
@@ -315,6 +349,9 @@ class UserModelUtils:
             data:dict=None, 
             reason:str="Some generic reason."
         )->None:
+        """
+        Keep a record of any deleted users in the MongoDB cluster.
+        """
         try:
             data["_id"] = data.get("id")
             del data["id"]
@@ -515,7 +552,7 @@ class UserModelUtils:
         return resp
 
     @classmethod
-    def record_user_mac(self, user:str=None, request:HttpRequest=None)->None:
+    def log_login_mac(self, user:str=None, request:HttpRequest=None)->None:
         mac = request.headers.get(MAC_HEADER)
         if mac:
             try:
@@ -525,7 +562,14 @@ class UserModelUtils:
                     "mac": mac,
                     "timestampUtc": datetime.utcnow()
                 }
-                _ = SynchronousMethods.insert_one(data=data, collection=DatabaseCollections.user_mac_addresses)
+                check_dict = {
+                    "$and": [
+                        {"user": user},
+                        {"mac": mac}
+                    ]
+                }
+                if not SynchronousMethods.exists(filter_dict=check_dict, collection=DatabaseCollections.user_mac_addresses):
+                    _ = SynchronousMethods.insert_one(data=data, collection=DatabaseCollections.user_mac_addresses)
             except Exception as ex:
                 logger.warn(f"{ex}")
 

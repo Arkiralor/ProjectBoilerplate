@@ -110,6 +110,7 @@ class SynchronousMethods:
         if not result > 0:
             return False
 
+        logger.info("Record(s) already exist(s).")
         return True
     
     @classmethod
