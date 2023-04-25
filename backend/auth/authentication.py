@@ -11,7 +11,7 @@ from rest_framework_simplejwt.tokens import Token
 
 from database.collections import DatabaseCollections
 from database.methods import SynchronousMethods
-from user_app.models import User
+from user_app.models import User, UserAuthToken
 
 from auth import logger
 
@@ -54,6 +54,9 @@ class JWTAuthentication(authentication.BaseAuthentication):
 
         user = self.get_user(validated_token=validated_token)
         ip_address = self.get_current_ip(request=request)
+        if not ip_address or ip_address == "":
+            raise AuthenticationFailed(
+                detail="Your IP address has changed to one from where you have never logged in before, please re-login.", code="unknown_ip_address")
 
         if not self.check_user_past_ip(user=user, ip=ip_address):
             raise AuthenticationFailed(
@@ -176,3 +179,122 @@ class JWTAuthentication(authentication.BaseAuthentication):
         _exists = SynchronousMethods.exists(filter_dict=filter_dict, collection=DatabaseCollections.user_ips) or SynchronousMethods.exists(
             filter_dict=filter_dict, collection=DatabaseCollections.user_white_listed_ips)
         return _exists
+    
+
+class TokenAuthentication(authentication.BaseAuthentication):
+    TOKEN_PREFIX = "Token".encode(HTTP_HEADER_ENCODING)
+    USER = User
+    TOKEN_MODEL = UserAuthToken
+
+    www_authenticate_realm = "api"
+    media_type = "application/json"
+
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+
+    def authenticate(self, request: Request) -> Optional[Tuple[User, Token]]:
+        header = self.get_header(request)
+        if header is None:
+            return None
+
+        raw_token = self.get_raw_token(header)
+        if raw_token is None:
+            return None
+        
+        user = self.get_user(raw_token=raw_token)
+        ip_address = self.get_current_ip(request=request)
+        if not ip_address or ip_address == "":
+            raise AuthenticationFailed(
+                detail="Your IP address has changed to one from where you have never logged in before, please re-login.", code="unknown_ip_address")
+
+        if not self.check_user_past_ip(user=user, ip=ip_address):
+            raise AuthenticationFailed(
+                detail="Your IP address has changed to one from where you have never logged in before, please re-login.", code="unknown_ip_address")
+
+        return user, raw_token
+
+    def authenticate_header(self, request: Request)->str:
+        return '{} realm="{}"'.format(
+            AUTH_HEADER_TYPES[0],
+            self.www_authenticate_realm,
+        )
+
+    def get_header(self, request: Request) -> bytes:
+        """
+        Extracts the header containing the JSON web token from the given
+        request.
+        """
+        header = request.META.get(api_settings.AUTH_HEADER_NAME)
+
+        if isinstance(header, str):
+            # Work around django test client oddness
+            header = header.encode(HTTP_HEADER_ENCODING)
+
+        return header
+
+    def get_raw_token(self, header: bytes) -> Optional[bytes]:
+        """
+        Extracts an unvalidated JSON web token from the given "Authorization"
+        header value.
+        """
+        parts = header.split()
+
+        if len(parts) == 0:
+            logger.warn("Empty AUTHORIZATION header sent")
+            return None
+
+        if parts[0] != self.TOKEN_PREFIX:
+            logger.warn("Assume the header does not contain a valid AuthToken")
+            return None
+
+        if len(parts) != 2:
+            raise AuthenticationFailed(
+                _("Authorization header must contain two space-delimited values"),
+                code="bad_authorization_header",
+            )
+
+        return parts[1].encode("utf-8", "strict")
+
+    def get_user(self, raw_token: Token) -> User:
+        """
+        Attempts to find and return a user using the given raw token.
+        """
+        try:
+            user = self.TOKEN_MODEL.objects.get(token=raw_token).user
+        except self.TOKEN_MODEL.DoesNotExist:
+            raise AuthenticationFailed(
+                _("User not found"), code="user_not_found")
+
+        if not user.is_active:
+            raise AuthenticationFailed(
+                _("User is inactive"), code="user_inactive")
+
+        return user
+
+    def get_current_ip(self, request: Request) -> str:
+        try:
+            x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+            if x_forwarded_for:
+                ip = x_forwarded_for.split(',')[0]
+            else:
+                ip = request.META.get('REMOTE_ADDR')
+            return ip
+        except Exception as ex:
+            logger.warn(f"{ex}")
+            return None
+
+    def check_user_past_ip(self, user: User, ip: str = None) -> bool:
+        filter_dict = {
+            "$and": [
+                {
+                    "user": f"{user.id}"
+                },
+                {
+                    "ip": ip
+                }
+            ]
+        }
+        _exists = SynchronousMethods.exists(filter_dict=filter_dict, collection=DatabaseCollections.user_ips) or SynchronousMethods.exists(
+            filter_dict=filter_dict, collection=DatabaseCollections.user_white_listed_ips)
+        return _exists
+

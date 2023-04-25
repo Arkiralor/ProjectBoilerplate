@@ -15,10 +15,10 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from core.boilerplate.response_template import Resp
 from database.collections import DatabaseCollections
 from database.methods import SynchronousMethods
-from database.synchronous import s_db
-from user_app.models import User, UserProfile
+from user_app.models import User, UserProfile, UserAuthToken
 from user_app.model_choices import UserModelChoices
-from user_app.serializers import UserRegisterSerializer, ShowUserSerializer, UserProfileInputSerializer, UserProfileOutputSerializer
+from user_app.serializers import UserRegisterSerializer, ShowUserSerializer, UserProfileInputSerializer, UserProfileOutputSerializer, \
+    UserAuthTokenInputSerializer, UserAuthTokenOutputSerializer
 
 from user_app import logger
 
@@ -498,6 +498,104 @@ class UserProfileModelUtils:
         deserialized.save()
         resp.message = "Profile updated successfully."
         resp.data = UserProfileOutputSerializer(instance=deserialized.instance).data
+        resp.status_code = status.HTTP_200_OK
+
+        logger.info(resp.message)
+        return resp
+    
+
+class UserAuthTokenModelUtils:
+
+    @classmethod
+    def create(cls, user:User=None, password:str=None)->Resp:
+        resp = Resp()
+
+        if not user or not password or not check_password(password=password, encoded=user.password):
+            resp.error = "Invalid Arguments"
+            resp.message = "Both 'user' and 'password' are mandatory arguments."
+            resp.data = {
+                "user": f"{user.id}",
+                "password": password
+            }
+            resp.status_code = status.HTTP_401_UNAUTHORIZED
+
+            logger.warn(resp.text())
+            return resp
+
+        auth_token,_ = UserAuthToken.objects.create(user=user)
+        resp.message = f"Token for {user.email} generated successfully."
+        resp.data = UserAuthTokenOutputSerializer(instance=auth_token).data
+        resp.status_code = status.HTTP_200_OK
+
+        logger.info(resp.message)
+        return resp
+        
+
+    @classmethod
+    def get(cls, user:User=None)->Resp:
+        resp = Resp()
+
+        if not user:
+            resp.error = "Invalid Arguments"
+            resp.message = "'user' is a mandatory argument."
+            resp.status_code = status.HTTP_401_UNAUTHORIZED
+
+            logger.warn(resp.text())
+            return resp
+
+        try:
+            auth_token = UserAuthToken.objects.get(user=user)
+        except UserAuthToken.DoesNotExist:
+            resp.error = "No Auth Token Found"
+            resp.message = f"{user.email} has not generated any authentication token."
+            resp.data = {
+                "user": f"{user.id}"
+            }
+            resp.status_code = status.HTTP_404_NOT_FOUND
+
+            logger.exception(resp.text())
+            return resp
+        
+        resp.message = f"Token for {user.email} retrieved successfully."
+        resp.data = UserAuthTokenOutputSerializer(instance=auth_token).data
+        resp.status_code = status.HTTP_200_OK
+
+        logger.info(resp.message)
+        return resp
+
+    @classmethod
+    def delete(cls, user:User=None, password:str=None)->Resp:
+        resp = Resp()
+
+        if not user or not password or not check_password(password=password, encoded=user.password):
+            resp.error = "Invalid Arguments"
+            resp.message = "Both 'user' and 'password' are mandatory arguments."
+            resp.data = {
+                "user": f"{user.id}",
+                "password": password
+            }
+            resp.status_code = status.HTTP_401_UNAUTHORIZED
+
+            logger.warn(resp.text())
+            return resp
+
+        try:
+            auth_token = UserAuthToken.objects.get(user=user)
+        except UserAuthToken.DoesNotExist:
+            resp.error = "No Auth Token Found"
+            resp.message = f"{user.email} has not generated any authentication token."
+            resp.data = {
+                "user": f"{user.id}",
+                "password": password
+            }
+            resp.status_code = status.HTTP_404_NOT_FOUND
+
+            logger.exception(resp.text())
+            return resp
+        
+        auth_token.delete()
+
+        resp.message = f"Token for {user.email} deleted successfully."
         resp.status_code = status.HTTP_200_OK
 
         logger.info(resp.message)
