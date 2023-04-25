@@ -74,6 +74,7 @@ class PasswordLoginAPI(APIView):
 
         _ = UserModelUtils.log_login_ip(
             user=f"{resp.data.get('user', '')}", request=request)
+        _ = UserModelUtils.record_user_mac(user=f"{resp.data.get('user', '')}", request=request)
         return resp.to_response()
 
 
@@ -155,4 +156,17 @@ class WhiteListIpAddressAPI(APIView):
         if resp.error:
             raise resp.to_exception()
 
+        return resp.to_response()
+    
+    def delete(self, request:Request, *args, **kwargs):
+        """
+        Delete a single whitelisted IP address for a user.
+        """
+        _id = request.data.get("id")
+        ip = request.data.get("ip")
+
+        resp = UserModelUtils.delete_whitelisted_ip(user=request.user, ip=ip, _id=_id)
+        if resp.error:
+            raise resp.to_exception()
+        
         return resp.to_response()

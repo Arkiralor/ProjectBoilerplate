@@ -111,3 +111,13 @@ class SynchronousMethods:
             return False
 
         return True
+    
+    @classmethod
+    def delete(cls, filter_dict:dict=None, collection:str=None) -> bool:
+        try:
+            cls.db[collection].delete_one(filter=filter_dict)
+        except Exception as ex:
+            logger.exception(f"{ex}")
+            return False
+        
+        return True

@@ -141,6 +141,9 @@ LOGGING = {
     },
 }
 
+IP_HEADER = "ip"
+MAC_HEADER = "mac"
+
 LANGUAGE_CODE = environ.get("LANGUAGE_CODE", "en-us")
 TIME_ZONE = environ.get("TIME_ZONE", "utc")
 USE_I18N = eval(environ.get("USE_I18N", "True"))
