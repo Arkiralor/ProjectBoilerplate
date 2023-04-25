@@ -127,3 +127,5 @@ urllib3==1.26.15
     # via
     #   botocore
     #   requests
+waitress==2.1.2
+    # via -r requirements.in

@@ -42,8 +42,9 @@ class AsynchronousMethods:
 
     @classmethod
     async def find_distinct(cls, filter_dict: dict = None, collection: str = None, page: int = 1) -> list:
-        results = await cls.find(filter_dict=filter_dict, collection=collection, page=page)
-        return list(set(results))
+        results = await cls.db[collection].distinct(filter=filter_dict).skip(
+                (page-1)*MAX_ITEMS_PER_PAGE).limit(MAX_ITEMS_PER_PAGE)
+        return results
 
     @classmethod
     async def exists(cls, filter_dict: dict = None, collection: str = None) -> bool:
@@ -95,9 +96,9 @@ class SynchronousMethods:
 
     @classmethod
     def find_distinct(cls, filter_dict: dict = None, collection: str = None, page: int = 1) -> list:
-        results = cls.find(filter_dict=filter_dict,
-                           collection=collection, page=page)
-        return list(set(results))
+        results = cls.db[collection].distinct(filter=filter_dict).skip(
+                (page-1)*MAX_ITEMS_PER_PAGE).limit(MAX_ITEMS_PER_PAGE)
+        return results
 
     @classmethod
     def exists(cls, filter_dict: dict = None, collection: str = None) -> bool:
@@ -109,4 +110,14 @@ class SynchronousMethods:
         if not result > 0:
             return False
 
+        return True
+    
+    @classmethod
+    def delete(cls, filter_dict:dict=None, collection:str=None) -> bool:
+        try:
+            cls.db[collection].delete_one(filter=filter_dict)
+        except Exception as ex:
+            logger.exception(f"{ex}")
+            return False
+        
         return True

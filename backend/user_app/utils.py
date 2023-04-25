@@ -13,6 +13,7 @@ from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from core.boilerplate.response_template import Resp
+from core.settings import MAC_HEADER
 from database.collections import DatabaseCollections
 from database.methods import SynchronousMethods
 from database.synchronous import s_db
@@ -366,7 +367,7 @@ class UserModelUtils:
         return resp
 
     @classmethod
-    def get_whitelisted_ips(cls, user:User=None)->Resp:
+    def get_whitelisted_ips(cls, user:User=None, page:int=1)->Resp:
         resp = Resp()
 
         if not user:
@@ -384,10 +385,13 @@ class UserModelUtils:
             "user": f"{user.id}"
         }
 
-        results = SynchronousMethods.find_distinct(filter_dict=filter_dict, collection=DatabaseCollections.user_white_listed_ips)
+        results = SynchronousMethods.find(filter_dict=filter_dict, collection=DatabaseCollections.user_white_listed_ips, page=page)
 
         resp.message = f"White-listed IP addresses for '{user.email}' retrieved successfully."
-        resp.data = results
+        resp.data = {
+            "page": page,
+            "results": results
+        }
         resp.status_code = status.HTTP_200_OK
 
         logger.info(resp.message)
@@ -416,7 +420,10 @@ class UserModelUtils:
                     "ip": ip
                 }
 
-                _ = SynchronousMethods.insert_one(data=data, collection=DatabaseCollections.user_white_listed_ips)
+                if SynchronousMethods.find(filter_dict=data, collection=DatabaseCollections.user_white_listed_ips):
+                    logger.warn("This IP is already whitelisted for this user.")
+                else:
+                    _ = SynchronousMethods.insert_one(data=data, collection=DatabaseCollections.user_white_listed_ips)
             except Exception as ex:
                 resp.error = "Error in MongoDB Insertion"
                 resp.message = f"{ex}"
@@ -437,6 +444,90 @@ class UserModelUtils:
         logger.info(resp.message)
         return resp
 
+    @classmethod
+    def delete_whitelisted_ip(cls, user:User=None, ip:str=None, _id:str=None) -> Resp:
+        resp = Resp()
+
+        if not user:
+            resp.error = "Argument 'user' invalid"
+            resp.message = "USER is a mandatory argument."
+            resp.status_code = status.HTTP_400_BAD_REQUEST
+
+            logger.warn(resp.to_text())
+
+        filter_dict = {}
+        filter_dict["user"] = f"{user.id}"
+
+        if _id and not ip:
+            filter_dict["_id"] = _id
+        elif not _id and ip:
+            filter_dict["ip"] = ip
+        elif _id and ip:
+            logger.info(f"Contructing complicated filter hash table for MongoDB query for {user.username} as both: '_id' and 'ip' were provided")
+            filter_dict = {
+                "$and":[
+                    {"user": f"{user.id}"},
+                    {
+                        "$or": [
+                            {"_id": _id},
+                            {"ip": ip}
+                        ]
+                    }
+                ]
+            }
+            logger.info(f"Filter Hash Table:\t{filter_dict}")
+        else:
+            resp.error = "Invalid Data"
+            resp.message = "Invalid arguments sent."
+            resp.data = {
+                "ip": ip,
+                "_id": _id
+            }
+            resp.status_code = status.HTTP_400_BAD_REQUEST
+
+            logger.warn(resp.to_text())
+            return resp
+        
+        if not SynchronousMethods.find(filter_dict=filter_dict, collection=DatabaseCollections.user_white_listed_ips):
+            resp.error = "Document Not Found"
+            resp.message = f"No document found with attributes: {filter_dict} in collection '{DatabaseCollections.user_white_listed_ips}'."
+            resp.data = filter_dict
+            resp.status_code = status.HTTP_404_NOT_FOUND
+
+            logger.warn(resp.to_text())
+            return resp
+        
+        check = SynchronousMethods.delete(filter_dict=filter_dict, collection=DatabaseCollections.user_white_listed_ips)
+        if not check:
+            resp.error = "Internal Error"
+            resp.message = f"Internal server error; check logs."
+            resp.data = filter_dict
+            resp.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+
+            logger.warn(resp.to_text())
+            return resp
+        
+        resp.message = f"Whitelisted IP address {ip if ip else _id} deleted for {user.email}."
+        resp.data = cls.get_whitelisted_ips(user=user).data
+        resp.status_code = status.HTTP_200_OK
+
+        logger.info(resp.message)
+        return resp
+
+    @classmethod
+    def record_user_mac(self, user:str=None, request:HttpRequest=None)->None:
+        mac = request.headers.get(MAC_HEADER)
+        if mac:
+            try:
+                data = {
+                    "_id": f"{uuid4()}".replace("-", "").upper(),
+                    "user": user,
+                    "mac": mac,
+                    "timestampUtc": datetime.utcnow()
+                }
+                _ = SynchronousMethods.insert_one(data=data, collection=DatabaseCollections.user_mac_addresses)
+            except Exception as ex:
+                logger.warn(f"{ex}")
 
 class UserProfileModelUtils:
 
