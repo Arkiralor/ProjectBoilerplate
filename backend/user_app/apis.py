@@ -133,7 +133,8 @@ class WhiteListIpAddressAPI(APIView):
         """
         Get all IP addresses whitelisted for user.
         """
-        resp = UserModelUtils.get_whitelisted_ips(user=request.user)
+        page = int(request.query_params.get("page", 1))
+        resp = UserModelUtils.get_whitelisted_ips(user=request.user, page=page)
         if resp.error:
             raise resp.to_exception()
 

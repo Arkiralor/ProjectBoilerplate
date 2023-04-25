@@ -366,7 +366,7 @@ class UserModelUtils:
         return resp
 
     @classmethod
-    def get_whitelisted_ips(cls, user:User=None)->Resp:
+    def get_whitelisted_ips(cls, user:User=None, page:int=1)->Resp:
         resp = Resp()
 
         if not user:
@@ -384,10 +384,13 @@ class UserModelUtils:
             "user": f"{user.id}"
         }
 
-        results = SynchronousMethods.find_distinct(filter_dict=filter_dict, collection=DatabaseCollections.user_white_listed_ips)
+        results = SynchronousMethods.find(filter_dict=filter_dict, collection=DatabaseCollections.user_white_listed_ips, page=page)
 
         resp.message = f"White-listed IP addresses for '{user.email}' retrieved successfully."
-        resp.data = results
+        resp.data = {
+            "page": page,
+            "results": results
+        }
         resp.status_code = status.HTTP_200_OK
 
         logger.info(resp.message)
@@ -416,7 +419,10 @@ class UserModelUtils:
                     "ip": ip
                 }
 
-                _ = SynchronousMethods.insert_one(data=data, collection=DatabaseCollections.user_white_listed_ips)
+                if SynchronousMethods.find(filter_dict=data, collection=DatabaseCollections.user_white_listed_ips):
+                    logger.warn("This IP is already whitelisted for this user.")
+                else:
+                    _ = SynchronousMethods.insert_one(data=data, collection=DatabaseCollections.user_white_listed_ips)
             except Exception as ex:
                 resp.error = "Error in MongoDB Insertion"
                 resp.message = f"{ex}"
