@@ -1,3 +1,4 @@
+import pymongo
 from uuid import uuid4
 
 from core.settings import MAX_ITEMS_PER_PAGE
@@ -50,12 +51,22 @@ class AsynchronousMethods:
     async def exists(cls, filter_dict: dict = None, collection: str = None) -> bool:
         if not filter_dict:
             return False
-
-        result = await cls.db[collection].count_documents(filter=filter_dict)
-        logger.info(f"Count: {result}")
-        if not result > 0:
+        
+        results = await cls.db[collection].count_documents(filter=filter_dict)
+        if results > 0:
+            logger.info("Record(s) exist(s).")
+            return True
+        
+        return False
+    
+    @classmethod
+    async def delete(cls, filter_dict:dict=None, collection:str=None) -> bool:
+        try:
+            _ = await cls.db[collection].delete_one(filter=filter_dict)
+        except Exception as ex:
+            logger.exception(f"{ex}")
             return False
-
+        
         return True
 
 
@@ -82,6 +93,29 @@ class SynchronousMethods:
         )
 
         return new
+    
+    @classmethod
+    def find_one(cls, _id:str=None, collection:str=None):
+        res = cls.db[collection].find_one({"_id":_id})
+        if not res:
+            return None
+        return res
+    
+    @classmethod
+    def update_one(cls, _id:str=None, data:dict=None, collection:str=None):
+        if "_id" in data.keys():
+            del data["_id"]
+
+        try:
+            _ = cls.db[collection].update_one(
+                {"_id":_id},
+                {"$set": data}
+            )
+        except Exception as ex:
+            logger.warn(f"{ex}")
+            return False
+
+        return True
 
     @classmethod
     def find(cls, filter_dict: dict = None, collection: str = None, page: int = 1) -> list:
@@ -93,30 +127,42 @@ class SynchronousMethods:
                 (page-1)*MAX_ITEMS_PER_PAGE).limit(MAX_ITEMS_PER_PAGE)
 
         return list(results)
+    
+    @classmethod
+    def find_and_order(cls, filter_dict:dict=None, collection:str=None, sort_field:str=None, page:int=1) -> list:
+        """
+        Find via a query and order by a given field name.
+        Useful when implementing a search.
+        """
+        results = cls.db[collection].find(filter_dict).sort(sort_field, pymongo.DESCENDING).skip((page-1)*MAX_ITEMS_PER_PAGE).limit(MAX_ITEMS_PER_PAGE)
+        return list(results)
+
 
     @classmethod
     def find_distinct(cls, filter_dict: dict = None, collection: str = None, page: int = 1) -> list:
         results = cls.db[collection].distinct(filter=filter_dict).skip(
                 (page-1)*MAX_ITEMS_PER_PAGE).limit(MAX_ITEMS_PER_PAGE)
         return results
+    
+    @classmethod
+    def count_documents(cls, filter_dict: dict = {}, collection: str = None)->int:
+        return cls.db[collection].count_documents(filter=filter_dict)
 
     @classmethod
     def exists(cls, filter_dict: dict = None, collection: str = None) -> bool:
         if not filter_dict:
             return False
-
-        result = cls.db[collection].count_documents(filter=filter_dict)
-        logger.info(f"Count: {result}")
-        if not result > 0:
-            return False
-
-        logger.info("Record(s) already exist(s).")
-        return True
+        
+        if cls.db[collection].count_documents(filter=filter_dict) > 0:
+            logger.info("Record(s) exist(s).")
+            return True
+        
+        return False
     
     @classmethod
     def delete(cls, filter_dict:dict=None, collection:str=None) -> bool:
         try:
-            cls.db[collection].delete_one(filter=filter_dict)
+            _ = cls.db[collection].delete_one(filter=filter_dict)
         except Exception as ex:
             logger.exception(f"{ex}")
             return False

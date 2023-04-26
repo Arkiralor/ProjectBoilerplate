@@ -29,8 +29,6 @@ class ShowUserSerializer(ModelSerializer):
             "email",
             "date_joined",
             "slug",
-            "unsuccessful_login_attempts",
-            "blocked_until",
             "date_joined"
         )
 

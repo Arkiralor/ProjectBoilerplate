@@ -16,5 +16,6 @@ CUSTOM_APPS = [
     'admin_app.apps.AdminAppConfig',
     'communications_app.apps.CommunicationsAppConfig',
     'middleware_app.apps.MiddlewareAppConfig',
+    'post_app.apps.PostAppConfig',
     'user_app.apps.UserAppConfig'
 ]
