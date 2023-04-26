@@ -19,8 +19,6 @@ class RequestLogsAPI(APIView):
         page = int(request.query_params.get("page", 1))
 
         resp = RequestLogUtils.get(page=page)
-        if resp.error:
-            raise resp.to_exception()
         
         return resp.to_response()
     
@@ -39,7 +37,5 @@ class RequestLogsAPI(APIView):
         else:
             resp = RequestLogUtils.find_by_path(method=method, path=path, page=page)
 
-        if resp.error:
-            raise resp.to_exception()
         
         return resp.to_response()

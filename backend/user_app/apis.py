@@ -52,8 +52,6 @@ class RegisterUserAPI(APIView):
         data = request.data
 
         resp = UserModelUtils.create(data=data)
-        if resp.error:
-            raise resp.to_exception()
 
         _ = UserModelUtils.log_login_ip(user=f"{resp.data.get('id', '')}", request=request)
         return resp.to_response()
@@ -69,8 +67,6 @@ class PasswordLoginAPI(APIView):
 
         resp = UserModelUtils.login_via_password(
             username=username, email=email, password=password)
-        if resp.error:
-            raise resp.to_exception()
 
         _ = UserModelUtils.log_login_ip(
             user=f"{resp.data.get('user', '')}", request=request)
@@ -87,8 +83,6 @@ class UserAPI(APIView):
             user_id = request.user.id
 
         resp = UserModelUtils.get(user_id=user_id)
-        if resp.error:
-            raise resp.to_exception()
 
         return resp.to_response()
 
@@ -97,8 +91,6 @@ class UserAPI(APIView):
         page = int(request.query_params.get("page", 1))
 
         resp = UserModelUtils.search(term=term, page=page)
-        if resp.error:
-            raise resp.to_exception()
 
         return resp.to_response()
 
@@ -107,8 +99,6 @@ class UserAPI(APIView):
         data = request.data
 
         resp = UserProfileModelUtils.put(user_id=user_id, data=data)
-        if resp.error:
-            raise resp.to_exception()
 
         return resp.to_response()
 
@@ -136,8 +126,6 @@ class WhiteListIpAddressAPI(APIView):
         """
         page = int(request.query_params.get("page", 1))
         resp = UserModelUtils.get_whitelisted_ips(user=request.user, page=page)
-        if resp.error:
-            raise resp.to_exception()
 
         return resp.to_response()
 
@@ -153,8 +141,6 @@ class WhiteListIpAddressAPI(APIView):
 
         resp = UserModelUtils.add_white_list_ips(
             user=request.user, password=password, ips=ip_addresses)
-        if resp.error:
-            raise resp.to_exception()
 
         return resp.to_response()
     
@@ -166,7 +152,5 @@ class WhiteListIpAddressAPI(APIView):
         ip = request.data.get("ip")
 
         resp = UserModelUtils.delete_whitelisted_ip(user=request.user, ip=ip, _id=_id)
-        if resp.error:
-            raise resp.to_exception()
         
         return resp.to_response()

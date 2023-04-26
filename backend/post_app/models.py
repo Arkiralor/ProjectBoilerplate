@@ -12,10 +12,10 @@ class Tag(TemplateModel):
     """
     name = models.CharField(max_length=64, unique=True)
 
-    def __str__(self):
+    def __str__(self)->str:
         return f"#{self.name}"
     
-    def __repr__(self):
+    def __repr__(self)->str:
         return self.__str__()
     
     def save(self, *args, **kwargs):
@@ -37,17 +37,17 @@ class Post(TemplateModel):
     Posts made by users.
     """
     title = models.CharField(max_length=64)
-    blurb = models.CharField(max_length=128)
+    blurb = models.CharField(max_length=128, blank=True, null=True)
     slug = models.SlugField(blank=True, null=True)
     body = models.TextField()
     author = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, blank=True)
 
     def __str__(self):
         return f"{self.title} by {self.author.username if self.author else 'deleted'}"
     
     def __repr__(self) -> str:
-        return f"{self.title} by {self.author.username if self.author else 'deleted'}"
+        return self.__str__()
     
     def save(self, *args, **kwargs):
         self.title = self.title.title()
@@ -59,6 +59,7 @@ class Post(TemplateModel):
 
     
     class Meta:
+        unique_together = ("title", "body", "author")
         verbose_name = "User Post"
         verbose_name_plural = "User Posts"
         ordering = ("-created",)
