@@ -205,7 +205,6 @@ class PostModelUtils:
         logger.info(resp.message)
         return resp
 
-
     @classmethod
     def insert_to_mongo(cls, post:Post)->None:
         logger.info(f"LOGS:\t{post.tags.all()}")
