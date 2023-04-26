@@ -13,7 +13,7 @@ def export_env():
             if line.startswith('##'):
                 print("Comment Line.")
             elif not line.startswith("##"):
-                key, value = line.replace('"', "").strip().split(" = ", 1)
+                key, value = line.replace('"', "").replace("'", "").strip().split(" = ", 1)
                 print(f"KEY: {key}\tVALUE: {value}")
                 os.environ[key] = value
             elif line.startswith("") or line.startswith(" "):

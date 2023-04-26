@@ -94,7 +94,7 @@ class IpAddressChecker(object):
         ip = self.get_client_ip(request=request)
         mac = self.get_client_mac_address(headers=headers)
 
-        if not user or not type(user) == User:
+        if headers.get("Authorization") and (not user or not type(user) == User):
             user = self.get_jwt_user(headers=headers)
 
         if user \
