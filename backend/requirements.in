@@ -8,8 +8,10 @@ djangorestframework
 djangorestframework-simplejwt
 django-storages
 motor
+pandas
 pillow
 psycopg2-binary
+pydantic
 pymongo
 pytest-django
 python-jose[cryptography]

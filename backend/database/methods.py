@@ -50,12 +50,22 @@ class AsynchronousMethods:
     async def exists(cls, filter_dict: dict = None, collection: str = None) -> bool:
         if not filter_dict:
             return False
-
-        result = await cls.db[collection].count_documents(filter=filter_dict)
-        logger.info(f"Count: {result}")
-        if not result > 0:
+        
+        results = await cls.db[collection].count_documents(filter=filter_dict)
+        if results > 0:
+            logger.info("Record(s) exist(s).")
+            return True
+        
+        return False
+    
+    @classmethod
+    async def delete(cls, filter_dict:dict=None, collection:str=None) -> bool:
+        try:
+            _ = await cls.db[collection].delete_one(filter=filter_dict)
+        except Exception as ex:
+            logger.exception(f"{ex}")
             return False
-
+        
         return True
 
 
@@ -104,19 +114,17 @@ class SynchronousMethods:
     def exists(cls, filter_dict: dict = None, collection: str = None) -> bool:
         if not filter_dict:
             return False
-
-        result = cls.db[collection].count_documents(filter=filter_dict)
-        logger.info(f"Count: {result}")
-        if not result > 0:
-            return False
-
-        logger.info("Record(s) already exist(s).")
-        return True
+        
+        if cls.db[collection].count_documents(filter=filter_dict) > 0:
+            logger.info("Record(s) exist(s).")
+            return True
+        
+        return False
     
     @classmethod
     def delete(cls, filter_dict:dict=None, collection:str=None) -> bool:
         try:
-            cls.db[collection].delete_one(filter=filter_dict)
+            _ = cls.db[collection].delete_one(filter=filter_dict)
         except Exception as ex:
             logger.exception(f"{ex}")
             return False
