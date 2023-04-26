@@ -207,7 +207,6 @@ class PostModelUtils:
 
     @classmethod
     def insert_to_mongo(cls, post:Post)->None:
-        logger.info(f"LOGS:\t{post.tags.all()}")
         data = {
             "_id": f"{post.id}",
             "title": post.title,
