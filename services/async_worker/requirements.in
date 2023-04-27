@@ -1,0 +1,16 @@
+autopep8
+boto3
+dataclasses
+fastapi
+httpx
+motor
+passlib[bcrypt]
+pydantic[email]
+python-dotenv
+python-jose[cryptography]
+python-multipart
+pymongo
+requests
+spacy
+spacy-langdetect
+uvicorn[standard]
