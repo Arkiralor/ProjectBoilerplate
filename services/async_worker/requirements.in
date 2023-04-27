@@ -5,6 +5,8 @@ fastapi
 httpx
 motor
 passlib[bcrypt]
+pillow
+psycopg2-binary
 pydantic[email]
 python-dotenv
 python-jose[cryptography]
@@ -13,4 +15,5 @@ pymongo
 requests
 spacy
 spacy-langdetect
+sqlmodel
 uvicorn[standard]
