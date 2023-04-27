@@ -65,8 +65,12 @@ jmespath==1.0.1
     #   botocore
 motor==3.1.2
     # via -r requirements.in
+numpy==1.24.3
+    # via pandas
 packaging==23.1
     # via pytest
+pandas==2.0.1
+    # via -r requirements.in
 pillow==9.5.0
     # via -r requirements.in
 pluggy==1.0.0
@@ -81,6 +85,8 @@ pycodestyle==2.10.0
     # via autopep8
 pycparser==2.21
     # via cffi
+pydantic==1.10.7
+    # via -r requirements.in
 pyjwt==2.6.0
     # via djangorestframework-simplejwt
 pymongo==4.3.3
@@ -92,11 +98,15 @@ pytest==7.3.1
 pytest-django==4.5.2
     # via -r requirements.in
 python-dateutil==2.8.2
-    # via botocore
+    # via
+    #   botocore
+    #   pandas
 python-jose[cryptography]==3.3.0
     # via -r requirements.in
 pytz==2023.3
-    # via djangorestframework
+    # via
+    #   djangorestframework
+    #   pandas
 requests==2.28.2
     # via
     #   -r requirements.in
@@ -121,8 +131,12 @@ tomli==2.0.1
     # via
     #   autopep8
     #   pytest
+typing-extensions==4.5.0
+    # via pydantic
 tzdata==2023.3
-    # via django
+    # via
+    #   django
+    #   pandas
 urllib3==1.26.15
     # via
     #   botocore

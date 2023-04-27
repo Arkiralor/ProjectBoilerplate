@@ -149,7 +149,8 @@ TIME_ZONE = environ.get("TIME_ZONE", "utc")
 USE_I18N = eval(environ.get("USE_I18N", "True"))
 USE_TZ = eval(environ.get("USE_TZ", "True"))
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = 'static'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'user_app.User'
 CORS_ORIGIN_WHITELIST = environ.get('CORS_ORIGIN_WHITELIST', '').split(', ')

@@ -35,7 +35,8 @@ In this way we refrain from asking the user to go through hoops in the sky just 
 2. Also, if for some reason the frontend/app isn't sending you the user's current IP address, kindly rectify it __immediately__ by following [these](https://www.thetechplatform.com/post/how-to-get-user-ip-address-in-react-js) steps, if necessary, to attach the current IP address to the correct fields in the request header _(of course, this is only an example, you can determine the user's IP address in multitudes of ways, but this should offer a good starting point)_.
 
 #### Addendum
-_It should be noted that we would want to set up a [Celery](https://docs.celeryq.dev/) or [Airflow](https://airflow.apache.org/) task to automatically delete all records older than the number of days it takes for a `refreshToken` to expire._
+
+_It should be noted that we would want to set up a [Celery](https://docs.celeryq.dev/) or [Airflow](https://airflow.apache.org/) task to automatically delete all records older than around six months or so._
 
 ### Final Thoughts
 

@@ -33,7 +33,7 @@ class Resp:
         else:
             return {
                 "error": self.error,
-                "message": self.message,
+                "message": self.to_text(),
                 "data": self.data
             }
     
@@ -52,5 +52,5 @@ class Resp:
 
         return APIException(
             detail=self.to_text(),
-            code=self.status_code
+            code=self.error
         )
