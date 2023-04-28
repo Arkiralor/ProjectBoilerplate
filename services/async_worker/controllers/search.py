@@ -12,7 +12,7 @@ router = APIRouter(
     tags=['search']
 )
 
-@router.post("/", response_model=list[AlikeSearchResponse], status_code=status.HTTP_200_OK)
+@router.post("/", response_model=List[AlikeSearchResponse], status_code=status.HTTP_200_OK)
 async def search_alike_post(data: AlikeSearchRequest = Body(...)):
     term = data.phrase
     resp = await PostUtils.search_for_posts_like_phrase(term=term)
