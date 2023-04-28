@@ -2,10 +2,8 @@ from fastapi import status
 
 from database.collections import UserPostCollections
 from database.methods import SynchronousMethods
-from schema.request_schema import AlikeSearchRequest
-from schema.response_schema import  StoryResponse
 from templates.func_response import Resp
-from utils.general_utils import LanguageHandlers
+from utils.language_utils import LanguageHandlers
 
 class PostUtils:
     
@@ -16,7 +14,7 @@ class PostUtils:
         resp = Resp()
 
         for item in records:
-            text = f"{item.get('title')} {item.get('blurb')}"
+            text = item.get('blurb')
             is_alike = LanguageHandlers.check_if_similiar(sample_text=term, tested_text=text)
 
             if is_alike.get('are_alike', False):

@@ -26,5 +26,6 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
             User.id == token_data.user_id)).scalar_one_or_none()
         if not user:
             raise credentials_exception
+        return user
     except Exception:
         raise credentials_exception

@@ -64,15 +64,20 @@ class LanguageHandlers:
             )
 
     @classmethod
-    def check_if_similiar(cls, sample_text: str, tested_text: str):
+    def check_if_similiar(cls, sample_text: str, tested_text: str, confidence_threshold:float=None):
         """
         Classmethod to check if two given texts are cosine-similiar
         Args:
             sample_text (str): The text that is provided by the user
             tested_text (str): The text that is recieved from the database
-        Returns:
-            bool: If the two texts are similiar
+            confidence_threshold (float): How confident the finding needs to be at minimum.
+        Returns: dict
+            are_alike (bool): If the two texts are similiar
+            confidence (decimal): How confident are the findings.
         """
+        if not confidence_threshold:
+            confidence_threshold = cls.confidence_threshold
+            
 
         try:
             nlp = en_core_web_md.load(disable=[None])
@@ -83,7 +88,7 @@ class LanguageHandlers:
 
             sim_index = sample_doc.similarity(tested_doc)
 
-            if sim_index >= cls.confidence_threshold:
+            if sim_index >= confidence_threshold:
                 resp = {
                     "are_alike": True,
                     "confidence": sim_index,
