@@ -13,8 +13,8 @@ router = APIRouter(
 )
 
 @router.post("/", response_model=list[AlikeSearchResponse], status_code=status.HTTP_200_OK)
-async def search_alike_post(term: AlikeSearchRequest = Body(...)):
-    term = jsonable_encoder(term).get("phrase")
+async def search_alike_post(data: AlikeSearchRequest = Body(...)):
+    term = data.phrase
     resp = await PostUtils.search_for_posts_like_phrase(term=term)
     if resp.error:
         raise resp.to_exception()

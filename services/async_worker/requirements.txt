@@ -146,7 +146,6 @@ pydantic[email]==1.10.7
     #   confection
     #   fastapi
     #   spacy
-    #   sqlmodel
     #   thinc
 pymongo==4.3.3
     # via
@@ -196,11 +195,7 @@ spacy-legacy==3.0.12
     # via spacy
 spacy-loggers==1.0.4
     # via spacy
-sqlalchemy==1.4.41
-    # via sqlmodel
-sqlalchemy2-stubs==0.0.2a34
-    # via sqlmodel
-sqlmodel==0.0.8
+sqlalchemy==2.0.11
     # via -r requirements.in
 srsly==2.4.6
     # via
@@ -224,7 +219,7 @@ typer==0.7.0
 typing-extensions==4.5.0
     # via
     #   pydantic
-    #   sqlalchemy2-stubs
+    #   sqlalchemy
     #   starlette
 urllib3==1.26.15
     # via

@@ -24,6 +24,8 @@ class Settings(BaseSettings):
     DB_PASSWORD: str
     DB_URI: str
 
+    USER_TABLE: str
+
     MONGO_URI: str
     MONGO_NAME:str
     MONGO_HOST:str

@@ -15,5 +15,5 @@ pymongo
 requests
 spacy
 spacy-langdetect
-sqlmodel
+SQLAlchemy > 2.0.0
 uvicorn[standard]
