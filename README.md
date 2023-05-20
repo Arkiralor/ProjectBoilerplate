@@ -2,11 +2,11 @@
 
 A boilerplate that can be used as a template for quickly setting up a repository for a web application with the following stacks:
 
-1. __Backend__ in _Django_
-2. __Frontend__ in _ReactJS_
-3. __Application__ in _React Native_
-4. __Stable Storage__ in _PostgreSQL_
-5. __Warehousing/Lake__ in _MongoDB_
+1. __Backend__ in [_Django_](https://www.djangoproject.com/) & [_Django Restframework_](https://www.django-rest-framework.org/)
+2. __Frontend__ in [_ReactJS_](https://react.dev/)
+3. __Application__ in [_React Native_](https://reactnative.dev/)
+4. __Stable Storage__ in [_PostgreSQL_](https://www.postgresql.org/)
+5. __Warehousing/Lake__ in [_MongoDB_](https://www.mongodb.com/)
 
 ## Setup
 
