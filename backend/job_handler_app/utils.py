@@ -8,7 +8,7 @@ from django.conf import settings
 
 from core.rq_constants import JobQ
 from job_handler_app.models import EnqueuedJob
-from job_handler_app import logger
+from job_handler_app import logger, redis_logger
 
 
 def enqueue_job(func: Callable, job_q: str = JobQ.DEFAULT_Q, is_async: bool = True, *args, **kwargs) -> Job:
@@ -25,8 +25,6 @@ def enqueue_job(func: Callable, job_q: str = JobQ.DEFAULT_Q, is_async: bool = Tr
     except Exception as ex:
         logger.exception(f"Failed to enqueue job to {job_q} queue")
         return None
-
-    logger.info(job.__dict__)
     return job
 
 
@@ -44,7 +42,7 @@ def get_job(job_id: str = None, job_q: str = None) -> Job:
         job = rq.Queue(
             name=job_q, connection=settings.REDIS_CONN).fetch_job(job_id)
     except Exception as ex:
-        logger.exception(f"Failed to fetch job {job_id} from {job_q} queue")
+        redis_logger.exception(f"Failed to fetch job {job_id} from {job_q} queue")
         return None
     if job is None:
         logger.warn(f"Job {job_id} not found in {job_q} queue")
@@ -82,4 +80,4 @@ def find_prime_numbers(lower_bound: int, upper_bound: int) -> None:
                 if (number % i) == 0:
                     break
             else:
-                logger.info(f"Prime Number Found: {number}")
+                redis_logger.info(f"Prime Number Found: {number}")

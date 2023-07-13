@@ -7,6 +7,7 @@ A boilerplate that can be used as a template for quickly setting up a repository
 3. __Application__ in [_React Native_](https://reactnative.dev/)
 4. __Stable Storage__ in [_PostgreSQL_](https://www.postgresql.org/)
 5. __Warehousing/Lake__ in [_MongoDB_](https://www.mongodb.com/)
+6. __In-Memory Datasource/ Caching (_Frontend Only_)__ in [_Redis_](https://redis.io/)
 
 ## Setup
 
@@ -22,10 +23,19 @@ The setup procedures are defined as follows
 5. __[React-Native](https://reactnative.dev/)__ _v9.6_
 6. __[PostreSQL](https://www.postgresql.org/)__ & __[PGAdmin](https://www.pgadmin.org/)__
 7. __[MongoDB](https://www.mongodb.com/)__ & __[MongoDB Compass](https://www.mongodb.com/products/compass)__
+8. __[Redis](https://redis.io/)__
 
 #### Repository Procurement
 
 `git clone https://<personalAccessToken>@github.com/Arkiralor/ProjectBoilerplate.git`
+
+#### How to use the Boilerplate
+
+1. Run the procurement command shown above.
+2. Delete the `.git` directory from the cloned repository.
+3. Rename the repository-directory to one that is more appropriate for the purpose of the codebase.
+4. Run `git init` from inside the repository-directory (_level-0_) to initiate a new repository.
+5. Code away...!
 
 #### Backend Setup
 
@@ -46,6 +56,10 @@ Details [here](https://www.postgresql.org/docs/current/tutorial-install.html).
 #### MongoDB/Compass Setup
 
 Details [here](https://www.mongodb.com/docs/manual/administration/install-community/).
+
+#### Redis Setup
+
+Details [here](https://redis.io/docs/getting-started/installation/).
 
 ## Documentation
 

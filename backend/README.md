@@ -1,5 +1,7 @@
 # Setup
 
+__IMPORTANT:__ `Redis` and `cron` are not available for windows-systems; if you have no choice but to use a windows machine, we suggest using a [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) instance to setup the repository, although it is not an ideal solution as sometimes, the code breaks on WSL.
+
 ## Respository Setup
 
 1. `python -m venv env`
@@ -8,9 +10,13 @@
 3. `python -m pip install pip-tools`
 4. `sh scripts/install_dependencies.sh`
 5. Copy the `.env` file for the backend into the folder and fill the values as per your local configuration.
-6. `python manage.py makemigrations`
-7. `python manage.py migrate`
-8. `python manage.py createsuperuser`
+6. `crontab -e` to open the `cron` config file.
+   1. `* * * * * path/to/python/executable path/to/manage.py runcrons --silent` to enable the cron jobs defined in the system.
+   2. `^o` to write the changes to the file buffer (press `Enter` when prompted)
+   3. `^x` to exit the file editor.
+7. `python manage.py makemigrations`
+8. `python manage.py migrate`
+9. `python manage.py createsuperuser`
 
     __FOR LOCAL DEV MACHINE ONLY__
 
@@ -20,7 +26,7 @@
     PASSWORD: password
     ```
 
-9. `sh scripts/run_server.sh`
+10. `sh scripts/run_server.sh`
 
 ## .ENV File Format
 
