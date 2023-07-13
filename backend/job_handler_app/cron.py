@@ -33,7 +33,6 @@ class MonitorEnqueuedJob(CronJobBase):
         for job in jobs:
             current_details = get_job(job_id=job.job_id, job_q=job.origin)
             if not current_details:
-                # job.delete()
                 continue
             
             if job._status != current_details._status:
@@ -41,7 +40,7 @@ class MonitorEnqueuedJob(CronJobBase):
                 job.save()
 
                 if job._status == EnquedJobChoice.failed:
-                    logger.warn(current_details.__dict__)
+                    logger.warn(f"Job {job.job_id} failed")
 
 
 class DeleteOldJobRecords(CronJobBase):

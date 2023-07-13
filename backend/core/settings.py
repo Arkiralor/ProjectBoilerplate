@@ -75,7 +75,11 @@ if USE_REDIS:
 
     RQ_QUEUES = {
         q: {
-            'URL': REDIS_URL, 
+            # 'URL': REDIS_URL, 
+            'HOST': REDIS_HOST,
+            'PORT': REDIS_PORT,
+            'DB': REDIS_DB,
+            'PASSWORD': REDIS_PASSWORD,
             'DEFAULT_TIMEOUT': 480
         } for q in JobQ.ALL_QS
     }

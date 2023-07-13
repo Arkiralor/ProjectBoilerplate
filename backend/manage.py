@@ -4,12 +4,15 @@ import os
 import sys
 from dotenv import read_dotenv
 
+from utils.network_utils import NetworkUtils
+
 
 def main():
     """
         Run administrative tasks.
     """
     read_dotenv()
+    NetworkUtils.add_to_allowed_hosts()
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
     
     try:
