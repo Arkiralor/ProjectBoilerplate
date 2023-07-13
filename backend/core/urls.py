@@ -11,12 +11,15 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('api/admin/', include('admin_app.endpoints')),
+    path('api/jobs/', include('job_handler_app.endpoints')),
     path('api/post/', include('post_app.endpoints')),
     path('api/user/', include('user_app.endpoints')),
 
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token-verify'),
     path('api/token/blacklist/', TokenBlacklistView.as_view(), name='token-blacklist'),
+
+    path('django-rq/', include('django_rq.urls')),
 ]
 
 if settings.DEBUG and settings.ENV_TYPE.lower() == 'dev':
