@@ -4,7 +4,7 @@ import redis
 from os import path, makedirs, environ
 
 from core.apps import DEFAULT_APPS, THIRD_PARTY_APPS, CUSTOM_APPS
-from core.cron_classes import JOB_HANDLER_APP_CRON, USER_APP_CRON
+from core.cron_classes import JOB_HANDLER_APP_CRON, MIDDLEWARE_APP_CRON, USER_APP_CRON
 from core.middleware import DEFAULT_MIDDLEWARE, THIRD_PARTY_MIDDLEWARE, CUSTOM_MIDDLEWARE
 from core.rq_constants import JobQ
 
@@ -84,7 +84,7 @@ if USE_REDIS:
         } for q in JobQ.ALL_QS
     }
 
-CRON_CLASSES = JOB_HANDLER_APP_CRON + USER_APP_CRON
+CRON_CLASSES = JOB_HANDLER_APP_CRON + MIDDLEWARE_APP_CRON + USER_APP_CRON
 
 
 AUTH_PASSWORD_VALIDATORS = [
