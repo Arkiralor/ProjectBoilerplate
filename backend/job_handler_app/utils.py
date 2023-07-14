@@ -8,6 +8,7 @@ from django.conf import settings
 
 from core.rq_constants import JobQ
 from job_handler_app.models import EnqueuedJob
+from job_handler_app.serializers import EnqueuedJobSerializer
 from job_handler_app import logger, redis_logger
 
 
@@ -46,7 +47,11 @@ def get_job(job_id: str = None, job_q: str = None) -> Job:
         return None
     if job is None:
         logger.warn(f"Job {job_id} not found in {job_q} queue")
-        return None
+        job_db = EnqueuedJob.objects.filter(job_id=job_id).first()
+        if not job_db:
+            logger.warn(f"Job {job_id} not found in DB")
+            return None
+        return EnqueuedJobSerializer(job_db).data
 
     return job
 
