@@ -13,6 +13,7 @@ from user_app.model_choices import UserModelChoices
 
 from user_app import logger
 
+
 class User(AbstractUser):
     id = models.UUIDField(
         primary_key=True,
@@ -51,10 +52,10 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.email
-    
+
     def save(self, *args, **kwargs):
         self.username = self.username.lower()
-        self.email = self.email.lower()        
+        self.email = self.email.lower()
         self.slug = slugify(self.username)
 
         super(User, self).save(*args, **kwargs)
@@ -79,33 +80,34 @@ class UserProfile(TemplateModel):
         null=True
     )
     middle_name = ArrayField(
-            models.CharField(
-                max_length=16,
-                blank=True,
-                null=True
-            ),
-            size=16,
+        models.CharField(
+            max_length=16,
             blank=True,
             null=True
-        )
+        ),
+        size=16,
+        blank=True,
+        null=True
+    )
     last_name = models.CharField(
         max_length=16,
         blank=True,
         null=True
     )
     regnal_number = models.PositiveIntegerField(default=1)
-    gender = models.CharField(max_length=32, choices=UserModelChoices.USER_GENDER_CHOICES, blank=True, null=True)
+    gender = models.CharField(
+        max_length=32, choices=UserModelChoices.USER_GENDER_CHOICES, blank=True, null=True)
     date_of_birth = models.DateField(blank=True, null=True)
     age = models.PositiveIntegerField(blank=True, null=True)
 
     def __str__(self):
         return self.user.email
-    
+
     def save(self, *args, **kwargs):
         if self.first_name:
             self.first_name = self.first_name.title()
         if self.last_name:
-            self.last_name = self.last_name.title()        
+            self.last_name = self.last_name.title()
         if self.middle_name and len(self.middle_name) > 0:
             for name in self.middle_name:
                 name = name.title()
@@ -113,7 +115,7 @@ class UserProfile(TemplateModel):
         if self.date_of_birth:
             res = timezone.now().date() - self.date_of_birth
             self.age = res.days//365.25
-        
+
         super(UserProfile, self).save(*args, **kwargs)
 
     class Meta:
@@ -123,4 +125,56 @@ class UserProfile(TemplateModel):
         indexes = (
             models.Index(fields=('user',)),
             models.Index(fields=('first_name', 'last_name')),
+        )
+
+
+class UserLoginOTP(TemplateModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    otp = models.CharField(max_length=1024)
+    otp_expires_at = models.DateTimeField()
+
+    def __str__(self):
+        return f"OTP for {self.user.email} expiring at {self.otp_expires_at}"
+
+    def save(self, *args, **kwargs):
+        if not self.otp_expires_at:
+            self.otp_expires_at = timezone.now() + timedelta(minutes=5)
+
+        super(UserLoginOTP, self).save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = 'User Login OTP'
+        verbose_name_plural = 'User Login OTPs'
+        ordering = ('-created', 'id')
+        indexes = (
+            models.Index(fields=('id',)),
+            models.Index(fields=('user',)),
+            models.Index(fields=('otp',)),
+            models.Index(fields=('otp_expires_at',))
+        )
+
+
+class UserPasswordResetToken(TemplateModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    token = models.CharField(max_length=1024)
+    token_expires_at = models.DateTimeField()
+
+    def __str__(self):
+        return f"Password reset token for {self.user.email} expiring at {self.token_expires_at}"
+
+    def save(self, *args, **kwargs):
+        if not self.token_expires_at:
+            self.token_expires_at = timezone.now() + timedelta(minutes=5)
+
+        super(UserPasswordResetToken, self).save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = 'User Password Reset Token'
+        verbose_name_plural = 'User Password Reset Tokens'
+        ordering = ('-created', 'id')
+        indexes = (
+            models.Index(fields=('id',)),
+            models.Index(fields=('user',)),
+            models.Index(fields=('token',)),
+            models.Index(fields=('token_expires_at',))
         )
