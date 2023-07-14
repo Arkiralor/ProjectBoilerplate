@@ -38,7 +38,7 @@ class Resp:
             }
     
     def to_text(self):
-        return f"{self.error.upper()}:  {self.message}"
+        return f"{self.error.upper() if self.error else None}{':' if self.error else None }{self.message}"
     
     def to_response(self):
         return Response(

@@ -38,12 +38,12 @@ class Resp:
             }
     
     def to_text(self):
-        return f"{self.error.upper()}:  {self.message}"
+        return f"{self.error.upper()+': ' if self.error else None}{self.message}"
     
     def to_response(self):
         return Response(
             self.to_dict(),
-            status=self.status_code
+            status=self.status_code if self.status_code else status.HTTP_200_OK
         )
         
     

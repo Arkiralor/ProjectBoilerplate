@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 from pathlib import Path
 import redis
 from os import path, makedirs, environ
@@ -74,14 +74,7 @@ if USE_REDIS:
     REDIS_CONN = redis.Redis.from_url(REDIS_URL)
 
     RQ_QUEUES = {
-        q: {
-            # 'URL': REDIS_URL, 
-            'HOST': REDIS_HOST,
-            'PORT': REDIS_PORT,
-            'DB': REDIS_DB,
-            'PASSWORD': REDIS_PASSWORD,
-            'DEFAULT_TIMEOUT': 480
-        } for q in JobQ.ALL_QS
+        q: {'HOST': REDIS_HOST,'PORT': REDIS_PORT,'DB': REDIS_DB,'PASSWORD': REDIS_PASSWORD,'DEFAULT_TIMEOUT': 480} for q in JobQ.ALL_QS
     }
 
 CRON_ENABLED = eval(environ.get("CRON_ENABLED", "True"))
@@ -130,6 +123,7 @@ if ENV_TYPE == "dev":
 LOG_DIR = path.join(BASE_DIR.parent, 'logs/')
 if not path.exists(LOG_DIR):
     makedirs(LOG_DIR)
+
 ENV_LOG_FILE = path.join(LOG_DIR, f'{ENV_TYPE}_root.log')
 DJANGO_LOG_FILE = path.join(LOG_DIR, 'django.log')
 
@@ -169,8 +163,8 @@ LOGGING = {
     },
 }
 
-IP_HEADER = "ip"
-MAC_HEADER = "mac"
+IP_HEADER = environ.get("IP_HEADER", "ip")
+MAC_HEADER = environ.get("MAC_HEADER", "mac")
 
 LANGUAGE_CODE = environ.get("LANGUAGE_CODE", "en-us")
 TIME_ZONE = environ.get("TIME_ZONE", "utc")
