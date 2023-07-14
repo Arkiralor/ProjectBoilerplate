@@ -4,8 +4,9 @@ from pytz import timezone
 
 from django.conf import settings
 from django.db.models import Q
+from django.utils import timezone
 
-from user_app.models import User
+from user_app.models import User, UserLoginOTP
 
 class DeleteInactiveUsers(CronJobBase):
     """
@@ -38,4 +39,20 @@ class DeleteAbandonedUsers(CronJobBase):
         _ = User.objects.filter(
             Q(is_active=True) 
             & Q(last_login__lte=ONE_YEAR_SIX_MONTHS_AGO)
+        ).delete()
+
+
+class DeleteExpiredLoginOTPs(CronJobBase):
+    """
+    Deletes expired Login OTPs.
+    """
+    RUN_EVERY_MINUTES = 5 # Run every 5 minutes
+    schedule = Schedule(run_every_mins=RUN_EVERY_MINUTES)
+
+    code = 'delete_expired_login_otps'
+
+    def do(self):
+        NOW: datetime = timezone.now()
+        _ = UserLoginOTP.objects.filter(
+            otp_expires_at__lte=NOW
         ).delete()

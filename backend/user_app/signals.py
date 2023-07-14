@@ -2,7 +2,7 @@ from django.db.models.signals import post_save, pre_save, post_delete, pre_delet
 
 from user_app.models import User, UserProfile
 from user_app.serializers import ShowUserSerializer
-from user_app.utils import UserModelUtils
+from user_app.helpers import UserModelHelpers
 
 from user_app import logger
 
@@ -23,7 +23,7 @@ class UserSignalReciever:
 
     @classmethod
     def pre_delete(cls, sender, instance, *args, **kwargs):
-        _ = UserModelUtils.insert_deleted_user_into_mongo(data=ShowUserSerializer(instance=instance).data)
+        _ = UserModelHelpers.insert_deleted_user_into_mongo(data=ShowUserSerializer(instance=instance).data)
 
 
 post_save.connect(receiver=UserSignalReciever.created,

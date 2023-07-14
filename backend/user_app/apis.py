@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 
 from core.boilerplate.response_template import Resp
 from user_app.serializers import ShowUserSerializer
-from user_app.utils import UserModelUtils, UserProfileModelUtils
+from user_app.helpers import UserModelHelpers, UserProfileModelHelpers
 
 from user_app import logger
 
@@ -51,9 +51,10 @@ class RegisterUserAPI(APIView):
     def post(self, request: Request, *args, **kwargs):
         data = request.data
 
-        resp = UserModelUtils.create(data=data)
+        resp = UserModelHelpers.create(data=data)
 
-        _ = UserModelUtils.log_login_ip(user=f"{resp.data.get('id', '')}", request=request)
+        _ = UserModelHelpers.log_login_ip(
+            user=f"{resp.data.get('id', '')}", request=request)
         return resp.to_response()
 
 
@@ -65,12 +66,38 @@ class PasswordLoginAPI(APIView):
         email = request.data.get("email", None)
         password = request.data.get("password", "")
 
-        resp = UserModelUtils.login_via_password(
+        resp = UserModelHelpers.login_via_password(
             username=username, email=email, password=password)
 
-        _ = UserModelUtils.log_login_ip(
-            user=f"{resp.data.get('user', '')}", request=request)
-        _ = UserModelUtils.log_login_mac(user=f"{resp.data.get('user', '')}", request=request)
+        if not resp.error:
+            _ = UserModelHelpers.log_login_ip(
+                user=f"{resp.data.get('user', '')}", request=request)
+            _ = UserModelHelpers.log_login_mac(
+                user=f"{resp.data.get('user', '')}", request=request)
+        return resp.to_response()
+    
+
+class OTPLoginInitAPI(APIView):
+    permission_classes = (AllowAny,)
+
+    def post(self, request:Request, *args, **kwargs):
+        username = request.data.get("username", "")
+        email = request.data.get("email", "")
+        resp = UserModelHelpers.otp_login_init(username=username, email=email)
+        return resp.to_response()
+    
+class OTPLoginConfirmAPI(APIView):
+    permission_classes = (AllowAny,)
+
+    def post(self, request:Request, *args, **kwargs):
+        otp = request.data.get("otp", "")
+        otp_id = request.data.get("otp_id", "")
+        resp = UserModelHelpers.login_via_otp(otp=otp, otp_id=otp_id)
+        if not resp.error:
+            _ = UserModelHelpers.log_login_ip(
+                user=f"{resp.data.get('user').get('id', '')}", request=request)
+            _ = UserModelHelpers.log_login_mac(
+                user=f"{resp.data.get('user').get('id', '')}", request=request)
         return resp.to_response()
 
 
@@ -82,7 +109,7 @@ class UserAPI(APIView):
         if not user_id:
             user_id = request.user.id
 
-        resp = UserModelUtils.get(user_id=user_id)
+        resp = UserModelHelpers.get(user_id=user_id)
 
         return resp.to_response()
 
@@ -90,7 +117,7 @@ class UserAPI(APIView):
         term = request.query_params.get("term", "")
         page = int(request.query_params.get("page", 1))
 
-        resp = UserModelUtils.search(term=term, page=page)
+        resp = UserModelHelpers.search(term=term, page=page)
 
         return resp.to_response()
 
@@ -98,14 +125,14 @@ class UserAPI(APIView):
         user_id = request.user.id
         data = request.data
 
-        resp = UserProfileModelUtils.put(user_id=user_id, data=data)
+        resp = UserProfileModelHelpers.put(user_id=user_id, data=data)
 
         return resp.to_response()
 
     def delete(self, request: Request, *args, **kwargs):
         password = request.data.get("password")
         reason = request.data.get("reason", "No reason given.")
-        resp = UserModelUtils.delete(
+        resp = UserModelHelpers.delete(
             user=request.user, password=password, reason=reason)
 
         if resp.error:
@@ -125,7 +152,7 @@ class WhiteListIpAddressAPI(APIView):
         Get all IP addresses whitelisted for user.
         """
         page = int(request.query_params.get("page", 1))
-        resp = UserModelUtils.get_whitelisted_ips(user=request.user, page=page)
+        resp = UserModelHelpers.get_whitelisted_ips(user=request.user, page=page)
 
         return resp.to_response()
 
@@ -139,18 +166,19 @@ class WhiteListIpAddressAPI(APIView):
         if not type(ip_addresses) == list and not type(ip_addresses) == set:
             ip_addresses = [ip_addresses]
 
-        resp = UserModelUtils.add_white_list_ips(
+        resp = UserModelHelpers.add_white_list_ips(
             user=request.user, password=password, ips=ip_addresses)
 
         return resp.to_response()
-    
-    def delete(self, request:Request, *args, **kwargs):
+
+    def delete(self, request: Request, *args, **kwargs):
         """
         Delete a single whitelisted IP address for a user.
         """
         _id = request.data.get("id")
         ip = request.data.get("ip")
 
-        resp = UserModelUtils.delete_whitelisted_ip(user=request.user, ip=ip, _id=_id)
-        
+        resp = UserModelHelpers.delete_whitelisted_ip(
+            user=request.user, ip=ip, _id=_id)
+
         return resp.to_response()
