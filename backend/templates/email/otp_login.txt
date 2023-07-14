@@ -1,0 +1,4 @@
+Hello {{user}}
+{{otp}} is your OTP to login to {{site}}. Please do not share this with anyone.
+
+(c) {{year}} {{site}}. All rights reserved.

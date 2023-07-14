@@ -30,7 +30,9 @@ CONTACT_EMAIL = environ.get("CONTACT_EMAIL", f"contact@{APP_NAME}.com")
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            path.join(BASE_DIR, 'templates/'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -177,6 +179,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'user_app.User'
 CORS_ORIGIN_WHITELIST = environ.get('CORS_ORIGIN_WHITELIST', '').split(', ')
 CORS_ORIGIN_ALLOW_ALL = True
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = environ.get('EMAIL_HOST', 'smtp.google.com')
+EMAIL_PORT = environ.get('EMAIL_PORT', 587)
+EMAIL_HOST_USER = environ.get('EMAIL_HOST_USER', 'email.user')
+EMAIL_HOST_PASSWORD = environ.get('EMAIL_HOST_PASSWORD', 'email.password')
+EMAIL_USE_TLS = eval(environ.get('EMAIL_USE_TLS', 'True'))
+EMAIL_USE_SSL = eval(environ.get('EMAIL_USE_SSL', 'False'))
 
 OTP_ATTEMPT_LIMIT = int(environ.get('OTP_ATTEMPT_LIMIT', 10000))
 OTP_ATTEMPT_TIMEOUT = int(environ.get('OTP_ATTEMPT_TIMEOUT', 0))

@@ -11,13 +11,13 @@ class UserSignalReciever:
     model = User
 
     @classmethod
-    def created(cls, sender, instance, created, *args, **kwargs):
+    def created(cls, sender, instance:User, created, *args, **kwargs):
         if created:
             user_profile, _ = UserProfile.objects.get_or_create(user=instance)
             logger.info(f"User: {instance.email} created.")
 
     @classmethod
-    def updated(cls, sender, instance, created, *args, **kwargs):
+    def updated(cls, sender, instance:User, created, *args, **kwargs):
         if not created:
             logger.info(f"User: '{instance.email}' updated.")
 
@@ -38,12 +38,12 @@ class UserProfileSignalReciever:
     model = UserProfile
 
     @classmethod
-    def created(cls, sender, instance, created, *args, **kwargs):
+    def created(cls, sender, instance:UserProfile, created, *args, **kwargs):
         if created:
             logger.info(f"Profile for user: '{instance.user.email}' created.")
 
     @classmethod
-    def updated(cls, sender, instance, created, *args, **kwargs):
+    def updated(cls, sender, instance:UserProfile, created, *args, **kwargs):
         if not created:
             instance.user.first_name = instance.first_name
             instance.user.last_name = instance.last_name

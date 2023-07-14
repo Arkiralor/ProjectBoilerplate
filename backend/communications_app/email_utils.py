@@ -1,15 +1,26 @@
 import re
-from typing import List
+from datetime import datetime
+from email.mime.base import MIMEBase
+from typing import Dict, List, Sequence
 
 import boto3
-from communications_app import logger
+
+from django.conf import settings
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+
 from core.boilerplate.response_template import Resp
+from core.rq_constants import JobQ
 from core.settings import (APP_NAME, AWS_ACCESS_KEY_ID, AWS_REGION_NAME,
                            AWS_SECRET_ACCESS_KEY, CONTACT_EMAIL, DOMAIN_URL,
                            ENV_TYPE, OWNER_EMAIL, SNS_SENDER_ID)
+from job_handler_app.utils import enqueue_job
+from pytz import timezone
 from rest_framework import status
 from user_app.constants import FormatRegex
 from user_app.models import User
+
+from communications_app import logger
 
 
 class SESEmailUtils:
@@ -283,4 +294,95 @@ class SESEmailUtils:
         resp = cls.send_plaintext_email(
             subject=subject, message=message, recievers=users)
 
+        return resp
+
+
+class DjangoEmailUtils:
+    """
+    Utilities/methods to send emails via Django's in-built email system.
+    """
+
+    VALID_RESPONSE_CODES = (int(f"20{item}") for item in range(0, 10, 1))
+
+    @classmethod
+    def send_email(
+        cls,
+        subject: str = None,
+        body: str = None,
+        cc: Sequence[str] = None,
+        from_email: str = CONTACT_EMAIL,
+        to: Sequence[str] = None,
+        bcc: Sequence[str] = None,
+        attachements: Sequence[MIMEBase] = None,
+        headers: Dict[str, str] = None,
+        *args,
+        **kwargs
+    ):
+        try:
+            email = EmailMessage(
+                subject=subject,
+                body=body,
+                from_email=from_email,
+                to=to,
+                cc=cc,
+                bcc=bcc,
+                attachments=attachements,
+                headers=headers
+                * args,
+                **kwargs
+            )
+        except Exception as ex:
+            logger.error(f"Error while creating email: {ex}")
+            return False
+
+        try:
+            job = enqueue_job(func=email.send, job_q=JobQ.EMAIL_Q)
+            if not job or not job.id:
+                logger.error(f"Error while sending email: {email}")
+                return False
+            return True
+        except Exception as ex:
+            logger.error(f"Error while sending email: {ex}")
+            return False
+
+    @classmethod
+    def send_otp_email(cls, user: User, otp: str):
+        """
+        Send an email with the OTP to the user
+        args:
+            user: User model instance
+            otp: Plaintext OTP
+        """
+        resp = Resp()
+        recipient_list = [user.email]
+
+        subject = f"OTP for {user.username}'s Login"
+        context = {
+            "user": user.username,
+            "otp": otp,
+            "site": settings.APP_NAME,
+            "year": datetime.now(timezone(settings.TIME_ZONE)).year
+        }
+        body = render_to_string(
+            template_name='email/otp_login.txt', context=context)
+
+        check = cls.send_email(
+            subject=subject,
+            body=body,
+            to=recipient_list
+        )
+
+        if not check:
+            resp.error = "Email Error"
+            resp.message = "Error while sending OTP email."
+            resp.data = context
+            resp.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+
+            logger.warn(resp.message)
+            return resp
+
+        resp.message = f"OTP email sent successfully to {user.email}."
+        resp.status_code = status.HTTP_200_OK
+
+        logger.info(resp.message)
         return resp
