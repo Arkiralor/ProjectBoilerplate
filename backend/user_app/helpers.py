@@ -238,14 +238,7 @@ class UserModelHelpers:
                     "timestampUtc": datetime.utcnow()
                 }
 
-                check_dict = {
-                    "$and": [
-                        {"user": user},
-                        {"ip": ip}
-                    ]
-                }
-                if not SynchronousMethods.exists(filter_dict=check_dict, collection=DatabaseCollections.user_ips):
-                    _ = SynchronousMethods.insert_one(
+                _ = SynchronousMethods.insert_one(
                         data=data, collection=DatabaseCollections.user_ips)
             except Exception as ex:
                 logger.warn(f"{ex}")
@@ -461,7 +454,7 @@ class UserModelHelpers:
         Keep a record of any deleted users in the MongoDB cluster.
         """
         try:
-            data["_id"] = data.get("id")
+            data["_id"] = data.get("id", f'{uuid4()}')
             del data["id"]
 
             data["reason"] = reason
@@ -676,14 +669,7 @@ class UserModelHelpers:
                     "mac": mac,
                     "timestampUtc": datetime.utcnow()
                 }
-                check_dict = {
-                    "$and": [
-                        {"user": user},
-                        {"mac": mac}
-                    ]
-                }
-                if not SynchronousMethods.exists(filter_dict=check_dict, collection=DatabaseCollections.user_mac_addresses):
-                    _ = SynchronousMethods.insert_one(
+                _ = SynchronousMethods.insert_one(
                         data=data, collection=DatabaseCollections.user_mac_addresses)
             except Exception as ex:
                 logger.warn(f"{ex}")

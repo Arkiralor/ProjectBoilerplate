@@ -75,21 +75,22 @@ class PasswordLoginAPI(APIView):
             _ = UserModelHelpers.log_login_mac(
                 user=f"{resp.data.get('user', '')}", request=request)
         return resp.to_response()
-    
+
 
 class OTPLoginInitAPI(APIView):
     permission_classes = (AllowAny,)
 
-    def post(self, request:Request, *args, **kwargs):
+    def post(self, request: Request, *args, **kwargs):
         username = request.data.get("username", "")
         email = request.data.get("email", "")
         resp = UserModelHelpers.otp_login_init(username=username, email=email)
         return resp.to_response()
-    
+
+
 class OTPLoginConfirmAPI(APIView):
     permission_classes = (AllowAny,)
 
-    def post(self, request:Request, *args, **kwargs):
+    def post(self, request: Request, *args, **kwargs):
         otp = request.data.get("otp", "")
         otp_id = request.data.get("otp_id", "")
         resp = UserModelHelpers.login_via_otp(otp=otp, otp_id=otp_id)
@@ -152,7 +153,8 @@ class WhiteListIpAddressAPI(APIView):
         Get all IP addresses whitelisted for user.
         """
         page = int(request.query_params.get("page", 1))
-        resp = UserModelHelpers.get_whitelisted_ips(user=request.user, page=page)
+        resp = UserModelHelpers.get_whitelisted_ips(
+            user=request.user, page=page)
 
         return resp.to_response()
 
