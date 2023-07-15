@@ -61,15 +61,22 @@ def register_job_in_db(job: Job = None):
     Register a job in DB.
     """
     try:
-        enqueued_job, _ = EnqueuedJob.objects.get_or_create(
-            job_id=job.id,
-            _func_name=job.func_name,
-            origin=job.origin,
-            enqueued_at=job.enqueued_at.replace(tzinfo=pytz.UTC),
-            data=pickle.loads(job.data) if job.data else None,
-            _kwargs=job.kwargs,
-            description=job.description
-        )
+        data = {
+            "job_id": f"{job.id}",
+            "_func_name": f"{job.func_name}",
+            "origin": f"{job.origin}",
+            "enqueued_at": job.enqueued_at.replace(tzinfo=pytz.timezone(settings.TIME_ZONE)),
+            "data": f"{pickle.loads(job.data)}" if job.data else None,
+            "_kwargs": f"{job.kwargs}",
+            "description": f"{job.description}"
+        }
+
+        deserialized = EnqueuedJobSerializer(data=data)
+        if not deserialized.is_valid():
+            logger.warn(f"Invalid data: {deserialized.errors}")
+            return
+        
+        deserialized.save()
     except Exception as ex:
         logger.warn(f"Failed to register job {job.id} in DB: {ex}")
 

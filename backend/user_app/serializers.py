@@ -60,7 +60,7 @@ class UserLoginOTPOutputSerializer(ModelSerializer):
 
     class Meta:
         model = UserLoginOTP
-        fields = ("id", "user", "otp", "created", "otp_expires_at")
+        fields = ("id", "user", "created", "otp_expires_at")
 
 
 class UserPasswordResetTokenInputSerializer(ModelSerializer):

@@ -81,8 +81,8 @@ class OTPLoginInitAPI(APIView):
     permission_classes = (AllowAny,)
 
     def post(self, request: Request, *args, **kwargs):
-        username = request.data.get("username", "")
-        email = request.data.get("email", "")
+        username = request.data.get("username")
+        email = request.data.get("email")
         resp = UserModelHelpers.otp_login_init(username=username, email=email)
         return resp.to_response()
 

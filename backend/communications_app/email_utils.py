@@ -1,7 +1,7 @@
 import re
 from datetime import datetime
 from email.mime.base import MIMEBase
-from typing import Dict, List, Sequence
+from typing import Dict, List, Sequence, Optional
 
 import boto3
 
@@ -309,12 +309,12 @@ class DjangoEmailUtils:
         cls,
         subject: str = None,
         body: str = None,
-        cc: Sequence[str] = None,
+        cc: Optional[Sequence[str]] = None,
         from_email: str = CONTACT_EMAIL,
         to: Sequence[str] = None,
-        bcc: Sequence[str] = None,
-        attachements: Sequence[MIMEBase] = None,
-        headers: Dict[str, str] = None,
+        bcc: Optional[Sequence[str]] = None,
+        attachements: Optional[Sequence[MIMEBase]] = None,
+        headers: Optional[Dict[str, str]] = None,
         *args,
         **kwargs
     ):
@@ -328,8 +328,6 @@ class DjangoEmailUtils:
                 bcc=bcc,
                 attachments=attachements,
                 headers=headers
-                * args,
-                **kwargs
             )
         except Exception as ex:
             logger.error(f"Error while creating email: {ex}")
@@ -375,7 +373,6 @@ class DjangoEmailUtils:
         if not check:
             resp.error = "Email Error"
             resp.message = "Error while sending OTP email."
-            resp.data = context
             resp.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
 
             logger.warn(resp.message)

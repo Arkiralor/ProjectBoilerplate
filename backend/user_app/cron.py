@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from django_cron import CronJobBase, Schedule
-from pytz import timezone
+import pytz
 
 from django.conf import settings
 from django.db.models import Q
@@ -18,7 +18,7 @@ class DeleteInactiveUsers(CronJobBase):
     code = 'delete_inactive_users'
 
     def do(self):
-        SEVEN_DAYS_AGO: datetime = datetime.now(timezone(settings.TIME_ZONE)) - timedelta(days=7)
+        SEVEN_DAYS_AGO: datetime = datetime.now(pytz.timezone(settings.TIME_ZONE)) - timedelta(days=7)
         _ = User.objects.filter(
             Q(is_active=False) 
             & Q(date_joined__lte=SEVEN_DAYS_AGO)
@@ -35,7 +35,7 @@ class DeleteAbandonedUsers(CronJobBase):
     code = 'delete_abandoned_users'
 
     def do(self):
-        ONE_YEAR_SIX_MONTHS_AGO: datetime = datetime.now(timezone(settings.TIME_ZONE)) - timedelta(days=547)
+        ONE_YEAR_SIX_MONTHS_AGO: datetime = datetime.now(pytz.timezone(settings.TIME_ZONE)) - timedelta(days=547)
         _ = User.objects.filter(
             Q(is_active=True) 
             & Q(last_login__lte=ONE_YEAR_SIX_MONTHS_AGO)
