@@ -239,7 +239,7 @@ class UserModelHelpers:
                 }
 
                 _ = SynchronousMethods.insert_one(
-                        data=data, collection=DatabaseCollections.user_ips)
+                    data=data, collection=DatabaseCollections.user_ips)
             except Exception as ex:
                 logger.warn(f"{ex}")
 
@@ -370,8 +370,9 @@ class UserModelHelpers:
             resp.message = f"Sending OTP in `Response` as this is a development environment."
             resp.data = {
                 "otp": otp,
-                "user": otp_object.user.id,
-                "exipry": otp_object.otp_expires_at
+                "id": f"{otp_object.id}",
+                "user": ShowUserSerializer(otp_object.user).data,
+                "otp_expires_at": otp_object.otp_expires_at
             }
             resp.status_code = status.HTTP_200_OK
 
@@ -380,7 +381,15 @@ class UserModelHelpers:
 
         email_resp = DjangoEmailUtils.send_otp_email(
             user=user, otp=otp)
-        return email_resp
+        if email_resp.error:
+            return email_resp
+
+        resp.message = f"OTP sent to {user.email}."
+        resp.data = UserLoginOTPOutputSerializer(otp_object).data
+        resp.status_code = status.HTTP_200_OK
+
+        logger.info(resp.message)
+        return resp
 
     @classmethod
     def login_via_otp(cls, otp: str = None, otp_id: str = None) -> Resp:
@@ -670,7 +679,7 @@ class UserModelHelpers:
                     "timestampUtc": datetime.utcnow()
                 }
                 _ = SynchronousMethods.insert_one(
-                        data=data, collection=DatabaseCollections.user_mac_addresses)
+                    data=data, collection=DatabaseCollections.user_mac_addresses)
             except Exception as ex:
                 logger.warn(f"{ex}")
 
