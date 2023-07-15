@@ -24,10 +24,6 @@ charset-normalizer==3.1.0
     # via requests
 click==8.1.4
     # via rq
-colorama==0.4.6
-    # via
-    #   click
-    #   pytest
 coverage==7.2.3
     # via -r requirements.in
 cryptography==40.0.2
@@ -154,9 +150,7 @@ tomli==2.0.1
 typing-extensions==4.5.0
     # via pydantic
 tzdata==2023.3
-    # via
-    #   django
-    #   pandas
+    # via pandas
 urllib3==1.26.15
     # via
     #   botocore

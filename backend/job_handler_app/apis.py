@@ -1,4 +1,4 @@
-from rq.serializers import DefaultSerializer
+from rq.job import Job
 
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -19,6 +19,11 @@ class TestEnqueue(APIView):
         job_id = request.query_params.get('job', None)
         job_q = request.query_params.get('jobQ', 'default')
         instance = get_job(job_id=job_id, job_q=job_q)
+        if not isinstance(instance, Job):
+            return Response(
+                instance,
+                status=status.HTTP_200_OK
+            )
 
         return Response(
             RQJobSerializer(instance).data,
