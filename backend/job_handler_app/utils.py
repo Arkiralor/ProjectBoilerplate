@@ -24,7 +24,7 @@ def enqueue_job(func: Callable, job_q: str = JobQ.DEFAULT_Q, is_async: bool = Tr
                        is_async=is_async).enqueue(func, *args, **kwargs)
         register_job_in_db(job=job)
     except Exception as ex:
-        logger.exception(f"Failed to enqueue job to {job_q} queue")
+        redis_logger.exception(f"Failed to enqueue job to {job_q} queue")
         return None
     return job
 
@@ -84,6 +84,9 @@ def register_job_in_db(job: Job = None):
 
 
 def find_prime_numbers(lower_bound: int, upper_bound: int) -> None:
+    """
+    Simple function to find prime numbers between a range; used to test the job queue implementation(s).
+    """
     logger.info(
         f"Finding prime numbers between {lower_bound} and {upper_bound}")
     for number in range(lower_bound, upper_bound + 1):
