@@ -7,13 +7,14 @@ from rest_framework.utils.serializer_helpers import ReturnDict
 
 from core import logger
 
+
 class Resp:
     error: str = None
     message: str = None
     data: dict or str or int or bool = None
     status_code: int = None
 
-    def __init__(self, error:str=None, message:str=None, data:dict or str or int or bool=None, status_code:int=None)->None:
+    def __init__(self, error: str = None, message: str = None, data: dict or str or int or bool or list = None, status_code: int = None) -> None:
         if error:
             self.error = error
         if message:
@@ -26,27 +27,26 @@ class Resp:
     def to_dict(self):
         if self.error:
             logger.warn(self.to_text())
-            
-        if (type(self.data) == dict or type(self.data) == OrderedDict or type(self.data) == ReturnDict) and not self.error:
+
+        if (isinstance(self.data, dict) or isinstance(self.data, OrderedDict) or isinstance(self.data, ReturnDict) or isinstance(self.data, list)) and not self.error:
             return self.data
-        
+
         else:
             return {
                 "error": self.error,
                 "message": self.to_text(),
                 "data": self.data
             }
-    
+
     def to_text(self):
         return f"{self.error.upper()+': ' if self.error else ''}{self.message}"
-    
+
     def to_response(self):
         return Response(
             self.to_dict(),
             status=self.status_code if self.status_code else status.HTTP_200_OK
         )
-        
-    
+
     def to_exception(self):
         logger.warn(self.to_text())
 

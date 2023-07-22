@@ -834,11 +834,11 @@ class UserTokenHelpers:
 
         deserialized.save()
 
-        resp.message = "Token created successfully."
+        resp.message = "Please save the token as you will not be able to recover the token once this view ends."
         resp.data = {
             "user": f"{user.id}",
             "token": token,
-            "alias": alias,
+            "alias": deserialized.data.get("alias"),
             "expires_at": deserialized.data.get("expires_at")
         }
         resp.status_code = status.HTTP_201_CREATED

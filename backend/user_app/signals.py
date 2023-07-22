@@ -84,5 +84,19 @@ class UserTokenSignalReciever:
     model = UserToken
 
     @classmethod
-    def pre_create(cls, sender, instance: UserToken, *args, **kwargs):
-        pass
+    def post_save(cls, sender, instance: UserToken, created, *args, **kwargs):
+        if created:
+            logger.info(f"Token {instance.alias} for user: '{instance.user.email}' created.")
+        
+        else:
+            logger.info(f"Token {instance.alias} for user: '{instance.user.email}' updated.")
+
+    @classmethod
+    def post_delete(cls, sender, instance: UserToken, *args, **kwargs):
+        logger.info(f"Token {instance.alias} for user: '{instance.user.email}' deleted.")
+
+
+post_save.connect(receiver=UserTokenSignalReciever.post_save,
+                    sender=UserTokenSignalReciever.model)
+post_delete.connect(receiver=UserTokenSignalReciever.post_delete,
+                    sender=UserTokenSignalReciever.model)

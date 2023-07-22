@@ -6,7 +6,7 @@ from django.conf import settings
 from django.db.models import Q
 from django.utils import timezone
 
-from user_app.models import User, UserLoginOTP
+from user_app.models import User, UserLoginOTP, UserToken
 
 class DeleteInactiveUsers(CronJobBase):
     """
@@ -55,4 +55,21 @@ class DeleteExpiredLoginOTPs(CronJobBase):
         NOW: datetime = timezone.now()
         _ = UserLoginOTP.objects.filter(
             otp_expires_at__lte=NOW
+        ).delete()
+
+
+class DeleteExpiredUserLogins(CronJobBase):
+    """
+    Deletes expired Permanent User Tokens.
+    """
+
+    RUN_EVERY_MINUTES = 20 # Run every 20 minutes
+    schedule = Schedule(run_every_mins=RUN_EVERY_MINUTES)
+
+    code = 'delete_expired_user_logins_tokens'
+
+    def do(self):
+        NOW: datetime = timezone.now()
+        _ = UserToken.objects.filter(
+            expires_at__lte=NOW
         ).delete()

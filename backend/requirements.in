@@ -4,6 +4,7 @@ coverage
 django
 django-cors-headers
 django_cron
+django-debug-toolbar
 django-dotenv
 djangorestframework
 djangorestframework-simplejwt

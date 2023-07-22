@@ -25,6 +25,7 @@ urlpatterns = [
 if settings.DEBUG and settings.ENV_TYPE.lower() == 'dev':
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += [path("__debug__/", include("debug_toolbar.urls"))]
 
 
 logger.info(f"Running in {settings.ENV_TYPE.upper()} mode with DEBUG: {settings.DEBUG}")

@@ -12,6 +12,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = environ.get("SECRET_KEY", "t3mp0r4ry-s3cre4-k3y")
 
 DEBUG = eval(environ.get("DEBUG", "False"))
+if DEBUG:
+    import socket  # only if you haven't already imported this
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1", "10.0.2.2"]
 ENV_TYPE = environ.get("ENV_TYPE", "PROD").lower()
 MAX_ITEMS_PER_PAGE = 15
 
