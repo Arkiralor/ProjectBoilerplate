@@ -178,3 +178,38 @@ class UserPasswordResetToken(TemplateModel):
             models.Index(fields=('token',)),
             models.Index(fields=('token_expires_at',))
         )
+
+
+class UserToken(TemplateModel):
+    """
+    Permanent token for user to make app-based API calls to the backend.
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    token = models.CharField(max_length=1024)
+    alias = models.CharField(max_length=64, blank=True, null=True)
+    expires_at = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return f"Token '{self.alias if self.alias else None}' for {self.user.email} expiring at {self.expires_at}"
+    
+    def save(self, *args, **kwargs):
+        if self.alias:
+            self.alias = self.alias.lower()
+
+        if not self.expires_at:
+            self.expires_at = timezone.now() + timedelta(days=90)
+
+        super(UserToken, self).save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = 'User Token'
+        verbose_name_plural = 'User Tokens'
+        unique_together = ('user', 'token', 'alias')
+        ordering = ('-created', 'id')
+        indexes = (
+            models.Index(fields=('id',)),
+            models.Index(fields=('user',)),
+            models.Index(fields=('token',)),
+            models.Index(fields=('alias',)),
+            models.Index(fields=('expires_at',))
+        )

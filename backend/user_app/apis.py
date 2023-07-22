@@ -2,15 +2,18 @@ from rest_framework import status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from rest_framework.request import Request
 from rest_framework.views import APIView
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
+from auth.authentication import TokenAuthentication
 from core.boilerplate.response_template import Resp
 from user_app.serializers import ShowUserSerializer
-from user_app.helpers import UserModelHelpers, UserProfileModelHelpers
+from user_app.helpers import UserModelHelpers, UserProfileModelHelpers, UserTokenHelpers
 
 from user_app import logger
 
 
 class AccessTestAPI(APIView):
+    authentication_classes = (JWTAuthentication, TokenAuthentication)
     permission_classes = (IsAuthenticated,)
 
     def get(self, request: Request, *args, **kwargs):
@@ -182,5 +185,39 @@ class WhiteListIpAddressAPI(APIView):
 
         resp = UserModelHelpers.delete_whitelisted_ip(
             user=request.user, ip=ip, _id=_id)
+
+        return resp.to_response()
+
+
+class UserTokenAPI(APIView):
+
+    authentication_classes = (JWTAuthentication, TokenAuthentication)
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request: Request, *args, **kwargs):
+        resp = UserTokenHelpers.get(user=request.user)
+
+        return resp.to_response()
+
+    def post(self, request: Request, *args, **kwargs):
+        user_id = f"{request.user.id}"
+        alias = request.data.get("alias", None)
+        expires_at = request.data.get("expires_at", None)
+        resp = UserTokenHelpers.create(
+            user_id=user_id,
+            alias=alias,
+            expires_at=expires_at
+        )
+
+        return resp.to_response()
+
+    def delete(self, request: Request, *args, **kwargs):
+        _id = request.data.get("id", None)
+        alias = request.data.get("alias", None)
+        resp = UserTokenHelpers.destroy(
+            user=request.user,
+            _id=_id,
+            alias=alias
+        )
 
         return resp.to_response()

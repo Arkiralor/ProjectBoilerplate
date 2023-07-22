@@ -12,12 +12,16 @@ from middleware_app import logger
 from middleware_app.models import RequestLog
 from user_app.models import User
 from user_app.serializers import ShowUserSerializer
+from user_app.utils import UserTokenUtils
 
 
 class RequestLogger(object):
     """
     Middleware to log requests recieved by the system.
     """
+    JWT_HEADER: str = "Bearer"
+    TOKEN_HEADER: str = "Token"
+    AUTHORIZATION_KEY: str = "Authorization"
 
     def __init__(self, get_response):
         self.get_response = get_response
@@ -50,6 +54,32 @@ class RequestLogger(object):
             token = headers.get("Authorization").split(" ")[1]
             validated = jwt.decode(token=token, key=SECRET_KEY, algorithms=[environ.get('JWT_ALGORITHM'),])
             return User.objects.filter(pk=validated.get("user_id")).first()
+        except Exception as ex:
+            logger.info(f"{ex}")
+            return None
+        
+    def get_token_user(
+        self,
+        headers: dict = None,
+        token_prefix: str = "Token"
+    ):
+        """
+        Method to get the user from the header of the request, if authentication is handled via a Permanent Token.
+        """
+        if not headers.get("Authorization"):
+            logger.warn("No authorization header.")
+            return None
+        
+        try:
+            if headers.get("Authorization").split(" ")[0] != token_prefix:
+                logger.warn("Inavlid token prefix.")
+                return None
+            raw_token = headers.get("Authorization").split(" ")[1]
+            user_part, token_part = UserTokenUtils.split_parts(raw_token)
+            user_id = UserTokenUtils.get_user_id(user_part=user_part)
+            user = User.objects.filter(pk=user_id).first()
+            return user
+
         except Exception as ex:
             logger.info(f"{ex}")
             return None
@@ -107,8 +137,13 @@ class RequestLogger(object):
             params = request.GET
             user = request.user
 
-            if not user or not type(user)==User:
-                user = self.get_jwt_user(headers=headers)
+            if not user or not type(user) == User:
+                if headers.get(self.AUTHORIZATION_KEY, "").split(" ")[0] == self.JWT_HEADER:
+                    user = self.get_jwt_user(headers=headers)
+                elif headers.get(self.AUTHORIZATION_KEY, "").split(" ")[0] == self.TOKEN_HEADER:
+                    user = self.get_token_user(headers=headers)
+                else:
+                    user = None
 
             logger.info( f"INCOMING REQUEST: `USER: {user.email if user else None}\tPATH:{path}\tMETHOD: {method}`")
 

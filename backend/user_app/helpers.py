@@ -17,11 +17,12 @@ from core.settings import MAC_HEADER
 from database.collections import DatabaseCollections
 from database.methods import SynchronousMethods
 from database.synchronous import s_db
-from user_app.models import User, UserProfile, UserLoginOTP, UserPasswordResetToken
+from user_app.models import User, UserProfile, UserLoginOTP, UserPasswordResetToken, UserToken
 from user_app.model_choices import UserModelChoices
 from user_app.serializers import UserRegisterSerializer, ShowUserSerializer, UserProfileInputSerializer, UserProfileOutputSerializer,\
-    UserLoginOTPInputSerializer, UserLoginOTPOutputSerializer, UserPasswordResetTokenInputSerializer, UserPasswordResetTokenOutputSerializer
-from user_app.utils import JWTUtils, LoginOTPUtils
+    UserLoginOTPInputSerializer, UserLoginOTPOutputSerializer, UserPasswordResetTokenInputSerializer, UserPasswordResetTokenOutputSerializer, \
+    UserTokenInputSerializer, UserTokenOutputSerializer
+from user_app.utils import JWTUtils, LoginOTPUtils, UserTokenUtils
 
 from user_app import logger
 
@@ -746,6 +747,160 @@ class UserProfileModelHelpers:
         resp.message = "Profile updated successfully."
         resp.data = UserProfileOutputSerializer(
             instance=deserialized.instance).data
+        resp.status_code = status.HTTP_200_OK
+
+        logger.info(resp.message)
+        return resp
+
+
+class UserTokenHelpers:
+
+    BLANK: str = ""
+
+    @classmethod
+    def get(cls, user:User)->Resp:
+        resp = Resp()
+
+        if not user:
+            resp.error = "Invalid Data"
+            resp.message = "User ID is required."
+            resp.data = user
+            resp.status_code = status.HTTP_400_BAD_REQUEST
+
+            logger.warn(resp.to_text())
+            return resp
+
+        user_tokens = UserToken.objects.filter(user=user)
+
+        serialized = UserTokenOutputSerializer(user_tokens, many=True).data
+
+        resp.message = f"Tokens for user `{user.email}` retrived successfully."
+        resp.data = serialized
+        resp.status_code = status.HTTP_200_OK
+
+        logger.info(resp.message)
+        return resp
+
+    @classmethod
+    def create(cls, user_id: str = None, alias: str = None, expires_at: str = None) -> Resp:
+        resp = Resp()
+
+        if not user_id or user_id == cls.BLANK:
+            resp.error = "Invalid Data"
+            resp.message = "User ID is required."
+            resp.data = user_id
+            resp.status_code = status.HTTP_400_BAD_REQUEST
+
+            logger.warn(resp.to_text())
+            return resp
+
+        user = User.objects.filter(pk=user_id).first()
+        if not user:
+            resp.error = "User Not Found"
+            resp.message = f"User with ID: {user_id} was not found in the system."
+            resp.data = user_id
+            resp.status_code = status.HTTP_404_NOT_FOUND
+
+            logger.warn(resp.to_text())
+            return resp
+
+        token = UserTokenUtils.create_permanent_token(usr=user)
+        if not token:
+            resp.error = "Internal Error"
+            resp.message = "Internal server error; check logs."
+            resp.data = user_id
+            resp.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+
+            logger.warn(resp.to_text())
+            return resp
+        user_part, token_part = UserTokenUtils.split_parts(token=token)
+
+        data = {
+            "user": f"{user.id}",
+            "token": make_password(token_part),
+            "alias": alias,
+            "expires_at": expires_at
+        }
+
+        deserialized = UserTokenInputSerializer(data=data)
+        if not deserialized.is_valid():
+            resp.error = "Invalid Data"
+            resp.message = f"{deserialized.errors}"
+            resp.data = data
+            resp.status_code = status.HTTP_400_BAD_REQUEST
+
+            logger.warn(resp.to_text())
+            return resp
+
+        deserialized.save()
+
+        resp.message = "Token created successfully."
+        resp.data = {
+            "user": f"{user.id}",
+            "token": token,
+            "alias": alias,
+            "expires_at": deserialized.data.get("expires_at")
+        }
+        resp.status_code = status.HTTP_201_CREATED
+
+        logger.info(resp.message)
+        return resp
+
+    @classmethod
+    def destroy(cls, user: User, alias: str, _id: str) -> Resp:
+        resp = Resp()
+
+        if not user:
+            resp.error = "Invalid Data"
+            resp.message = "User ID is required."
+            resp.data = user
+            resp.status_code = status.HTTP_400_BAD_REQUEST
+
+            logger.warn(resp.to_text())
+            return resp
+
+        if alias and alias != cls.BLANK:
+            user_token = UserToken.objects.filter(
+                Q(user=user)
+                & Q(alias=alias)
+            ).first()
+        elif _id and _id != cls.BLANK:
+            user_token = UserToken.objects.filter(
+                Q(user=user)
+                & Q(pk=_id)
+            ).first()
+        else:
+            resp.error = "Invalid Data"
+            resp.message = "Either alias or _id is required."
+            resp.data = {
+                "user": f"{user.id}",
+                "alias": alias,
+                "_id": _id
+            }
+            resp.status_code = status.HTTP_400_BAD_REQUEST
+
+            logger.warn(resp.to_text())
+            return resp
+
+        deserialized = UserTokenOutputSerializer(user_token)
+
+        if not user_token:
+            resp.error = "Token Not Found"
+            resp.message = f"Token with ID: {_id} was not found in the system."
+            resp.data = {
+                "user": f"{user.id}",
+                "alias": alias,
+                "_id": _id
+            }
+            resp.status_code = status.HTTP_404_NOT_FOUND
+
+            logger.warn(resp.to_text())
+            return resp
+
+        user_token.delete()
+
+        resp.message = "Token deleted successfully."
+        resp.data = deserialized.data
         resp.status_code = status.HTTP_200_OK
 
         logger.info(resp.message)

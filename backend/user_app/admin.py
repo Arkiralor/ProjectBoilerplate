@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from user_app.models import User, UserProfile, UserLoginOTP, UserPasswordResetToken
+from user_app.models import User, UserProfile, UserLoginOTP, UserPasswordResetToken, UserToken
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
@@ -36,6 +36,18 @@ class UserLoginOTPAdmin(admin.ModelAdmin):
 @admin.register(UserPasswordResetToken)
 class UserPasswordResetTokenAdmin(admin.ModelAdmin):
     list_display = ("id", "user", "token", "token_expires_at")
+    search_fields = (
+        "id",
+        "user__id",
+        "user__username",
+        "user__email"
+    )
+    raw_id_fields = ("user",)
+    ordering = ("-created",)
+
+@admin.register(UserToken)
+class UserTokenAdmin(admin.ModelAdmin):
+    list_display = ("id", "user", "token", "expires_at")
     search_fields = (
         "id",
         "user__id",

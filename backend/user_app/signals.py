@@ -1,6 +1,6 @@
 from django.db.models.signals import post_save, pre_save, post_delete, pre_delete
 
-from user_app.models import User, UserProfile, UserLoginOTP
+from user_app.models import User, UserProfile, UserLoginOTP, UserToken
 from user_app.serializers import ShowUserSerializer
 from user_app.helpers import UserModelHelpers
 
@@ -77,3 +77,12 @@ post_save.connect(receiver=UserLoginOTPSignalReciever.created,
                   sender=UserLoginOTPSignalReciever.model)
 post_delete.connect(receiver=UserLoginOTPSignalReciever.deleted,
                     sender=UserLoginOTPSignalReciever.model)
+
+
+class UserTokenSignalReciever:
+
+    model = UserToken
+
+    @classmethod
+    def pre_create(cls, sender, instance: UserToken, *args, **kwargs):
+        pass

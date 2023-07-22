@@ -7,6 +7,7 @@ from django.http import HttpRequest, HttpResponseForbidden
 
 from core.settings import SECRET_KEY, IP_HEADER, MAC_HEADER
 from user_app.models import User
+from user_app.utils import UserTokenUtils
 
 from middleware_app import logger
 
@@ -19,6 +20,10 @@ class IpAddressChecker(object):
 
     MAC_ADDRESS_HEADER_NAME: str = MAC_HEADER
     IP_HEADER: str = IP_HEADER
+
+    JWT_HEADER: str = "Bearer"
+    TOKEN_HEADER: str = "Token"
+    AUTHORIZATION_KEY: str = "Authorization"
 
     def __init__(self, get_response):
         self.get_response = get_response
@@ -94,8 +99,13 @@ class IpAddressChecker(object):
         ip = self.get_client_ip(request=request)
         mac = self.get_client_mac_address(headers=headers)
 
-        if not user or not type(user) == User:
-            user = self.get_jwt_user(headers=headers)
+        if (not user or not type(user) == User):
+            ## We don't need to check the IP if the user is using a permanent Token, as that would overcomplicate things on the user's end.
+            if headers.get(self.AUTHORIZATION_KEY, "").split(" ")[0] == self.JWT_HEADER: 
+                user = self.get_jwt_user(headers=headers)
+            else:
+                user = None
+
 
         if user \
             and not (user.is_superuser or user.is_staff) \
