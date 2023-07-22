@@ -186,7 +186,7 @@ class UserToken(TemplateModel):
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     token = models.CharField(max_length=1024)
-    alias = models.CharField(max_length=64, blank=True, null=True)
+    alias = models.CharField(max_length=64, blank=False, null=False)
     expires_at = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
@@ -204,7 +204,7 @@ class UserToken(TemplateModel):
     class Meta:
         verbose_name = 'User Token'
         verbose_name_plural = 'User Tokens'
-        unique_together = ('user', 'token', 'alias')
+        unique_together = ('user', 'alias')
         ordering = ('-created', 'id')
         indexes = (
             models.Index(fields=('id',)),

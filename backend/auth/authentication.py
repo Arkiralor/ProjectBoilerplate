@@ -52,7 +52,6 @@ class TokenAuthentication(BaseAuthentication):
             msg = 'Invalid token header. Token string should not contain invalid characters.'
             logger.error(msg)
             raise exceptions.AuthenticationFailed(msg)
-        logger.info(f"Raw token: {raw_token}")
         return self.authenticate_credentials(raw_token)
     
     def authenticate_credentials(self, token):
