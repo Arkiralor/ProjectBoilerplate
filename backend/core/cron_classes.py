@@ -9,5 +9,6 @@ MIDDLEWARE_APP_CRON = [
 USER_APP_CRON = [
     'user_app.cron.DeleteInactiveUsers',
     'user_app.cron.DeleteAbandonedUsers',
-    'user_app.cron.DeleteExpiredLoginOTPs'
+    'user_app.cron.DeleteExpiredLoginOTPs',
+    'user_app.cron.DeleteExpiredUserLoginTokens'
 ]

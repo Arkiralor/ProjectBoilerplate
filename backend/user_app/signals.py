@@ -1,6 +1,6 @@
 from django.db.models.signals import post_save, pre_save, post_delete, pre_delete
 
-from user_app.models import User, UserProfile, UserLoginOTP, UserToken
+from user_app.models import User, UserProfile, UserLoginOTP, UserToken, UserTokenUsage
 from user_app.serializers import ShowUserSerializer
 from user_app.helpers import UserModelHelpers
 
@@ -100,3 +100,16 @@ post_save.connect(receiver=UserTokenSignalReciever.post_save,
                     sender=UserTokenSignalReciever.model)
 post_delete.connect(receiver=UserTokenSignalReciever.post_delete,
                     sender=UserTokenSignalReciever.model)
+
+
+class UserTokenUsageSignalReciever:
+
+    model = UserTokenUsage
+
+    @classmethod
+    def post_save(cls, sender, instance: UserTokenUsage, created, *args, **kwargs):
+        if created:
+            logger.info(f"Token '{instance.token.alias}' used by {instance.token.user.email} at {instance.created}")
+        
+post_save.connect(receiver=UserTokenUsageSignalReciever.post_save,
+                    sender=UserTokenUsageSignalReciever.model)

@@ -35,7 +35,7 @@ class DeleteAbandonedUsers(CronJobBase):
     code = 'delete_abandoned_users'
 
     def do(self):
-        ONE_YEAR_SIX_MONTHS_AGO: datetime = datetime.now(pytz.timezone(settings.TIME_ZONE)) - timedelta(days=547)
+        ONE_YEAR_SIX_MONTHS_AGO: datetime = datetime.now(pytz.timezone(settings.TIME_ZONE)) - timedelta(days=548) ## (prithoo): 364.25 days times 1.5 is equal to 547.875 days
         _ = User.objects.filter(
             Q(is_active=True) 
             & Q(last_login__lte=ONE_YEAR_SIX_MONTHS_AGO)
@@ -58,7 +58,7 @@ class DeleteExpiredLoginOTPs(CronJobBase):
         ).delete()
 
 
-class DeleteExpiredUserLogins(CronJobBase):
+class DeleteExpiredUserLoginTokens(CronJobBase):
     """
     Deletes expired Permanent User Tokens.
     """

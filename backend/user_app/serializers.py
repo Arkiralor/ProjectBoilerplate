@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 
-from user_app.models import User, UserProfile, UserLoginOTP, UserPasswordResetToken, UserToken
+from user_app.models import User, UserProfile, UserLoginOTP, UserPasswordResetToken, UserToken, UserTokenUsage
 
 
 class UserRegisterSerializer(ModelSerializer):
@@ -87,6 +87,22 @@ class UserTokenInputSerializer(ModelSerializer):
 
 class UserTokenOutputSerializer(ModelSerializer):
     user = ShowUserSerializer()
+
     class Meta:
         model = UserToken
         fields = ('id', 'user', 'alias', 'created', 'updated')
+
+
+class UserTokenUsageInputSerializer(ModelSerializer):
+
+    class Meta:
+        model = UserTokenUsage
+        fields = '__all__'
+
+
+class UserTokenUsageOutputSerializer(ModelSerializer):
+    token = UserTokenOutputSerializer()
+
+    class Meta:
+        model = UserTokenUsage
+        fields = '__all__'

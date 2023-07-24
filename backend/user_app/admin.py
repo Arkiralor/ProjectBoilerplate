@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from user_app.models import User, UserProfile, UserLoginOTP, UserPasswordResetToken, UserToken
+from user_app.models import User, UserProfile, UserLoginOTP, UserPasswordResetToken, UserToken, UserTokenUsage
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
@@ -55,4 +55,18 @@ class UserTokenAdmin(admin.ModelAdmin):
         "user__email"
     )
     raw_id_fields = ("user",)
+    ordering = ("-created",)
+
+
+@admin.register(UserTokenUsage)
+class UserTokenUsageAdmin(admin.ModelAdmin):
+    list_display = ("id", "token", "created")
+    search_fields = (
+        "id",
+        "token__alias",
+        "token__user__id",
+        "token__user__username",
+        "token__user__email"
+    )
+    raw_id_fields = ("token",)
     ordering = ("-created",)

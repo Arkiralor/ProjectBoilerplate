@@ -213,3 +213,24 @@ class UserToken(TemplateModel):
             models.Index(fields=('alias',)),
             models.Index(fields=('expires_at',))
         )
+
+
+class UserTokenUsage(TemplateModel):
+    token = models.ForeignKey(UserToken, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+
+    def __str__(self):
+        return f"Token '{self.token.alias}' used by {self.token.user.email} at {self.created}"
+    
+    def __repr__(self):
+        return self.__str()
+    
+    class Meta:
+        verbose_name = 'User Token Usage'
+        verbose_name_plural = 'User Token Usages'
+        ordering = ('-created', 'id')
+        indexes = (
+            models.Index(fields=('id',)),
+            models.Index(fields=('token',)),
+            models.Index(fields=('created',))
+        )
