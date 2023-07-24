@@ -31,13 +31,15 @@ class JWTUtilsTestCase(TestCase):
                                       settings.SIMPLE_JWT.get('ALGORITHM'),])
         self.refresh_decoded = jwt.decode(token=self.refreshToken, key=settings.SECRET_KEY, algorithms=[
                                         settings.SIMPLE_JWT.get('ALGORITHM'),])
+        
+        logger.info(f"Access Token: {self.access_decoded}")
+        logger.info(f"Refresh Token: {self.refresh_decoded}")
 
     def test_get_tokens_for_user_returns_tokens(self):
         self.assertIsInstance(self.accessToken, str)
         self.assertIsInstance(self.refreshToken, str)
 
     def test_access_token_validity(self):
-        refresh = self.refresh_decoded
         access = self.access_decoded
         self.assertTrue(access['user_id'] == str(self.user.id))
         

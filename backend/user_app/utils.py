@@ -21,7 +21,7 @@ class JWTUtils:
     @classmethod
     def get_tokens_for_user(cls, user: User = None):
         if not user:
-            logger.warn(f'Invalid argument(s) `user` passed.')
+            logger.warn(f'Invalid argument(s) NULL `user` passed.')
             return None
         if not isinstance(user, User):
             logger.warn(f'Invalid argument(s) `user` passed.')
