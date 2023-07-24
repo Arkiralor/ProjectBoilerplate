@@ -20,6 +20,16 @@ class JWTUtils:
     """
     @classmethod
     def get_tokens_for_user(cls, user: User = None):
+        if not user:
+            logger.warn(f'Invalid argument(s) `user` passed.')
+            return None
+        if not isinstance(user, User):
+            logger.warn(f'Invalid argument(s) `user` passed.')
+            return None
+        
+        if not user in User.objects.all():
+            logger.warn(f'Invalid argument(s) `user` does not exist.')
+            return None
         refresh = RefreshToken.for_user(user)
 
         return {
