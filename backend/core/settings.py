@@ -177,6 +177,11 @@ TIME_ZONE = environ.get("TIME_ZONE", "utc")
 USE_I18N = eval(environ.get("USE_I18N", "True"))
 USE_TZ = eval(environ.get("USE_TZ", "True"))
 
+#(prithoo): Salt sizes used in determining the user part in the permanent token;
+#           Looked cleaner when decalred in the `conf` module of the project.
+SALT_01_SIZE = int(environ.get('SALT_01_SIZE', 4))
+SALT_02_SIZE = int(environ.get('SALT_02_SIZE', 6))
+
 STATIC_URL = '/static/'
 STATIC_ROOT = 'static'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

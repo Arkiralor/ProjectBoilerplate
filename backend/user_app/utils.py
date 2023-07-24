@@ -97,8 +97,9 @@ class UserTokenUtils:
     NUMBERS = tuple(str(i) for i in range(0, 10))
 
     TOKEN_SIZE: int = 32
-    SALT_01_SIZE: int = 4
-    SALT_02_SIZE: int = 6
+    UUID_LENGTH: int = 36 #(prithoo): The length of a typical UUIDv4 value.
+    SALT_01_SIZE: int = settings.SALT_01_SIZE
+    SALT_02_SIZE: int = settings.SALT_02_SIZE
 
     @classmethod
     def generate_hex_token(cls, token_size: int = None) -> str:
@@ -125,7 +126,7 @@ class UserTokenUtils:
         if not token or token == "":
             logger.warn(f"Invalid argument(s) `token` passed.")
             return None, None
-        user_part = token[0:((cls.SALT_01_SIZE*2)+len(f"{uuid4()}")+(cls.SALT_02_SIZE*2)+1):]
+        user_part = token[0:((cls.SALT_01_SIZE*2)+cls.UUID_LENGTH+(cls.SALT_02_SIZE*2)+1):]
         token_part = token.replace(user_part, "")
 
         return user_part, token_part
