@@ -11,6 +11,7 @@ from user_app.utils import JWTUtils, LoginOTPUtils, UserTokenUtils
 
 from user_app import logger
 
+
 class JWTUtilsTestCase(TestCase):
 
     def setUp(self):
@@ -28,12 +29,9 @@ class JWTUtilsTestCase(TestCase):
         self.accessToken = tokens['accessToken']
         self.refreshToken = tokens['refreshToken']
         self.access_decoded = jwt.decode(token=self.accessToken, key=settings.SECRET_KEY, algorithms=[
-                                      settings.SIMPLE_JWT.get('ALGORITHM'),])
+            settings.SIMPLE_JWT.get('ALGORITHM'),])
         self.refresh_decoded = jwt.decode(token=self.refreshToken, key=settings.SECRET_KEY, algorithms=[
-                                        settings.SIMPLE_JWT.get('ALGORITHM'),])
-        
-        logger.info(f"Access Token: {self.access_decoded}")
-        logger.info(f"Refresh Token: {self.refresh_decoded}")
+            settings.SIMPLE_JWT.get('ALGORITHM'),])
 
     def test_get_tokens_for_user_returns_tokens(self):
         self.assertIsInstance(self.accessToken, str)
@@ -42,20 +40,23 @@ class JWTUtilsTestCase(TestCase):
     def test_access_token_validity(self):
         access = self.access_decoded
         self.assertTrue(access['user_id'] == str(self.user.id))
-        
+
         access_token_duration = access['exp'] - access['iat']
-        self.assertGreaterEqual(access_token_duration, timedelta(minutes=5).seconds)
+        self.assertGreaterEqual(access_token_duration,
+                                timedelta(minutes=5).seconds)
 
     def test_refresh_token_validity(self):
         refresh = self.refresh_decoded
         refresh_token_duration = refresh['exp'] - refresh['iat']
-        self.assertGreaterEqual(refresh_token_duration, timedelta(days=7).seconds)
+        self.assertGreaterEqual(refresh_token_duration,
+                                timedelta(days=7).seconds)
 
     def test_get_tokens_for_user_with_invalid_user_returns_none(self):
         tokens = JWTUtils.get_tokens_for_user()  # Test without passing user
         self.assertIsNone(tokens)
 
-        invalid_user = User(username='invaliduser')  # Test with an invalid user
+        # Test with an invalid user
+        invalid_user = User(username='invaliduser')
         tokens = JWTUtils.get_tokens_for_user(invalid_user)
         self.assertIsNone(tokens)
 
@@ -78,17 +79,20 @@ class LoginOTPUtilsTestCase(TestCase):
     def test_generate_text_otp(self):
         otp = LoginOTPUtils.generate_text_otp()
         self.assertEqual(len(otp), LoginOTPUtils.OTP_SIZE)
-        self.assertRegex(otp, '^[A-Z]+$')  # Check if OTP contains only uppercase letters
+        # Check if OTP contains only uppercase letters
+        self.assertRegex(otp, '^[A-Z]+$')
 
     def test_generate_numeric_otp(self):
         otp = LoginOTPUtils.generate_numeric_otp()
         self.assertEqual(len(otp), LoginOTPUtils.OTP_SIZE)
-        self.assertRegex(otp, '^[0-9]+$')  # Check if OTP contains only numeric digits
+        # Check if OTP contains only numeric digits
+        self.assertRegex(otp, '^[0-9]+$')
 
     def test_generate_hex_otp(self):
         otp = LoginOTPUtils.generate_hex_otp()
         self.assertEqual(len(otp), LoginOTPUtils.OTP_SIZE)
-        self.assertRegex(otp, '^[A-F0-9]+$')  # Check if OTP is a valid hex string
+        # Check if OTP is a valid hex string
+        self.assertRegex(otp, '^[A-F0-9]+$')
 
     def test_assign_otp_to_user(self):
         otp = LoginOTPUtils.generate_numeric_otp()
@@ -97,7 +101,8 @@ class LoginOTPUtilsTestCase(TestCase):
         self.assertEqual(otp_instance.user, self.user)
         self.assertTrue(check_password(otp, otp_instance.otp))
         self.assertTrue(otp_instance.otp_expires_at > timezone.now())
-        self.assertTrue(otp_instance.otp_expires_at <= timezone.now() + timedelta(minutes=LoginOTPUtils.OTP_EXPIRY_MINUTES))
+        self.assertTrue(otp_instance.otp_expires_at <= timezone.now(
+        ) + timedelta(minutes=LoginOTPUtils.OTP_EXPIRY_MINUTES))
 
         # Test invalid arguments
         invalid_user = None
@@ -118,15 +123,16 @@ class UserTokenUtilsTestCase(TestCase):
         except Exception as ex:
             logger.exception(ex)
 
-
     def test_generate_hex_token(self):
         token = UserTokenUtils.generate_hex_token()
         self.assertEqual(len(token), UserTokenUtils.TOKEN_SIZE*2)
-        self.assertRegex(token, '^[A-F0-9]+$')  # Check if token is a valid hex string
+        # Check if token is a valid hex string
+        self.assertRegex(token, '^[A-F0-9]+$')
 
     def test_process_user_salt(self):
         salt = UserTokenUtils.process_user_salt(self.user)
-        self.assertEqual(len(salt), UserTokenUtils.SALT_01_SIZE*2 + len(str(self.user.id)) + UserTokenUtils.SALT_02_SIZE*2)
+        self.assertEqual(len(salt), UserTokenUtils.SALT_01_SIZE *
+                         2 + len(str(self.user.id)) + UserTokenUtils.SALT_02_SIZE*2)
 
     def test_split_parts(self):
         token = UserTokenUtils.create_permanent_token(self.user)
