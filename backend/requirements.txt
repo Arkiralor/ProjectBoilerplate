@@ -24,6 +24,10 @@ charset-normalizer==3.1.0
     # via requests
 click==8.1.4
     # via rq
+colorama==0.4.6
+    # via
+    #   click
+    #   pytest
 coverage==7.2.3
     # via -r requirements.in
 cryptography==40.0.2
@@ -33,6 +37,7 @@ django==4.2
     #   -r requirements.in
     #   django-cors-headers
     #   django-cron
+    #   django-debug-toolbar
     #   django-rq
     #   django-storages
     #   djangorestframework
@@ -40,6 +45,8 @@ django==4.2
 django-cors-headers==3.14.0
     # via -r requirements.in
 django-cron==0.6.0
+    # via -r requirements.in
+django-debug-toolbar==4.2.0
     # via -r requirements.in
 django-dotenv==1.4.2
     # via -r requirements.in
@@ -140,7 +147,9 @@ six==1.16.0
     #   python-dateutil
     #   requests-file
 sqlparse==0.4.4
-    # via django
+    # via
+    #   django
+    #   django-debug-toolbar
 tldextract==3.4.0
     # via -r requirements.in
 tomli==2.0.1
@@ -150,7 +159,9 @@ tomli==2.0.1
 typing-extensions==4.5.0
     # via pydantic
 tzdata==2023.3
-    # via pandas
+    # via
+    #   django
+    #   pandas
 urllib3==1.26.15
     # via
     #   botocore
