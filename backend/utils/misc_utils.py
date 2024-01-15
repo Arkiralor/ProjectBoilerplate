@@ -17,12 +17,14 @@ def time_execution(func: Callable[..., Any]) -> Callable[..., Any]:
     """
     @wraps(func)
     def wrapper(*args: Tuple, **kwargs: Dict) -> Any:
-        t1: float = time.time()
+        timestamp_01: float = time.time()
         result = func(*args, **kwargs)
-        t2: float = time.time()
+        timestamp_02: float = time.time()
 
-        formatted_args = ', '.join([repr(arg) for arg in args] + [f'{key}={repr(value)}' for key, value in kwargs.items()])
-        logger.debug(f"`{func.__name__}({formatted_args})` was executed in {t2 - t1:.6f} seconds.")
+        formatted_args = ', '.join(
+            [repr(arg) for arg in args] + [f'{key}={repr(value)}' for key, value in kwargs.items()])
+        logger.debug(
+            f"`{func.__name__}({formatted_args})` was executed in {timestamp_02 - timestamp_01:.6f} seconds.")
 
         return result
 

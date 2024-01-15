@@ -114,8 +114,9 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=15),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
-    'UPDATE_LAST_LOGIN': False,
-    # prithoo: We WANT this to break if it cannot find the algorithm.
+    ## prithoo: No, we do not want to update the `last_login` of the user if they just refresh their tokens.
+    'UPDATE_LAST_LOGIN': False, 
+    ## prithoo: We WANT this to break if it cannot find the algorithm.
     'ALGORITHM': environ['JWT_ALGORITHM'],
     'SIGNING_KEY': SECRET_KEY,
 }

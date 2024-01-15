@@ -24,7 +24,7 @@ def enqueue_job(func: Callable, job_q: str = JobQ.DEFAULT_Q, is_async: bool = Tr
                        is_async=is_async).enqueue(func, *args, **kwargs)
         register_job_in_db(job=job)
     except Exception as ex:
-        redis_logger.exception(f"Failed to enqueue job to {job_q} queue")
+        redis_logger.exception(f"Failed to enqueue job to {job_q} queue: {ex}")
         return None
     return job
 
@@ -43,7 +43,7 @@ def get_job(job_id: str = None, job_q: str = None) -> Job:
         job = rq.Queue(
             name=job_q, connection=settings.REDIS_CONN).fetch_job(job_id)
     except Exception as ex:
-        redis_logger.exception(f"Failed to fetch job {job_id} from {job_q} queue")
+        redis_logger.exception(f"Failed to fetch job {job_id} from {job_q} queue: {ex}")
         return None
     if job is None:
         logger.warn(f"Job {job_id} not found in {job_q} queue")
