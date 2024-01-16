@@ -10,6 +10,7 @@ from rest_framework import HTTP_HEADER_ENCODING, exceptions
 
 
 from user_app.models import User, UserToken, UserTokenUsage
+from user_app.helpers import UserTokenUsageHelpers
 from user_app.utils import UserTokenUtils
 
 from auth import logger
@@ -76,15 +77,12 @@ class TokenAuthentication(BaseAuthentication):
             & Q(expires_at__gte=NOW)
         ).select_related('user')
         if not user_tokens:
-            logger.error('Token object not found.')
-            raise exceptions.AuthenticationFailed('Token object not found.')
+            logger.error('Token object not found or is expired.')
+            raise exceptions.AuthenticationFailed('Token object not found or is expired.')
 
         for token_obj in user_tokens:
             if check_password(token_part, token_obj.token):
-                _, _ = UserTokenUsage.objects.get_or_create(
-                    token=token_obj,
-                    created=NOW
-                )
+                UserTokenUsageHelpers.create(data = {"token": f"{token_obj.id}", "created": NOW})
                 return token_obj.user, token_obj
 
         raise exceptions.AuthenticationFailed(

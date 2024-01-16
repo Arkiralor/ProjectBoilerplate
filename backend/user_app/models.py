@@ -209,7 +209,6 @@ class UserToken(TemplateModel):
         indexes = (
             models.Index(fields=('id',)),
             models.Index(fields=('user',)),
-            models.Index(fields=('token',)),
             models.Index(fields=('alias',)),
             models.Index(fields=('expires_at',))
         )
@@ -223,7 +222,7 @@ class UserTokenUsage(TemplateModel):
         return f"Token '{self.token.alias}' used by {self.token.user.email} at {self.created}"
     
     def __repr__(self):
-        return self.__str()
+        return self.__str__()
     
     class Meta:
         verbose_name = 'User Token Usage'

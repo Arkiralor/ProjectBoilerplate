@@ -1,5 +1,5 @@
 from datetime import datetime, timezone, timedelta
-from typing import List
+from typing import List, Dict
 from uuid import uuid4
 
 from django.conf import settings
@@ -21,7 +21,7 @@ from user_app.models import User, UserProfile, UserLoginOTP, UserPasswordResetTo
 from user_app.model_choices import UserModelChoices
 from user_app.serializers import UserRegisterSerializer, ShowUserSerializer, UserProfileInputSerializer, UserProfileOutputSerializer,\
     UserLoginOTPInputSerializer, UserLoginOTPOutputSerializer, UserPasswordResetTokenInputSerializer, UserPasswordResetTokenOutputSerializer, \
-    UserTokenInputSerializer, UserTokenOutputSerializer
+    UserTokenInputSerializer, UserTokenOutputSerializer, UserTokenUsageInputSerializer, UserTokenUsageOutputSerializer
 from user_app.utils import JWTUtils, LoginOTPUtils, UserTokenUtils
 
 from user_app import logger
@@ -905,3 +905,16 @@ class UserTokenHelpers:
 
         logger.info(resp.message)
         return resp
+
+
+class UserTokenUsageHelpers:
+
+    @classmethod
+    def create(cls, data: Dict[str, str]) -> Resp:
+        deserialized = UserTokenUsageInputSerializer(data=data)
+        if not deserialized.is_valid():
+            _msg: str = f"{deserialized.errors}"
+            raise Exception(_msg)
+        
+        deserialized.save()
+        return
