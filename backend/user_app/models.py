@@ -211,7 +211,6 @@ class UserToken(TemplateModel):
         indexes = (
             models.Index(fields=('id',)),
             models.Index(fields=('user',)),
-            models.Index(fields=('token',)),
             models.Index(fields=('alias',)),
             models.Index(fields=('expires_at',))
         )
