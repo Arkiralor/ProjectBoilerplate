@@ -22,7 +22,7 @@ class DeleteOldUserIPAddresses(CronJobBase):
     
     def do(self):
         """
-        Delete IP addresses older than 30 days.
+        Delete IP addresses older than 90 days or approximately, 3 months.
         """
         NINETY_DAYS_AGO = datetime.now(pytz.timezone(settings.TIME_ZONE)) - timedelta(days=90)
         logger.info("Deleting old IP addresses.")

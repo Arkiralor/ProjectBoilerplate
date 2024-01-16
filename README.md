@@ -24,6 +24,7 @@ The setup procedures are defined as follows
 6. __[PostreSQL](https://www.postgresql.org/)__ & __[PGAdmin](https://www.pgadmin.org/)__
 7. __[MongoDB](https://www.mongodb.com/)__ & __[MongoDB Compass](https://www.mongodb.com/products/compass)__
 8. __[Redis](https://redis.io/)__
+9. __[Crontab](https://man7.org/linux/man-pages/man5/crontab.5.html)__
 
 #### Repository Procurement
 

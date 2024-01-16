@@ -279,3 +279,6 @@ yarn-error.log
 
 ## Encryption Keys:
 *.pem
+
+## Auto-Generated Requirements file.
+requirements.txt

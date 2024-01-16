@@ -88,7 +88,7 @@ class UserModelHelpers:
             | Q(user__pk__icontains=term)
             | Q(user__username__icontains=term)
             | Q(user__email__icontains=term)
-        ).select_related("user")
+        ).select_related("user").order_by("user__username")
 
         if not users:
             resp.error = "No Users Found"
