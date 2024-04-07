@@ -14,6 +14,12 @@ def time_execution(func: Callable[..., Any]) -> Callable[..., Any]:
 
     Returns:
         Callable: The decorated function.
+
+    Example:
+
+        @time_execution
+        def some_func(*args, **keargs):
+            pass
     """
     @wraps(func)
     def wrapper(*args: Tuple, **kwargs: Dict) -> Any:

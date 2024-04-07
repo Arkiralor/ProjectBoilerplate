@@ -11,8 +11,11 @@ def main():
     """
         Run administrative tasks.
     """
+    ## Custom Code
     read_dotenv()
     NetworkUtils.add_to_allowed_hosts()
+    ## END Custom Code
+
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
     
     try:
