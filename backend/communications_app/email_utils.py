@@ -105,7 +105,7 @@ class SESEmailUtils:
         """
         resp = Resp()
 
-        if not subject or message or subject == cls.BLANK or message == cls.BLANK:
+        if (not subject) or (not message) or subject == cls.BLANK or message == cls.BLANK:
             resp.error = "Invalid Body"
             resp.message = "Please enter a valid message and subject"
             resp.data = {
@@ -283,7 +283,7 @@ class SESEmailUtils:
         Method to send a login notification to a user's email.
         """
         message = f"Hello {user.username},\n"\
-            f"We thought we would let you know that your account on {cls.app_name} was logged into at {user.last_login}.\n"\
+            f"Your account on {cls.app_name} was logged into at {user.last_login}.\n"\
             f"If this was you, you don't need to do anything and you can disregard this email.\n"\
             f"However, if this was not you, we suggest that you change your login credentials ASAP."
         subject = f"Login Notification for {cls.app_name}"
@@ -299,7 +299,7 @@ class SESEmailUtils:
 
 class DjangoEmailUtils:
     """
-    Utilities/methods to send emails via Django's in-built email system.
+    Utilities/methods to send emails via Django's built-in email system.
     """
 
     VALID_RESPONSE_CODES = (int(f"20{item}") for item in range(0, 10, 1))
