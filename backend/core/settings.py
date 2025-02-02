@@ -24,6 +24,13 @@ ALLOWED_HOSTS = environ.get("ALLOWED_HOSTS", "").split(", ")
 INSTALLED_APPS = DEFAULT_APPS+THIRD_PARTY_APPS+CUSTOM_APPS
 MIDDLEWARE = DEFAULT_MIDDLEWARE+THIRD_PARTY_MIDDLEWARE+CUSTOM_MIDDLEWARE
 
+if DEBUG:
+    INSTALLED_APPS.extend(
+        [
+            'debug_toolbar'
+        ]
+    )
+
 ROOT_URLCONF = 'core.urls'
 
 APP_NAME = environ.get("APP_NAME", "")

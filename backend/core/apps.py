@@ -10,7 +10,6 @@ DEFAULT_APPS = [
 THIRD_PARTY_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
-    'debug_toolbar',
     'django_cron',
     'django_rq',
 ]
