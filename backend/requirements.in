@@ -7,7 +7,9 @@ djangorestframework
 djangorestframework-simplejwt
 django-storages
 django-rq
+freezegun
 gunicorn
+mock
 motor
 pandas
 pillow
