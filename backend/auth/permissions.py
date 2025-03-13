@@ -19,5 +19,5 @@ class IsModerator(BasePermission):
             )
             return bool(is_true)
         except Exception as ex:
-            logger.warn(f"ERROR: {ex}")
+            logger.warning(f"ERROR: {ex}")
             return False
