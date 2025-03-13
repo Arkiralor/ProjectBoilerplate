@@ -53,4 +53,6 @@ class DeleteOldJobRecords(CronJobBase):
 
     def do(self):
         six_months_ago = timezone.now() - timezone.timedelta(days=180)
-        _ = EnqueuedJob.objects.filter(created__lte=six_months_ago).delete()
+        jobs = EnqueuedJob.objects.filter(created__lte=six_months_ago)
+        for job in jobs:
+            job.delete()

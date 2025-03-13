@@ -7,6 +7,7 @@ from django.test import TestCase
 from django.utils import timezone
 
 from user_app.models import User, UserLoginOTP
+from user_app.helpers import UserModelHelpers
 from user_app.utils import JWTUtils, LoginOTPUtils, UserTokenUtils
 
 from user_app import logger
@@ -21,7 +22,12 @@ class JWTUtilsTestCase(TestCase):
             "email": "test.user.001@email.com"
         }
         try:
-            self.user, _ = User.objects.get_or_create(**data)
+            resp = UserModelHelpers.create(data=data)
+            if resp.error:
+                raise Exception(resp.to_text())
+            self.user = User.objects.filter(pk=resp.data.get('id')).first()
+            if not self.user:
+                raise Exception("User not created")
         except Exception as ex:
             logger.warning(f"{ex}")
 
@@ -70,7 +76,12 @@ class LoginOTPUtilsTestCase(TestCase):
             "email": "test.user.001@test.com"
         }
         try:
-            self.user, _ = User.objects.get_or_create(**user_data)
+            resp = UserModelHelpers.create(data=user_data)
+            if resp.error:
+                raise Exception(resp.to_text())
+            self.user = User.objects.filter(pk=resp.data.get('id')).first()
+            if not self.user:
+                raise Exception("User not created")
         except Exception as ex:
             logger.exception(ex)
 
@@ -119,7 +130,12 @@ class UserTokenUtilsTestCase(TestCase):
             "email": "test.user.001@test.com"
         }
         try:
-            self.user, _ = User.objects.get_or_create(**user_data)
+            resp = UserModelHelpers.create(data=user_data)
+            if resp.error:
+                raise Exception(resp.to_text())
+            self.user = User.objects.filter(pk=resp.data.get('id')).first()
+            if not self.user:
+                raise Exception("User not created")
         except Exception as ex:
             logger.exception(ex)
 

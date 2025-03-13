@@ -1,3 +1,10 @@
+"""
+This is dedicated to the Cron Job management package for Django built by the
+extremely talented people at [Tivix](https://www.tivix.com/).
+
+The original repository this app is forked from can be found at their [GitHub](https://github.com/Tivix/django-cron).
+"""
+
 import logging
 from datetime import datetime, timedelta
 import traceback
